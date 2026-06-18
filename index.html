@@ -6,28 +6,14 @@
 <title>Arquitetura de Declarações Fiscais</title>
 <style>
   :root{
-    --orange:#D04A02;
-    --orange-l:#E0701F;
-    --tangerine:#EB8C00;
-    --black:#2D2D2D;
-    --ink:#1a1a1a;
-    --grey-9:#3F3F3F;
-    --grey-7:#5C5C5C;
-    --grey-5:#7D7D7D;
-    --grey-3:#BDBDBD;
-    --grey-1:#EDEDED;
-    --paper:#F7F7F7;
-    --white:#FFFFFF;
-    --line:#DADADA;
-    --line-d:#404040;
-    --r:6px;
-    --aside-w:250px;
-    --aside-wc:64px;
+    --orange:#D04A02;--orange-l:#E0701F;--tangerine:#EB8C00;--black:#2D2D2D;--ink:#1a1a1a;
+    --grey-9:#3F3F3F;--grey-7:#5C5C5C;--grey-5:#7D7D7D;--grey-3:#BDBDBD;--grey-1:#EDEDED;
+    --paper:#F7F7F7;--white:#FFFFFF;--line:#DADADA;--line-d:#404040;--r:6px;
+    --aside-w:250px;--aside-wc:64px;--green:#2E7D32;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:var(--paper);
-    color:var(--black);line-height:1.55;font-size:14px}
+  body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:var(--paper);color:var(--black);line-height:1.55;font-size:14px}
   a{color:inherit;text-decoration:none}
   .wrap{display:flex;min-height:100vh}
 
@@ -50,14 +36,11 @@
   .nav-item .n{width:22px;font-size:12px;color:var(--orange);font-weight:700;flex-shrink:0;text-align:center}
   .nav-item .lbl{transition:opacity .15s}
 
-  /* collapsed state */
   aside.collapsed{width:var(--aside-wc)}
   aside.collapsed .navlbl{opacity:0;height:0;margin:0;overflow:hidden}
   aside.collapsed .nav-item .lbl{opacity:0;width:0;overflow:hidden}
   aside.collapsed .nav-item{justify-content:center;padding:11px 0;gap:0}
   aside.collapsed .toggle svg{transform:rotate(180deg)}
-
-  /* hover expands when collapsed */
   aside.collapsed:hover{width:var(--aside-w)}
   aside.collapsed:hover .navlbl{opacity:1;height:auto;margin:18px 12px 8px}
   aside.collapsed:hover .navlbl:first-child{margin-top:6px}
@@ -65,7 +48,7 @@
   aside.collapsed:hover .nav-item{justify-content:flex-start;padding:11px 14px;gap:11px}
   aside.collapsed:hover .toggle svg{transform:rotate(0deg)}
 
-  main{flex:1;padding:0;overflow:auto;transition:max-width .25s}
+  main{flex:1;padding:0;overflow:auto}
   .header{background:var(--white);border-bottom:1px solid var(--line);padding:34px 56px 0}
   .header .crumb{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);font-weight:700}
   .header h2{font-size:30px;margin:8px 0 6px;color:var(--ink);font-weight:600}
@@ -81,40 +64,32 @@
   @media(max-width:760px){.g3,.g2{grid-template-columns:1fr}}
 
   .card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px}
-  .card h3{font-size:16px;margin-bottom:13px;color:var(--ink);font-weight:600;
-    padding-bottom:11px;border-bottom:2px solid var(--grey-1)}
+  .card h3{font-size:16px;margin-bottom:13px;color:var(--ink);font-weight:600;padding-bottom:11px;border-bottom:2px solid var(--grey-1)}
   .card h3 .num{color:var(--orange);margin-right:6px}
   .muted{color:var(--grey-7)}
   .card ul{margin-left:18px;line-height:2;color:var(--grey-7)}
-  .card ul code,td code{background:var(--grey-1);padding:1px 6px;border-radius:4px;font-size:12.5px;
-    color:var(--orange);font-weight:600}
+  .card ul code,td code{background:var(--grey-1);padding:1px 6px;border-radius:4px;font-size:12.5px;color:var(--orange);font-weight:600}
 
-  .pill{display:inline-block;font-size:11px;padding:3px 10px;border-radius:3px;margin:2px 3px 2px 0;
-    border:1px solid var(--grey-3);background:var(--white);color:var(--grey-7);font-weight:600}
+  .pill{display:inline-block;font-size:11px;padding:3px 10px;border-radius:3px;margin:2px 3px 2px 0;border:1px solid var(--grey-3);background:var(--white);color:var(--grey-7);font-weight:600}
   .pill.nav{border-color:var(--orange);color:var(--orange)}
   .pill.calc{border-color:var(--tangerine);color:var(--tangerine)}
   .pill.non{border-color:var(--black);color:var(--black);background:var(--grey-1)}
 
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:26px}
   @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
-  .kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px;
-    border-top:3px solid var(--orange)}
+  .kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px;border-top:3px solid var(--orange)}
   .kpi b{font-size:32px;color:var(--ink);font-weight:700;display:block}
   .kpi span{font-size:12.5px;color:var(--grey-7);margin-top:2px;display:block}
 
   .flow{display:flex;flex-direction:column;gap:6px}
   .stagewrap{position:relative}
-  .stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);
-    padding:20px 22px;border-left:4px solid var(--orange)}
+  .stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;border-left:4px solid var(--orange)}
   .stage .sh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-  .stage .sn{width:28px;height:28px;background:var(--orange);color:#fff;border-radius:var(--r);
-    display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
+  .stage .sn{width:28px;height:28px;background:var(--orange);color:#fff;border-radius:var(--r);display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
   .stage .st{font-size:15.5px;font-weight:600;color:var(--ink)}
-  .stage .layer{margin-left:auto;font-size:10px;letter-spacing:1px;text-transform:uppercase;
-    color:var(--grey-5);background:var(--grey-1);padding:4px 10px;border-radius:3px}
+  .stage .layer{margin-left:auto;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey-5);background:var(--grey-1);padding:4px 10px;border-radius:3px}
   .nodes{display:flex;flex-wrap:wrap;gap:12px}
-  .node{flex:1;min-width:190px;background:var(--paper);border:1px solid var(--line);
-    border-radius:var(--r);padding:14px 16px}
+  .node{flex:1;min-width:190px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
   .node .nt{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
   .node .nd{font-size:12.5px;color:var(--grey-7)}
   .arrow{text-align:center;color:var(--grey-3);font-size:16px;padding:2px 0}
@@ -132,12 +107,10 @@
   tbody tr:nth-child(even){background:var(--paper)}
   tbody tr:hover{background:#FDF1EA}
 
-  .fab{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:3px;
-    background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);margin:2px 4px 2px 0}
+  .fab{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:3px;background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);margin:2px 4px 2px 0}
 
   details{border:1px solid var(--line);border-radius:var(--r);margin-bottom:11px;background:var(--white);overflow:hidden}
-  summary{padding:16px 20px;cursor:pointer;font-weight:600;font-size:14.5px;list-style:none;
-    display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
+  summary{padding:16px 20px;cursor:pointer;font-weight:600;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
   summary::-webkit-details-marker{display:none}
   summary::after{content:'+';font-size:18px;color:var(--orange);font-weight:700}
   details[open] summary::after{content:'\2013'}
@@ -153,43 +126,46 @@
   .tag.llm{background:var(--orange);color:#fff}
   .tag.mix{background:var(--tangerine);color:#fff}
 
-  .legend{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px;font-size:13px;color:var(--grey-7);
-    align-items:center}
-  .note{border-left:4px solid var(--orange);background:#FDF1EA;padding:16px 20px;
-    border-radius:0 var(--r) var(--r) 0;font-size:13.5px;color:var(--grey-9);margin-top:20px}
-  .search{width:100%;padding:13px 16px;border-radius:var(--r);border:1px solid var(--line);
-    background:var(--white);color:var(--black);font-size:14px;margin-bottom:18px}
+  .legend{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px;font-size:13px;color:var(--grey-7);align-items:center}
+  .note{border-left:4px solid var(--orange);background:#FDF1EA;padding:16px 20px;border-radius:0 var(--r) var(--r) 0;font-size:13.5px;color:var(--grey-9);margin-top:20px}
+  .search{width:100%;padding:13px 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--white);color:var(--black);font-size:14px;margin-bottom:18px}
   .search:focus{outline:none;border-color:var(--orange)}
-  footer{padding:20px 56px;border-top:3px solid var(--orange);font-size:12.5px;color:var(--ink);
-    background:var(--white);font-weight:600;letter-spacing:.3px}
+  footer{padding:20px 56px;border-top:3px solid var(--orange);font-size:12.5px;color:var(--ink);background:var(--white);font-weight:600;letter-spacing:.3px}
 
   /* PM FLOW */
   .pmflow{background:var(--ink);border-radius:var(--r);padding:38px 30px;overflow-x:auto;margin-bottom:24px}
   .pmtrack{display:flex;align-items:stretch;gap:0;min-width:1050px}
   .pmstep{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 6px}
-  .pmico{width:66px;height:66px;border-radius:50%;background:linear-gradient(160deg,var(--orange),var(--orange-l));
-    display:grid;place-items:center;margin-bottom:13px;box-shadow:0 6px 16px rgba(208,74,2,.4);position:relative;z-index:2}
+  .pmico{width:66px;height:66px;border-radius:50%;background:linear-gradient(160deg,var(--orange),var(--orange-l));display:grid;place-items:center;margin-bottom:13px;box-shadow:0 6px 16px rgba(208,74,2,.4);position:relative;z-index:2}
   .pmico svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .pmstep .ph{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tangerine);font-weight:700;margin-bottom:4px}
   .pmstep .pt{font-size:13.5px;font-weight:600;color:#fff;margin-bottom:9px;line-height:1.3}
   .pmstep .pf{display:flex;flex-direction:column;gap:4px;align-items:center}
-  .pmstep .pf span{font-size:10.5px;color:#cfcfcf;background:#2b2b2b;border:1px solid #3a3a3a;
-    padding:3px 8px;border-radius:3px;white-space:nowrap}
-  .pmstep:not(:last-child)::after{content:'';position:absolute;top:33px;left:calc(50% + 42px);
-    right:calc(-50% + 42px);height:3px;background:repeating-linear-gradient(90deg,var(--tangerine) 0 8px,transparent 8px 14px);z-index:1}
-  .pmstep:not(:last-child)::before{content:'';position:absolute;top:27px;right:calc(-50% + 36px);
-    width:0;height:0;border-left:9px solid var(--tangerine);border-top:7px solid transparent;
-    border-bottom:7px solid transparent;z-index:2}
+  .pmstep .pf span{font-size:10.5px;color:#cfcfcf;background:#2b2b2b;border:1px solid #3a3a3a;padding:3px 8px;border-radius:3px;white-space:nowrap}
+  .pmstep:not(:last-child)::after{content:'';position:absolute;top:33px;left:calc(50% + 42px);right:calc(-50% + 42px);height:3px;background:repeating-linear-gradient(90deg,var(--tangerine) 0 8px,transparent 8px 14px);z-index:1}
+  .pmstep:not(:last-child)::before{content:'';position:absolute;top:27px;right:calc(-50% + 36px);width:0;height:0;border-left:9px solid var(--tangerine);border-top:7px solid transparent;border-bottom:7px solid transparent;z-index:2}
   .pmband{display:flex;min-width:1050px;margin-top:28px;gap:8px}
-  .pmlayer{flex:1;text-align:center;padding:10px;border-radius:4px;font-size:11px;font-weight:700;
-    letter-spacing:1px;text-transform:uppercase;color:#fff}
-  .pmlayer.bz{background:#5C5C5C}
-  .pmlayer.sv{background:#8a8a8a}
-  .pmlayer.gd{background:var(--orange)}
-  .pmloop{min-width:1050px;margin-top:14px;background:#2b2b2b;border:1px dashed var(--tangerine);
-    border-radius:var(--r);padding:11px 18px;font-size:12.5px;color:#e0e0e0;display:flex;align-items:center;gap:10px}
+  .pmlayer{flex:1;text-align:center;padding:10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff}
+  .pmlayer.bz{background:#5C5C5C}.pmlayer.sv{background:#8a8a8a}.pmlayer.gd{background:var(--orange)}
+  .pmloop{min-width:1050px;margin-top:14px;background:#2b2b2b;border:1px dashed var(--tangerine);border-radius:var(--r);padding:11px 18px;font-size:12.5px;color:#e0e0e0;display:flex;align-items:center;gap:10px}
   .pmloop svg{width:18px;height:18px;stroke:var(--tangerine);fill:none;stroke-width:2;flex-shrink:0}
   @media(max-width:760px){.pmstep .pt{font-size:11px}}
+
+  /* COST & DIFFICULTY */
+  .dots{display:inline-flex;gap:3px;vertical-align:middle}
+  .dot{width:11px;height:11px;border-radius:50%;background:var(--grey-1);border:1px solid var(--grey-3)}
+  .dot.on-cost{background:var(--orange);border-color:var(--orange)}
+  .dot.on-diff{background:var(--tangerine);border-color:var(--tangerine)}
+  .meterlbl{font-size:11px;color:var(--grey-5);margin-left:8px;font-weight:600}
+  td .lic{font-size:11.5px;color:var(--grey-7)}
+  .stagehdr{margin:26px 0 12px;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);border-bottom:2px solid var(--grey-1);padding-bottom:8px}
+  .stagehdr:first-child{margin-top:0}
+  .stagehdr.fabhdr{color:var(--ink);border-bottom-color:var(--orange)}
+  .costlegend{display:flex;gap:30px;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:22px}
+  .costlegend div{font-size:12.5px;color:var(--grey-7)}
+  .costlegend b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  .fabcard{border-left:4px solid var(--orange)}
+  .fabtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);padding:2px 8px;border-radius:3px;margin-left:8px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -208,11 +184,12 @@
       <div class="navlbl">Tecnologia</div>
       <div class="nav-item" data-p="stack" title="Stack por Stage"><span class="n">03</span><span class="lbl">Stack por Stage</span></div>
       <div class="nav-item" data-p="fabric" title="Microsoft Fabric"><span class="n">04</span><span class="lbl">Microsoft Fabric</span></div>
-      <div class="nav-item" data-p="reqs" title="Requisitos"><span class="n">05</span><span class="lbl">Requisitos</span></div>
+      <div class="nav-item" data-p="cost" title="Custo e Dificuldade"><span class="n">05</span><span class="lbl">Custo &amp; Dificuldade</span></div>
+      <div class="nav-item" data-p="reqs" title="Requisitos"><span class="n">06</span><span class="lbl">Requisitos</span></div>
       <div class="navlbl">Regras de Negócio</div>
-      <div class="nav-item" data-p="decl" title="Validações por Declaração"><span class="n">06</span><span class="lbl">Validações por Declaração</span></div>
-      <div class="nav-item" data-p="inputs" title="Inputs e Origem"><span class="n">07</span><span class="lbl">Inputs e Origem</span></div>
-      <div class="nav-item" data-p="agents" title="Agentes"><span class="n">08</span><span class="lbl">Agentes</span></div>
+      <div class="nav-item" data-p="decl" title="Validações por Declaração"><span class="n">07</span><span class="lbl">Validações por Declaração</span></div>
+      <div class="nav-item" data-p="inputs" title="Inputs e Origem"><span class="n">08</span><span class="lbl">Inputs e Origem</span></div>
+      <div class="nav-item" data-p="agents" title="Agentes"><span class="n">09</span><span class="lbl">Agentes</span></div>
     </nav>
   </aside>
 
@@ -371,37 +348,31 @@
         Para cada stage, o serviço Fabric a utilizar e a justificação.</p>
       </div>
       <div class="content">
-
         <div class="pmflow">
           <div class="pmtrack">
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg></div>
-              <div class="ph">Stage 1</div>
-              <div class="pt">Ingestão</div>
+              <div class="ph">Stage 1</div><div class="pt">Ingestão</div>
               <div class="pf"><span>Data Factory</span><span>Dataflows Gen2</span><span>Mirroring</span></div>
             </div>
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><circle cx="8" cy="6" r="1.4" fill="#fff" stroke="none"/><circle cx="14" cy="12" r="1.4" fill="#fff" stroke="none"/><circle cx="10" cy="18" r="1.4" fill="#fff" stroke="none"/></svg></div>
-              <div class="ph">Stage 2</div>
-              <div class="pt">Normalização<br>(OneLake)</div>
+              <div class="ph">Stage 2</div><div class="pt">Normalização<br>(OneLake)</div>
               <div class="pf"><span>Lakehouse</span><span>Notebooks</span><span>Doc Intelligence</span></div>
             </div>
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="ph">Stage 3</div>
-              <div class="pt">Validação &amp;<br>Reconciliação</div>
+              <div class="ph">Stage 3</div><div class="pt">Validação &amp;<br>Reconciliação</div>
               <div class="pf"><span>Notebooks Spark</span><span>dbt</span><span>Data Agents</span></div>
             </div>
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8" y="14" width="7" height="7" rx="1"/><path d="M6.5 10v2.5h11V10"/><path d="M11.5 12.5V14"/></svg></div>
-              <div class="ph">Stage 4</div>
-              <div class="pt">Consolidação<br>&amp; Geração</div>
+              <div class="ph">Stage 4</div><div class="pt">Consolidação<br>&amp; Geração</div>
               <div class="pf"><span>Warehouse</span><span>Data Pipelines</span><span>AI Functions</span></div>
             </div>
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
-              <div class="ph">Stage 5</div>
-              <div class="pt">Análise &amp;<br>Monitorização</div>
+              <div class="ph">Stage 5</div><div class="pt">Análise &amp;<br>Monitorização</div>
               <div class="pf"><span>Power BI (Direct Lake)</span><span>Activator</span><span>Purview</span></div>
             </div>
           </div>
@@ -449,6 +420,126 @@
         <div class="note"><b>Resumo:</b> o Fabric concentra ingestão, lakehouse, transformação, IA, orquestração e BI
         num único serviço SaaS sobre o OneLake, reduzindo integração e movimento de dados — em troca de maior
         dependência da plataforma. A página "Stack por Stage" mantém a alternativa modular Azure/Databricks.</div>
+      </div>
+    </section>
+
+    <!-- COST & DIFFICULTY -->
+    <section class="page" id="cost">
+      <div class="header">
+        <div class="crumb">Tecnologia · Avaliação</div>
+        <h2>Custo &amp; Dificuldade por Tecnologia</h2>
+        <p>Comparação relativa de cada tecnologia da stack: ordem de grandeza de custo e dificuldade de
+        implementação/operação. As escalas são indicativas (1 = baixo, 5 = elevado) e variam com volume,
+        licenciamento e maturidade da equipa.</p>
+      </div>
+      <div class="content">
+        <div class="costlegend">
+          <div><b>Preço</b><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Custo relativo de licença/consumo (1–5)</div>
+          <div><b>Dificuldade</b><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Esforço de implementação e operação (1–5)</div>
+          <div><b>Modelo</b><span class="lic">PAYG = pay-as-you-go · Capacidade = SKU reservado · Free = open-source</span></div>
+        </div>
+
+        <input class="search" id="costSearch" placeholder="Filtrar tecnologia (ex.: Databricks, Fabric, Power BI)...">
+
+        <div id="costWrap">
+
+          <!-- FABRIC dedicated comparison -->
+          <div class="stagehdr fabhdr">Microsoft Fabric — plataforma unificada (por componente)</div>
+          <div class="card fabcard" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Componente Fabric</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>Fabric Capacity (F SKU)</b> <span class="fabtag">base</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Capacidade reservada partilhada por todos os componentes. Mínimo (F2/F64) eleva o custo de entrada, mas é previsível.</td></tr>
+                <tr><td><b>Data Factory / Dataflows Gen2</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Consome capacidade. Ingestão low-code com conector nativo de BC.</td></tr>
+                <tr><td><b>Lakehouse + OneLake</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Storage faturado à parte (barato). "One copy" elimina duplicação.</td></tr>
+                <tr><td><b>Warehouse</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Consome capacidade. SQL familiar para o modelo canónico.</td></tr>
+                <tr><td><b>Notebooks (Spark)</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">Spark consome capacidade. Exige skills PySpark para reconciliações.</td></tr>
+                <tr><td><b>Data Agents / AI Functions / Copilot</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">Copilot exige capacidade mínima (F64) + consumo de IA. Setup de agentes é exigente.</td></tr>
+                <tr><td><b>Data Pipelines / Activator / Monitoring</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Incluído na capacidade. Orquestração e alertas integrados.</td></tr>
+                <tr><td><b>Power BI (Direct Lake) + Purview</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">Power BI incluído na capacidade; governança Purview integrada.</td></tr>
+                <tr style="background:#FDF1EA"><td><b>FABRIC — plataforma completa</b> <span class="fabtag">total</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic"><b>Avaliação global:</b> custo elevado (capacidade mínima), mas dificuldade de operação baixa — tudo num só serviço, sem integrar ferramentas.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stagehdr">Ingestão / EL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--grey-5)">— alternativa modular Azure</span></div>
+          <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Tecnologia</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>Azure Data Factory</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">PAYG por execução/atividade. Baixo custo base; conectores prontos para BC.</td></tr>
+                <tr><td><b>Logic Apps / Power Automate</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">1/5</span></td><td class="lic">PAYG / por conector premium. Low-code, rápido de montar.</td></tr>
+                <tr><td><b>ADLS Gen2</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">1/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">1/5</span></td><td class="lic">PAYG por GB. Armazenamento muito barato.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stagehdr">Armazenamento / Lakehouse</div>
+          <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Tecnologia</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>Azure Databricks</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">PAYG (DBU) + compute. Potente mas exige skills Spark.</td></tr>
+                <tr><td><b>Azure SQL / Synapse</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">vCore / DWU. Familiar para equipas SQL.</td></tr>
+                <tr style="background:#FDF1EA"><td><b>Microsoft Fabric (OneLake)</b> <span class="fabtag">SaaS</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Capacidade (F SKU). Tudo-em-um; custo previsível mas mínimo elevado. Ver bloco Fabric acima.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stagehdr">Transformação / Validação</div>
+          <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Tecnologia</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>dbt</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">1/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">Core grátis (Cloud pago). Curva de SQL/modelação.</td></tr>
+                <tr><td><b>Delta Live Tables</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">Premium DBU. Pipelines declarativos com qualidade incorporada.</td></tr>
+                <tr><td><b>Great Expectations</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">1/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">Open-source. Configuração inicial de regras leva tempo.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stagehdr">Agentes / IA</div>
+          <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Tecnologia</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>Azure OpenAI Service</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">PAYG por token. Custo escala com volume de documentos.</td></tr>
+                <tr><td><b>AI Document Intelligence</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">PAYG por página. Treino de modelos custom adiciona esforço.</td></tr>
+                <tr><td><b>Azure AI Foundry / Semantic Kernel</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span></span><span class="meterlbl">5/5</span></td><td class="lic">Custo do compute/modelos. Orquestração de agentes é complexa.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stagehdr">Orquestração</div>
+          <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Tecnologia</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>ADF Triggers</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">1/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Incluído no ADF. Agendamento simples por prazo.</td></tr>
+                <tr><td><b>Databricks Workflows</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">Incluído (compute). Dependências entre jobs.</td></tr>
+                <tr><td><b>Azure Monitor / Log Analytics</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">PAYG por GB ingerido de logs.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stagehdr">Apresentação / BI &amp; Governança</div>
+          <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+            <table class="costTable">
+              <thead><tr><th style="width:230px">Tecnologia</th><th style="width:160px">Preço</th><th style="width:170px">Dificuldade</th><th>Modelo &amp; notas</th></tr></thead>
+              <tbody>
+                <tr><td><b>Power BI</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Por utilizador (Pro/PPU) ou capacidade. Amplamente conhecido.</td></tr>
+                <tr><td><b>Microsoft Purview</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">PAYG / capacidade. Setup de catálogo e políticas é exigente.</td></tr>
+                <tr><td><b>Power Apps</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Por app/utilizador. Low-code para portal de revisão.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="note"><b>Leitura rápida:</b> o caminho de <b>menor custo e menor dificuldade</b> assenta em
+        ADF + ADLS + Azure SQL + Power BI. As componentes de <b>IA/agentes</b> (OpenAI, AI Foundry) e
+        <b>Databricks</b> são as que mais elevam custo e esforço. O <b>Fabric</b> tem custo de entrada elevado
+        (capacidade mínima reservada), mas a <b>dificuldade de operação é baixa</b> por concentrar tudo num só
+        serviço — boa opção quando se valoriza simplicidade operacional e governança integrada.</div>
       </div>
     </section>
 
@@ -661,7 +752,6 @@
   const toggle=document.getElementById('toggle');
   const items=document.querySelectorAll('.nav-item');
   const pages=document.querySelectorAll('.page');
-
   function scrollTop(){
     const m=document.querySelector('main');
     m&&m.scrollTo({top:0,behavior:'auto'});
@@ -669,9 +759,7 @@
     document.documentElement.scrollTop=0;
     document.body.scrollTop=0;
   }
-
   toggle.addEventListener('click',()=>aside.classList.toggle('collapsed'));
-
   items.forEach(it=>it.addEventListener('click',()=>{
     items.forEach(i=>i.classList.remove('active'));
     pages.forEach(p=>p.classList.remove('active'));
@@ -680,7 +768,6 @@
     aside.classList.add('collapsed');
     scrollTop();
   }));
-
   const ds=document.getElementById('declSearch');
   ds&&ds.addEventListener('input',e=>{
     const q=e.target.value.toLowerCase();
@@ -690,6 +777,11 @@
   is&&is.addEventListener('input',e=>{
     const q=e.target.value.toLowerCase();
     document.querySelectorAll('#inTable tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
+  });
+  const cs=document.getElementById('costSearch');
+  cs&&cs.addEventListener('input',e=>{
+    const q=e.target.value.toLowerCase();
+    document.querySelectorAll('#costWrap .costTable tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
   });
 </script>
 </body>
