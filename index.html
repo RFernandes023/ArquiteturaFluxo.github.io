@@ -3,926 +3,948 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plataforma de Declarações Fiscais</title>
+<title>TaxFlow · Plataforma de Declarações Fiscais</title>
 <style>
-  :root{
-    --orange:#D04A02;--orange-l:#E0701F;--tangerine:#EB8C00;--black:#2D2D2D;--ink:#1a1a1a;
-    --grey-9:#3F3F3F;--grey-7:#5C5C5C;--grey-5:#7D7D7D;--grey-3:#BDBDBD;--grey-1:#EDEDED;
-    --paper:#F7F7F7;--white:#FFFFFF;--line:#DADADA;--line-d:#404040;--r:6px;
-    --aside-w:252px;--aside-wc:64px;--green:#2E7D32;--green-bg:#E8F5E9;--red:#C62828;--red-bg:#FDECEA;
-    --amber:#EF6C00;--amber-bg:#FFF3E0;--blue:#1565C0;--blue-bg:#E3F2FD;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:var(--paper);color:var(--black);line-height:1.55;font-size:14px}
-  a{color:inherit;text-decoration:none}
-  .wrap{display:flex;min-height:100vh}
+:root{
+  --orange:#D04A02;--orange-l:#E0701F;--tangerine:#EB8C00;--ink:#1a1a1a;--ink2:#23262b;
+  --grey-9:#3F3F3F;--grey-7:#5C5C5C;--grey-5:#7D7D7D;--grey-3:#BDBDBD;--grey-1:#ECECEC;
+  --paper:#F5F6F8;--white:#FFFFFF;--line:#E2E4E8;--r:10px;--rs:8px;
+  --green:#2E7D32;--green-bg:#E8F5E9;--red:#C62828;--red-bg:#FDECEA;
+  --amber:#EF6C00;--amber-bg:#FFF3E0;--blue:#1565C0;--blue-bg:#E7F0FB;--purple:#6A1B9A;--purple-bg:#F3E5F5;
+  --side:248px;--shadow:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+  --shadow-l:0 10px 30px rgba(16,24,40,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',-apple-system,Arial,sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:#FCD9C6}
+.hidden{display:none!important}
 
-  /* ===== SIDEBAR (scrollable) ===== */
-  aside{width:var(--aside-w);flex-shrink:0;background:var(--ink);color:#fff;
-    position:sticky;top:0;height:100vh;display:flex;flex-direction:column;transition:width .25s ease;z-index:20}
-  .topbar{height:6px;background:var(--orange);flex-shrink:0}
-  .asidetop{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:12px 14px 8px;flex-shrink:0}
-  .brand{font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;transition:opacity .15s}
-  .brand small{display:block;font-size:9px;color:var(--tangerine);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
-  .toggle{width:34px;height:34px;border-radius:var(--r);background:#2b2b2b;border:1px solid #3a3a3a;
-    cursor:pointer;display:grid;place-items:center;transition:.15s;flex-shrink:0}
-  .toggle:hover{background:var(--orange);border-color:var(--orange)}
-  .toggle svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
-  nav{padding:6px 12px 24px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;overflow-x:hidden;flex:1;
-    scrollbar-width:thin;scrollbar-color:#3a3a3a transparent}
-  nav::-webkit-scrollbar{width:7px}
-  nav::-webkit-scrollbar-track{background:transparent}
-  nav::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:4px}
-  nav::-webkit-scrollbar-thumb:hover{background:var(--orange)}
-  .navlbl{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--grey-5);
-    margin:16px 12px 6px;white-space:nowrap;transition:opacity .15s}
-  .navlbl:first-child{margin-top:4px}
-  .nav-item{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:var(--r);
-    font-size:13px;color:var(--grey-3);cursor:pointer;transition:.15s;border-left:3px solid transparent;white-space:nowrap}
-  .nav-item:hover{background:#262626;color:#fff}
-  .nav-item.active{background:#2b2b2b;color:#fff;border-left-color:var(--orange)}
-  .nav-item .n{width:24px;font-size:11px;color:var(--orange);font-weight:700;flex-shrink:0;text-align:center}
-  .nav-item.prod .n{color:var(--tangerine)}
-  .nav-item .lbl{transition:opacity .15s}
+/* AUTH */
+.auth{position:fixed;inset:0;z-index:500;background:linear-gradient(135deg,#1a1a1a 0%,#2b2b2b 55%,#3a2418 100%);display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .5s ease}
+.auth.gone{opacity:0;pointer-events:none}
+.authcard{background:var(--white);border-radius:16px;width:100%;max-width:420px;padding:42px 38px;box-shadow:var(--shadow-l);animation:rise .5s ease}
+@keyframes rise{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.authlogo{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+.authlogo .dotmark{width:14px;height:14px;border-radius:50%;background:var(--orange)}
+.authlogo b{font-size:21px;letter-spacing:-.3px}
+.authcard p.sub{color:var(--grey-7);font-size:13.5px;margin-bottom:26px}
+.authfield{margin-bottom:14px}
+.authfield label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--grey-9)}
+.authfield input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:var(--rs);font-size:14px;transition:.15s}
+.authfield input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px #FCD9C6}
+.sso-btn{width:100%;padding:13px;border-radius:var(--rs);border:1px solid var(--line);background:var(--white);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.15s;margin-bottom:12px}
+.sso-btn:hover{border-color:var(--ink);background:#fafafa}
+.sso-btn .ms{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:1.5px}
+.sso-btn .ms i{display:block}
+.divider{display:flex;align-items:center;gap:12px;color:var(--grey-5);font-size:12px;margin:18px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.demoswitch{margin-top:20px;padding-top:18px;border-top:1px dashed var(--line)}
+.demoswitch .dlbl{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--grey-5);font-weight:700;margin-bottom:10px}
+.demouser{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--rs);cursor:pointer;margin-bottom:8px;transition:.15s}
+.demouser:hover{border-color:var(--orange);background:#FFF8F4}
+.demouser .av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.demouser .nm{font-weight:600;font-size:13px}
+.demouser .rl{font-size:11px;color:var(--grey-7)}
 
-  aside.collapsed{width:var(--aside-wc)}
-  aside.collapsed .brand{opacity:0}
-  aside.collapsed .navlbl{opacity:0;height:0;margin:0;overflow:hidden}
-  aside.collapsed .nav-item .lbl{opacity:0;width:0;overflow:hidden}
-  aside.collapsed .nav-item{justify-content:center;padding:10px 0;gap:0}
-  aside.collapsed .toggle svg{transform:rotate(180deg)}
-  aside.collapsed:hover{width:var(--aside-w)}
-  aside.collapsed:hover .brand{opacity:1}
-  aside.collapsed:hover .navlbl{opacity:1;height:auto;margin:16px 12px 6px}
-  aside.collapsed:hover .navlbl:first-child{margin-top:4px}
-  aside.collapsed:hover .nav-item .lbl{opacity:1;width:auto}
-  aside.collapsed:hover .nav-item{justify-content:flex-start;padding:10px 13px;gap:11px}
-  aside.collapsed:hover .toggle svg{transform:rotate(0deg)}
+.app{display:flex;min-height:100vh;opacity:0;transition:opacity .5s ease}
+.app.show{opacity:1}
+aside{width:var(--side);flex-shrink:0;background:var(--ink);color:#fff;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:30}
+.sidebrand{padding:20px 20px 16px;display:flex;align-items:center;gap:11px;border-bottom:1px solid #2e2e2e}
+.sidebrand .dotmark{width:12px;height:12px;border-radius:50%;background:var(--orange)}
+.sidebrand b{font-size:17px}
+.sidebrand small{display:block;font-size:9px;color:var(--tangerine);letter-spacing:1px;text-transform:uppercase}
+.scope{margin:14px 14px 4px;background:#262626;border:1px solid #333;border-radius:var(--rs);padding:10px 12px;font-size:12px}
+.scope .sl{font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--grey-5);margin-bottom:3px}
+.scope select{width:100%;background:transparent;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.scope select option{background:#262626}
+nav{flex:1;overflow-y:auto;padding:10px 12px 20px;scrollbar-width:thin;scrollbar-color:#3a3a3a transparent}
+nav::-webkit-scrollbar{width:6px}nav::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:4px}
+.navsec{font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--grey-5);margin:16px 12px 6px;font-weight:700}
+.navsec:first-child{margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);font-size:13.5px;color:#c9c9c9;cursor:pointer;transition:.13s;margin-bottom:2px;position:relative}
+.nav-item:hover{background:#262626;color:#fff}
+.nav-item.active{background:linear-gradient(90deg,rgba(208,74,2,.22),rgba(208,74,2,.05));color:#fff;font-weight:600}
+.nav-item.active::before{content:'';position:absolute;left:0;top:7px;bottom:7px;width:3px;background:var(--orange);border-radius:3px}
+.nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.nav-item .nb{margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 7px;min-width:18px;text-align:center}
+.nav-item .nn{margin-left:auto;font-size:10px;color:var(--grey-5);font-weight:700}
+.sideuser{padding:14px;border-top:1px solid #2e2e2e;display:flex;align-items:center;gap:11px}
+.sideuser .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.sideuser .info{flex:1;min-width:0}
+.sideuser .info b{font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sideuser .info span{font-size:11px;color:var(--grey-5)}
+.sideuser .lo{cursor:pointer;color:var(--grey-5);transition:.15s}
+.sideuser .lo:hover{color:#fff}
+.sideuser .lo svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2}
 
-  main{flex:1;padding:0;overflow:auto}
-  .header{background:var(--white);border-bottom:1px solid var(--line);padding:34px 56px 0}
-  .header .crumb{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);font-weight:700}
-  .header h2{font-size:30px;margin:8px 0 6px;color:var(--ink);font-weight:600}
-  .header p{color:var(--grey-7);max-width:980px;font-size:15px;padding-bottom:26px}
-  .content{padding:34px 56px;max-width:1560px}
-  .page{display:none}
-  .page.active{display:block}
+main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:62px;background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 32px;position:sticky;top:0;z-index:20}
+.topbar .pgtitle{font-size:17px;font-weight:700}
+.topbar .pgtitle small{display:block;font-size:11px;color:var(--grey-5);font-weight:500;text-transform:uppercase;letter-spacing:.7px}
+.topbar .sp{flex:1}
+.topbar .tbtn{width:40px;height:40px;border-radius:var(--rs);border:1px solid var(--line);background:var(--white);cursor:pointer;display:grid;place-items:center;position:relative;transition:.15s}
+.topbar .tbtn:hover{border-color:var(--orange);color:var(--orange)}
+.topbar .tbtn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2}
+.topbar .tbtn .dot{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--orange);border:2px solid #fff}
+.topbar .search{flex:0 1 320px;display:flex;align-items:center;gap:9px;background:var(--paper);border:1px solid var(--line);border-radius:var(--rs);padding:9px 13px}
+.topbar .search input{border:none;background:none;outline:none;flex:1;font-size:13px}
+.topbar .search svg{width:17px;height:17px;stroke:var(--grey-5);fill:none;stroke-width:2}
 
-  .grid{display:grid;gap:20px}
-  .g2{grid-template-columns:repeat(2,1fr)}
-  .g3{grid-template-columns:repeat(3,1fr)}
-  .g4{grid-template-columns:repeat(4,1fr)}
-  @media(max-width:1200px){.g4{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
-  @media(max-width:760px){.g3,.g2,.g4{grid-template-columns:1fr}}
-  td.cnt{text-align:center;font-weight:700;color:var(--orange)}
-  .ofilter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-  .ofbtn{background:var(--white);border:1px solid var(--line);color:var(--grey-7);padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
-  .ofbtn:hover{border-color:var(--orange);color:var(--orange)}
-  .ofbtn.active{background:var(--orange);border-color:var(--orange);color:#fff}
-  .ofbtn .cnt-b{font-size:11px;font-weight:700;background:rgba(0,0,0,.08);padding:1px 7px;border-radius:10px}
-  .ofbtn.active .cnt-b{background:rgba(255,255,255,.25);color:#fff}
-  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px}
-  .card h3{font-size:16px;margin-bottom:13px;color:var(--ink);font-weight:600;padding-bottom:11px;border-bottom:2px solid var(--grey-1)}
-  .card h3 .num{color:var(--orange);margin-right:6px}
-  .muted{color:var(--grey-7)}
-  .card ul{margin-left:18px;line-height:2;color:var(--grey-7)}
-  .card ul code,td code{background:var(--grey-1);padding:1px 6px;border-radius:4px;font-size:12.5px;color:var(--orange);font-weight:600}
+.view{flex:1;padding:30px 32px;overflow-y:auto;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.phead{margin-bottom:24px}
+.phead h1{font-size:25px;font-weight:700;letter-spacing:-.4px}
+.phead p{color:var(--grey-7);font-size:14px;margin-top:4px;max-width:820px}
+.crumb{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:6px}
 
-  .pill{display:inline-block;font-size:11px;padding:3px 10px;border-radius:3px;margin:2px 3px 2px 0;border:1px solid var(--grey-3);background:var(--white);color:var(--grey-7);font-weight:600}
-  .pill.nav{border-color:var(--orange);color:var(--orange)}
-  .pill.calc{border-color:var(--tangerine);color:var(--tangerine)}
-  .pill.non{border-color:var(--black);color:var(--black);background:var(--grey-1)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1250px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1050px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+@media(max-width:720px){.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.card.pad0{padding:0;overflow:hidden}
+.card h3{font-size:15.5px;font-weight:700;margin-bottom:4px}
+.card h3.bb{padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:16px;display:flex;align-items:center;gap:9px}
+.card h3 .num{color:var(--orange);margin-right:6px}
+.card .csub{font-size:12.5px;color:var(--grey-7);margin-bottom:14px}
+.card ul{margin-left:18px;line-height:2;color:var(--grey-7)}
+.card ul code,td code{background:var(--grey-1);padding:1px 6px;border-radius:4px;font-size:12.5px;color:var(--orange);font-weight:600}
+.muted{color:var(--grey-7)}
 
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:26px}
-  @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
-  .kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px;border-top:3px solid var(--orange)}
-  .kpi b{font-size:32px;color:var(--ink);font-weight:700;display:block}
-  .kpi span{font-size:12.5px;color:var(--grey-7);margin-top:2px;display:block}
+.kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi .ico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;margin-bottom:14px}
+.kpi .ico svg{width:21px;height:21px;stroke:#fff;fill:none;stroke-width:2}
+.kpi b{font-size:30px;font-weight:800;letter-spacing:-1px;display:block;line-height:1}
+.kpi span{font-size:12.5px;color:var(--grey-7);margin-top:5px;display:block}
+.kpi .trend{font-size:11.5px;font-weight:700;margin-top:8px;display:inline-flex;align-items:center;gap:4px}
+.kpi .trend.up{color:var(--green)}.kpi .trend.down{color:var(--red)}
+.bg-o{background:linear-gradient(135deg,var(--orange),var(--orange-l))}
+.bg-t{background:linear-gradient(135deg,var(--tangerine),#F0A500)}
+.bg-r{background:linear-gradient(135deg,#E53935,#C62828)}
+.bg-g{background:linear-gradient(135deg,#43A047,#2E7D32)}
+.bg-b{background:linear-gradient(135deg,#1E88E5,#1565C0)}
+.bg-p{background:linear-gradient(135deg,#8E24AA,#6A1B9A)}
 
-  .flow{display:flex;flex-direction:column;gap:6px}
-  .stagewrap{position:relative}
-  .stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;border-left:4px solid var(--orange)}
-  .stage .sh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-  .stage .sn{width:28px;height:28px;background:var(--orange);color:#fff;border-radius:var(--r);display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
-  .stage .st{font-size:15.5px;font-weight:600;color:var(--ink)}
-  .stage .layer{margin-left:auto;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey-5);background:var(--grey-1);padding:4px 10px;border-radius:3px}
-  .nodes{display:flex;flex-wrap:wrap;gap:12px}
-  .node{flex:1;min-width:190px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
-  .node .nt{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
-  .node .nd{font-size:12.5px;color:var(--grey-7)}
-  .arrow{text-align:center;color:var(--grey-3);font-size:16px;padding:2px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:13px 18px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--grey-5);background:var(--paper);font-weight:700}
+tbody tr{transition:.12s}
+tbody tr:hover{background:#FFF8F4}
+tbody tr:last-child td{border-bottom:none}
+.empty td{text-align:center;color:var(--grey-5);padding:30px}
+td.cnt{text-align:center;font-weight:700;color:var(--orange)}
 
-  .stackrow{display:flex;align-items:flex-start;gap:18px;padding:16px 0;border-bottom:1px solid var(--grey-1)}
-  .stackrow:last-child{border-bottom:none}
-  .stackrow .tech{width:260px;flex-shrink:0;font-weight:600;color:var(--ink);font-size:14px}
-  .stackrow .why{flex:1;color:var(--grey-7);font-size:13.5px}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:20px;white-space:nowrap}
+.st::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
+.st-ok{background:var(--green-bg);color:var(--green)}.st-warn{background:var(--amber-bg);color:var(--amber)}
+.st-err{background:var(--red-bg);color:var(--red)}.st-info{background:var(--blue-bg);color:var(--blue)}
+.st-grey{background:var(--grey-1);color:var(--grey-7)}.st-pur{background:var(--purple-bg);color:var(--purple)}
+.role{font-size:10px;font-weight:800;padding:3px 9px;border-radius:11px;letter-spacing:.4px;text-transform:uppercase}
+.role.associate{background:var(--blue-bg);color:var(--blue)}.role.senior{background:var(--amber-bg);color:var(--amber)}
+.role.manager{background:#FDE7DD;color:var(--orange)}.role.admin{background:var(--green-bg);color:var(--green)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:13px;background:var(--grey-1);color:var(--grey-7);margin:2px}
+.chip.req{background:var(--amber-bg);color:var(--amber)}.chip.got{background:var(--green-bg);color:var(--green)}
+.chip.o{background:#FDF1EA;color:var(--orange)}
 
-  table{width:100%;border-collapse:collapse;font-size:13.5px}
-  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
-  th{font-size:11px;text-transform:uppercase;letter-spacing:.6px;background:var(--ink);color:#fff;font-weight:600}
-  th:first-child{border-radius:var(--r) 0 0 0}
-  th:last-child{border-radius:0 var(--r) 0 0}
-  tbody tr:nth-child(even){background:var(--paper)}
-  tbody tr:hover{background:#FDF1EA}
+.pill{display:inline-block;font-size:11px;padding:3px 10px;border-radius:3px;margin:2px 3px 2px 0;border:1px solid var(--grey-3);background:var(--white);color:var(--grey-7);font-weight:600}
+.pill.nav{border-color:var(--orange);color:var(--orange)}.pill.calc{border-color:var(--tangerine);color:var(--tangerine)}.pill.non{border-color:var(--ink);color:var(--ink);background:var(--grey-1)}
+.tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
+.tag.alta{background:var(--orange);color:#fff}.tag.media{background:var(--tangerine);color:#fff}.tag.normal{background:var(--grey-3);color:var(--ink)}
+.tag.det{background:var(--grey-1);color:var(--grey-9);border:1px solid var(--grey-3)}.tag.llm{background:var(--orange);color:#fff}.tag.mix{background:var(--tangerine);color:#fff}
+.fab{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:3px;background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);margin:2px 4px 2px 0}
 
-  .fab{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:3px;background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);margin:2px 4px 2px 0}
+.btn{background:var(--orange);color:#fff;border:none;padding:9px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{background:var(--orange-l);box-shadow:0 4px 12px rgba(208,74,2,.3)}
+.btn.ghost{background:var(--white);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--orange);color:var(--orange);box-shadow:none}
+.btn.sm{padding:6px 12px;font-size:12px}
+.btn.ok{background:var(--green)}.btn.ok:hover{background:#256528}
+.btn.danger{background:var(--red)}.btn.danger:hover{background:#a51d1d}
+.btn.dark{background:var(--ink)}.btn.dark:hover{background:#000}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.toolbar .grow{flex:1}
+.inp{padding:9px 13px;border:1px solid var(--line);border-radius:var(--rs);font-size:13px;background:var(--white)}
+.inp:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px #FCD9C6}
+select.inp{cursor:pointer}
+.search-i{width:100%;padding:12px 15px;border-radius:var(--rs);border:1px solid var(--line);background:var(--white);font-size:14px;margin-bottom:18px}
+.search-i:focus{outline:none;border-color:var(--orange)}
 
-  details{border:1px solid var(--line);border-radius:var(--r);margin-bottom:11px;background:var(--white);overflow:hidden}
-  summary{padding:16px 20px;cursor:pointer;font-weight:600;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
-  summary::-webkit-details-marker{display:none}
-  summary::after{content:'+';font-size:18px;color:var(--orange);font-weight:700}
-  details[open] summary::after{content:'\2013'}
-  details[open] summary{border-bottom:1px solid var(--grey-1)}
-  details .body{padding:15px 20px;font-size:13.5px;color:var(--grey-7)}
-  details .body ul{margin-left:18px;line-height:1.9}
+.ofilter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.ofbtn{background:var(--white);border:1px solid var(--line);color:var(--grey-7);padding:9px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+.ofbtn:hover{border-color:var(--orange);color:var(--orange)}
+.ofbtn.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.ofbtn .cnt-b{font-size:11px;font-weight:700;background:rgba(0,0,0,.08);padding:1px 7px;border-radius:10px}
+.ofbtn.active .cnt-b{background:rgba(255,255,255,.25);color:#fff}
 
-  .tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
-  .tag.alta{background:var(--orange);color:#fff}.tag.media{background:var(--tangerine);color:#fff}.tag.normal{background:var(--grey-3);color:var(--ink)}
-  .tag.det{background:var(--grey-1);color:var(--grey-9);border:1px solid var(--grey-3)}.tag.llm{background:var(--orange);color:#fff}.tag.mix{background:var(--tangerine);color:#fff}
+details{border:1px solid var(--line);border-radius:var(--r);margin-bottom:11px;background:var(--white);overflow:hidden}
+summary{padding:16px 20px;cursor:pointer;font-weight:600;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';font-size:18px;color:var(--orange);font-weight:700}
+details[open] summary::after{content:'\2013'}
+details[open] summary{border-bottom:1px solid var(--grey-1)}
+details .body{padding:15px 20px;font-size:13.5px;color:var(--grey-7)}
+details .body ul{margin-left:18px;line-height:1.9}
 
-  .legend{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px;font-size:13px;color:var(--grey-7);align-items:center}
-  .note{border-left:4px solid var(--orange);background:#FDF1EA;padding:16px 20px;border-radius:0 var(--r) var(--r) 0;font-size:13.5px;color:var(--grey-9);margin-top:20px}
-  .search{width:100%;padding:13px 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--white);color:var(--black);font-size:14px;margin-bottom:18px}
-  .search:focus{outline:none;border-color:var(--orange)}
-  footer{padding:20px 56px;border-top:3px solid var(--orange);font-size:12.5px;color:var(--ink);background:var(--white);font-weight:600;letter-spacing:.3px}
+.prog{height:7px;background:var(--grey-1);border-radius:7px;overflow:hidden;min-width:80px}
+.prog span{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--tangerine));border-radius:7px;transition:width .4s}
 
-  /* PM FLOW */
-  .pmflow{background:var(--ink);border-radius:var(--r);padding:38px 30px;overflow-x:auto;margin-bottom:24px}
-  .pmtrack{display:flex;align-items:stretch;gap:0;min-width:1050px}
-  .pmstep{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 6px}
-  .pmico{width:66px;height:66px;border-radius:50%;background:linear-gradient(160deg,var(--orange),var(--orange-l));display:grid;place-items:center;margin-bottom:13px;box-shadow:0 6px 16px rgba(208,74,2,.4);position:relative;z-index:2}
-  .pmico svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .pmstep .ph{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tangerine);font-weight:700;margin-bottom:4px}
-  .pmstep .pt{font-size:13.5px;font-weight:600;color:#fff;margin-bottom:9px;line-height:1.3}
-  .pmstep .pf{display:flex;flex-direction:column;gap:4px;align-items:center}
-  .pmstep .pf span{font-size:10.5px;color:#cfcfcf;background:#2b2b2b;border:1px solid #3a3a3a;padding:3px 8px;border-radius:3px;white-space:nowrap}
-  .pmstep:not(:last-child)::after{content:'';position:absolute;top:33px;left:calc(50% + 42px);right:calc(-50% + 42px);height:3px;background:repeating-linear-gradient(90deg,var(--tangerine) 0 8px,transparent 8px 14px);z-index:1}
-  .pmstep:not(:last-child)::before{content:'';position:absolute;top:27px;right:calc(-50% + 36px);width:0;height:0;border-left:9px solid var(--tangerine);border-top:7px solid transparent;border-bottom:7px solid transparent;z-index:2}
-  .pmband{display:flex;min-width:1050px;margin-top:28px;gap:8px}
-  .pmlayer{flex:1;text-align:center;padding:10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff}
-  .pmlayer.bz{background:#5C5C5C}.pmlayer.sv{background:#8a8a8a}.pmlayer.gd{background:var(--orange)}
-  .pmloop{min-width:1050px;margin-top:14px;background:#2b2b2b;border:1px dashed var(--tangerine);border-radius:var(--r);padding:11px 18px;font-size:12.5px;color:#e0e0e0;display:flex;align-items:center;gap:10px}
-  .pmloop svg{width:18px;height:18px;stroke:var(--tangerine);fill:none;stroke-width:2;flex-shrink:0}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dh{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--grey-5);text-align:center;font-weight:700;padding:4px 0}
+.cell{min-height:74px;border:1px solid var(--line);border-radius:var(--rs);padding:6px 7px;font-size:12px;position:relative;background:var(--white);transition:.12s}
+.cell:hover{border-color:var(--orange)}
+.cell.empty{background:transparent;border:none}
+.cell.today{border-color:var(--orange);box-shadow:0 0 0 2px #FCD9C6}
+.cell .dn{font-weight:700;color:var(--grey-9);font-size:12px}
+.cell .ev{display:block;font-size:9.5px;font-weight:700;color:#fff;border-radius:4px;padding:2px 5px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.ev.due{background:var(--orange)}.ev.warn{background:var(--tangerine)}.ev.late{background:var(--red)}.ev.ok{background:var(--green)}
 
-  /* COST */
-  .dots{display:inline-flex;gap:3px;vertical-align:middle}
-  .dot{width:11px;height:11px;border-radius:50%;background:var(--grey-1);border:1px solid var(--grey-3)}
-  .dot.on-cost{background:var(--orange);border-color:var(--orange)}
-  .dot.on-diff{background:var(--tangerine);border-color:var(--tangerine)}
-  .meterlbl{font-size:11px;color:var(--grey-5);margin-left:8px;font-weight:600}
-  td .lic{font-size:11.5px;color:var(--grey-7)}
-  .stagehdr{margin:26px 0 12px;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);border-bottom:2px solid var(--grey-1);padding-bottom:8px}
-  .stagehdr:first-child{margin-top:0}
-  .stagehdr.fabhdr{color:var(--ink);border-bottom-color:var(--orange)}
-  .costlegend{display:flex;gap:30px;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:22px}
-  .costlegend div{font-size:12.5px;color:var(--grey-7)}
-  .costlegend b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
-  .fabcard{border-left:4px solid var(--orange)}
-  .fabtag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);padding:2px 8px;border-radius:3px;margin-left:8px;vertical-align:middle}
+.tl{position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--grey-1)}
+.tlev{position:relative;padding:0 0 18px}
+.tlev::before{content:'';position:absolute;left:-23px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--orange);border:2px solid #fff;box-shadow:0 0 0 2px var(--orange)}
+.tlev.done::before{background:var(--green);box-shadow:0 0 0 2px var(--green)}
+.tlev.late::before{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+.tlev.pending::before{background:var(--grey-3);box-shadow:0 0 0 2px var(--grey-3)}
+.tlev .tt{font-size:13.5px;font-weight:600}
+.tlev .td{font-size:12px;color:var(--grey-7)}
 
-  /* ===== PROD PROTOTYPE ===== */
-  .prodbar{background:linear-gradient(90deg,var(--ink),#2b2b2b);color:#fff;padding:14px 56px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:3px solid var(--orange)}
-  .prodbar .logo{font-weight:700;font-size:15px;display:flex;align-items:center;gap:9px}
-  .prodbar .logo .dotmark{width:11px;height:11px;border-radius:50%;background:var(--orange)}
-  .prodbar .logo small{display:block;font-size:9px;color:var(--tangerine);letter-spacing:.5px}
-  .prodbar .spacer{flex:1}
-  .prodbar .pbtn{background:#2b2b2b;border:1px solid #3f3f3f;color:#e8e8e8;padding:8px 14px;border-radius:var(--r);font-size:12.5px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
-  .prodbar .pbtn:hover{background:var(--orange);border-color:var(--orange);color:#fff}
-  .prodbar .pbtn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
-  .prodbar .pbtn.primary:hover{background:var(--orange-l)}
-  .prodbar svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
-  .prodbar .avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
-  .prodbar .bell{position:relative;cursor:pointer}
-  .prodbar .bell .badge{position:absolute;top:-5px;right:-5px;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:9px;padding:1px 5px}
+.msg{display:flex;gap:13px;padding:14px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;background:var(--white);transition:.12s}
+.msg:hover{border-color:var(--orange);box-shadow:var(--shadow)}
+.msg .mi{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.msg .mi svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2}
+.msg .mc{flex:1;min-width:0}.msg .mc b{font-size:13.5px}.msg .mc p{font-size:12.5px;color:var(--grey-7);margin-top:2px}
+.msg .mt{font-size:11px;color:var(--grey-5);white-space:nowrap}
 
-  .btn{background:var(--orange);color:#fff;border:none;padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
-  .btn:hover{background:var(--orange-l)}
-  .btn.ghost{background:var(--white);color:var(--ink);border:1px solid var(--line)}
-  .btn.ghost:hover{border-color:var(--orange);color:var(--orange)}
-  .btn.sm{padding:6px 11px;font-size:12px}
-  .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-  .toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-  .toolbar .grow{flex:1}
-  .inp{padding:9px 13px;border:1px solid var(--line);border-radius:var(--r);font-size:13px;background:var(--white);color:var(--ink)}
-  .inp:focus{outline:none;border-color:var(--orange)}
-  select.inp{cursor:pointer}
+.frow{display:flex;align-items:center;gap:13px;padding:12px 15px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:9px;background:var(--white)}
+.frow .fic{width:38px;height:38px;border-radius:9px;background:var(--blue-bg);color:var(--blue);display:grid;place-items:center;font-size:10px;font-weight:800;flex-shrink:0}
+.frow .fic.red{background:var(--amber-bg);color:var(--amber)}
+.frow .fn{flex:1;font-size:13px;font-weight:600}
+.frow .fmeta{font-size:11.5px;color:var(--grey-5);font-weight:400}
 
-  .status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap}
-  .status::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
-  .st-ok{background:var(--green-bg);color:var(--green)}
-  .st-warn{background:var(--amber-bg);color:var(--amber)}
-  .st-err{background:var(--red-bg);color:var(--red)}
-  .st-info{background:var(--blue-bg);color:var(--blue)}
-  .st-grey{background:var(--grey-1);color:var(--grey-7)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:22px;flex-wrap:wrap}
+.tab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--grey-7);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.13s}
+.tab:hover{color:var(--orange)}.tab.active{color:var(--orange);border-bottom-color:var(--orange)}
+.tabpane{display:none;animation:fade .3s}.tabpane.active{display:block}
 
-  .progress{height:8px;background:var(--grey-1);border-radius:8px;overflow:hidden;min-width:90px}
-  .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--tangerine));border-radius:8px}
+.checkgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+@media(max-width:720px){.checkgrid{grid-template-columns:1fr}}
+.checkitem{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:var(--rs);background:var(--white);cursor:pointer;transition:.12s}
+.checkitem:hover{border-color:var(--orange)}.checkitem.on{border-color:var(--orange);background:#FFF8F4}
+.checkitem input{width:16px;height:16px;accent-color:var(--orange);flex-shrink:0}
+.checkitem .ci-t{font-size:12.5px;font-weight:600}
+.checkitem .ci-o{margin-left:auto}
+.chk-section{margin:18px 0 9px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--orange)}
 
-  .prodkpi{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
-  @media(max-width:1000px){.prodkpi{grid-template-columns:1fr 1fr}}
-  .pk{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
-  .pk .ico{width:42px;height:42px;border-radius:var(--r);display:grid;place-items:center;margin-bottom:12px}
-  .pk .ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
-  .pk b{font-size:28px;color:var(--ink);font-weight:700;display:block;line-height:1.1}
-  .pk span{font-size:12.5px;color:var(--grey-7)}
-  .pk .delta{font-size:11.5px;font-weight:700;margin-top:6px;display:inline-block}
-  .pk .delta.up{color:var(--green)}.pk .delta.down{color:var(--red)}
+.miniav{width:30px;height:30px;font-size:11px;margin-right:9px;vertical-align:middle;display:inline-grid;place-items:center;border-radius:50%;color:#fff;font-weight:700}
 
-  .bars{display:flex;align-items:flex-end;gap:10px;height:160px;padding-top:10px}
-  .bars .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
-  .bars .bar .col{width:100%;max-width:46px;background:linear-gradient(180deg,var(--orange),var(--tangerine));border-radius:5px 5px 0 0;transition:.3s}
-  .bars .bar:hover .col{filter:brightness(1.1)}
-  .bars .bar small{font-size:11px;color:var(--grey-7);font-weight:600}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(16,20,26,.55);backdrop-filter:blur(2px);z-index:300;align-items:center;justify-content:center;padding:22px}
+.modal-bg.open{display:flex}
+.modal{background:var(--white);border-radius:14px;max-width:540px;width:100%;box-shadow:var(--shadow-l);overflow:hidden;animation:rise .25s ease}
+.modal.wide{max-width:760px}
+.modal .mh{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modal .mh h4{font-size:17px}
+.modal .mx{cursor:pointer;color:var(--grey-5);font-size:24px;line-height:1;background:none;border:none;transition:.15s}
+.modal .mx:hover{color:var(--ink)}
+.modal .mb{padding:22px 24px;font-size:13.5px;color:var(--grey-7);max-height:68vh;overflow:auto}
+.modal .mf{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;background:var(--paper)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--rs);font-size:13px;font-family:inherit}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px #FCD9C6}
+.field.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.note{border-left:3px solid var(--orange);background:#FFF8F4;padding:14px 16px;border-radius:0 var(--rs) var(--rs) 0;font-size:13px;color:var(--grey-9)}
+.legend{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px;font-size:13px;color:var(--grey-7);align-items:center}
 
-  .timeline{position:relative;padding-left:26px}
-  .timeline::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--grey-1)}
-  .tevent{position:relative;padding:0 0 18px 0}
-  .tevent::before{content:'';position:absolute;left:-23px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--orange);border:2px solid #fff;box-shadow:0 0 0 2px var(--orange)}
-  .tevent.done::before{background:var(--green);box-shadow:0 0 0 2px var(--green)}
-  .tevent.pending::before{background:var(--grey-3);box-shadow:0 0 0 2px var(--grey-3)}
-  .tevent .tt{font-size:13.5px;font-weight:600;color:var(--ink)}
-  .tevent .td{font-size:12px;color:var(--grey-7)}
+.toast{position:fixed;bottom:26px;right:26px;background:var(--ink);color:#fff;padding:14px 20px;border-radius:var(--rs);font-size:13px;box-shadow:var(--shadow-l);z-index:600;display:flex;align-items:center;gap:11px;transform:translateY(120px);opacity:0;transition:.35s;border-left:4px solid var(--green);max-width:340px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast svg{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:2.5;flex-shrink:0}
 
-  .calmonth{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .calmonth .dh{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--grey-5);text-align:center;font-weight:700;padding:4px 0}
-  .cell{aspect-ratio:1;border:1px solid var(--line);border-radius:var(--r);padding:6px;font-size:12px;color:var(--grey-7);position:relative;background:var(--white)}
-  .cell.empty{background:transparent;border:none}
-  .cell.due{border-color:var(--orange);background:#FDF1EA}
-  .cell .dn{font-weight:700;color:var(--ink)}
-  .cell .ev{position:absolute;bottom:5px;left:5px;right:5px;font-size:9px;font-weight:700;color:#fff;background:var(--orange);border-radius:3px;padding:1px 4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .cell .ev.amber{background:var(--tangerine)}
+.fab-chat{position:fixed;bottom:26px;right:26px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-l));box-shadow:0 8px 24px rgba(208,74,2,.45);cursor:pointer;display:grid;place-items:center;z-index:400;transition:.2s;border:none}
+.fab-chat:hover{transform:scale(1.06)}
+.fab-chat svg{width:27px;height:27px;stroke:#fff;fill:none;stroke-width:2}
+.fab-chat .pulse{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:var(--green);border:3px solid var(--paper);border-radius:50%}
+.chatwin{position:fixed;bottom:26px;right:26px;width:390px;max-width:calc(100vw - 36px);height:600px;max-height:calc(100vh - 52px);background:var(--white);border-radius:16px;box-shadow:var(--shadow-l);z-index:450;display:none;flex-direction:column;overflow:hidden;animation:rise .25s ease}
+.chatwin.open{display:flex}
+.chathead{background:linear-gradient(135deg,var(--ink),#2b2b2b);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.chathead .bot{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--tangerine));display:grid;place-items:center;flex-shrink:0}
+.chathead .bot svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.chathead .bi b{font-size:14.5px;display:block}
+.chathead .bi span{font-size:11px;color:#9CCC65;display:flex;align-items:center;gap:5px}
+.chathead .bi span::before{content:'';width:7px;height:7px;border-radius:50%;background:#9CCC65}
+.chathead .cx{margin-left:auto;cursor:pointer;color:#bbb;background:none;border:none;font-size:22px;transition:.15s}
+.chathead .cx:hover{color:#fff}
+.chatbody{flex:1;overflow-y:auto;padding:18px;background:var(--paper);display:flex;flex-direction:column;gap:12px}
+.bub{max-width:80%;padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.5;animation:fade .25s}
+.bub.bot{background:var(--white);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.bub.me{background:linear-gradient(135deg,var(--orange),var(--orange-l));color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.bub.bot b{color:var(--orange)}
+.quickreplies{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.qr{font-size:11.5px;font-weight:600;padding:7px 12px;border:1px solid var(--orange);color:var(--orange);border-radius:16px;cursor:pointer;background:#fff;transition:.13s}
+.qr:hover{background:var(--orange);color:#fff}
+.typing{display:flex;gap:4px;padding:12px 14px;background:var(--white);border:1px solid var(--line);border-radius:14px;border-bottom-left-radius:4px;align-self:flex-start;width:fit-content}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--grey-3);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+.chatfoot{padding:13px 15px;border-top:1px solid var(--line);display:flex;gap:9px;align-items:center;background:var(--white)}
+.chatfoot input{flex:1;border:1px solid var(--line);border-radius:22px;padding:10px 15px;font-size:13px;outline:none}
+.chatfoot input:focus{border-color:var(--orange)}
+.chatfoot .send{width:40px;height:40px;border-radius:50%;background:var(--orange);border:none;cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:.15s}
+.chatfoot .send:hover{background:var(--orange-l)}
+.chatfoot .send svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2}
 
-  .tabs{display:flex;gap:4px;border-bottom:2px solid var(--grey-1);margin-bottom:20px;flex-wrap:wrap}
-  .tab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--grey-7);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
-  .tab:hover{color:var(--orange)}
-  .tab.active{color:var(--orange);border-bottom-color:var(--orange)}
-  .tabpane{display:none}.tabpane.active{display:block}
+.livechat{display:flex;flex-direction:column;height:480px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.lcbody{flex:1;overflow-y:auto;padding:18px;background:var(--paper);display:flex;flex-direction:column;gap:12px}
+.lcfoot{padding:14px;border-top:1px solid var(--line);display:flex;gap:10px;background:var(--white)}
+.lcfoot input{flex:1;border:1px solid var(--line);border-radius:var(--rs);padding:11px 14px;outline:none;font-size:13px}
+.lcfoot input:focus{border-color:var(--orange)}
 
-  .recon{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;background:var(--white)}
-  .recon .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
-  .recon .ic svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2}
-  .recon .info{flex:1}
-  .recon .info b{font-size:13.5px;color:var(--ink)}
-  .recon .info p{font-size:12px;color:var(--grey-7);margin-top:2px}
-  .recon .val{font-family:'Consolas',monospace;font-size:13px;font-weight:700;text-align:right}
-  .ic.ok{background:var(--green)}.ic.warn{background:var(--amber)}.ic.err{background:var(--red)}
+.logline{font-family:'Consolas',monospace;font-size:12px;padding:9px 14px;border-bottom:1px solid var(--line);display:flex;gap:14px}
+.logline .lt{color:var(--grey-5);white-space:nowrap}
+.logline .lv{font-weight:700;padding:0 6px;border-radius:4px;font-size:10px;height:fit-content}
+.lv.INFO{background:var(--blue-bg);color:var(--blue)}.lv.WARN{background:var(--amber-bg);color:var(--amber)}
+.lv.ERR{background:var(--red-bg);color:var(--red)}.lv.OK{background:var(--green-bg);color:var(--green)}
 
-  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 9px;border-radius:14px;background:var(--grey-1);color:var(--grey-7);margin:2px}
-  .chip.req{background:var(--amber-bg);color:var(--amber)}
-  .chip.got{background:var(--green-bg);color:var(--green)}
+.dlcard{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid var(--line);border-radius:var(--r);background:var(--white);margin-bottom:10px;transition:.12s}
+.dlcard:hover{border-color:var(--orange);box-shadow:var(--shadow)}
+.dlcard .di{width:44px;height:44px;border-radius:10px;background:#FDF1EA;color:var(--orange);display:grid;place-items:center;flex-shrink:0;font-weight:800;font-size:11px}
+.dlcard .dn{flex:1}.dlcard .dn b{font-size:13.5px}.dlcard .dn p{font-size:12px;color:var(--grey-7)}
 
-  .filerow{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;background:var(--white)}
-  .filerow .fic{width:34px;height:34px;border-radius:6px;background:var(--blue-bg);color:var(--blue);display:grid;place-items:center;flex-shrink:0;font-size:10px;font-weight:700}
-  .filerow .fn{flex:1;font-size:13px;color:var(--ink);font-weight:600}
-  .filerow .fmeta{font-size:11.5px;color:var(--grey-5)}
+.profilehero{background:linear-gradient(120deg,var(--ink),#2b2b2b 70%,#3a2418);border-radius:14px;padding:30px;color:#fff;display:flex;align-items:center;gap:22px;margin-bottom:24px}
+.profilehero .pav{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;font-size:28px;font-weight:800;flex-shrink:0;border:3px solid rgba(255,255,255,.2)}
+.profilehero h2{font-size:24px}
+.profilehero .pmail{color:#cfcfcf;font-size:13.5px;margin-top:3px}
+.profilehero .ptags{margin-top:10px}
+.bar-chart{display:flex;align-items:flex-end;gap:12px;height:150px;padding-top:6px}
+.bar-chart .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;justify-content:flex-end;height:100%}
+.bar-chart .b .col{width:100%;max-width:42px;background:linear-gradient(180deg,var(--orange),var(--tangerine));border-radius:6px 6px 0 0;transition:.4s}
+.bar-chart .b:hover .col{filter:brightness(1.08)}
+.bar-chart .b small{font-size:11px;color:var(--grey-7);font-weight:600}
+.donut{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:0 auto}
+.donut .inner{width:104px;height:104px;background:var(--white);border-radius:50%;display:grid;place-items:center;text-align:center}
+.donut .inner b{font-size:26px;font-weight:800}.donut .inner span{font-size:11px;color:var(--grey-7)}
+.legrow{display:flex;align-items:center;gap:8px;font-size:12.5px;margin-bottom:7px}
+.legrow .sw{width:11px;height:11px;border-radius:3px}
 
-  .modal-bg{display:none;position:fixed;inset:0;background:rgba(26,26,26,.55);z-index:100;align-items:center;justify-content:center;padding:20px}
-  .modal-bg.open{display:flex}
-  .modal{background:var(--white);border-radius:10px;max-width:560px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;animation:pop .2s ease}
-  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-  .modal .mh{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-  .modal .mh h4{font-size:17px;color:var(--ink)}
-  .modal .mx{cursor:pointer;color:var(--grey-5);font-size:22px;line-height:1;background:none;border:none}
-  .modal .mb{padding:22px 24px;font-size:13.5px;color:var(--grey-7);max-height:60vh;overflow:auto}
-  .modal .mf{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;background:var(--paper)}
-  .field{margin-bottom:14px}
-  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink);margin-bottom:5px}
-  .field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r);font-size:13px;font-family:inherit}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--orange)}
-
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:14px 20px;border-radius:var(--r);font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:200;display:flex;align-items:center;gap:10px;transform:translateY(120px);opacity:0;transition:.3s;border-left:4px solid var(--green)}
-  .toast.show{transform:translateY(0);opacity:1}
-  .toast svg{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:2.5}
-
-  .devbadge{display:inline-block;background:var(--tangerine);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px;margin-left:10px;vertical-align:middle}
-  .split{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
-  @media(max-width:1100px){.split{grid-template-columns:1fr}}
+/* DOCS pages (01-09) helpers */
+.stackrow{display:flex;align-items:flex-start;gap:18px;padding:16px 0;border-bottom:1px solid var(--grey-1)}
+.stackrow:last-child{border-bottom:none}
+.stackrow .tech{width:260px;flex-shrink:0;font-weight:600;font-size:14px}
+.stackrow .why{flex:1;color:var(--grey-7);font-size:13.5px}
+.flow{display:flex;flex-direction:column;gap:6px}
+.stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;border-left:4px solid var(--orange);box-shadow:var(--shadow)}
+.stage .sh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.stage .sn{width:28px;height:28px;background:var(--orange);color:#fff;border-radius:var(--rs);display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
+.stage .stt{font-size:15.5px;font-weight:600}
+.stage .layer{margin-left:auto;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey-5);background:var(--grey-1);padding:4px 10px;border-radius:3px}
+.nodes{display:flex;flex-wrap:wrap;gap:12px}
+.node{flex:1;min-width:180px;background:var(--paper);border:1px solid var(--line);border-radius:var(--rs);padding:14px 16px}
+.node .nt{font-size:13.5px;font-weight:600;margin-bottom:5px}
+.node .nd{font-size:12.5px;color:var(--grey-7)}
+.arrow{text-align:center;color:var(--grey-3);font-size:16px;padding:2px 0}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--grey-1);border:1px solid var(--grey-3)}
+.dot.on-cost{background:var(--orange);border-color:var(--orange)}.dot.on-diff{background:var(--tangerine);border-color:var(--tangerine)}
+.stagehdr{margin:26px 0 12px;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);border-bottom:2px solid var(--grey-1);padding-bottom:8px}
+.stagehdr:first-child{margin-top:0}
+.costlegend{display:flex;gap:30px;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:22px}
+.costlegend b{display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+td .lic{font-size:11.5px;color:var(--grey-7)}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <aside id="aside">
-    <div class="topbar"></div>
-    <div class="asidetop">
-      <div class="brand">DTT &amp; Associates<small>Tax Platform</small></div>
-      <button class="toggle" id="toggle" title="Recolher / expandir menu">
-        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
+
+<div class="auth" id="auth">
+  <div class="authcard">
+    <div class="authlogo"><span class="dotmark"></span><b>TaxFlow</b></div>
+    <p class="sub">Plataforma de Declarações Fiscais · DTT &amp; Associates</p>
+    <button class="sso-btn" onclick="ssoLogin()">
+      <span class="ms"><i style="background:#F25022"></i><i style="background:#7FBA00"></i><i style="background:#00A4EF"></i><i style="background:#FFB900"></i></span>
+      Entrar com Microsoft Entra ID
+    </button>
+    <div class="divider">ou</div>
+    <div class="authfield"><label>Email organizacional</label><input id="authEmail" type="email" placeholder="nome@dtt.pt" value=""></div>
+    <button class="btn" style="width:100%;justify-content:center;padding:12px" onclick="ssoLogin()">Continuar</button>
+    <div class="demoswitch">
+      <div class="dlbl">Demo · escolher perfil (role via Entra ID)</div>
+      <div class="demouser" onclick="loginAs(2)"><div class="av" style="background:#1565C0">RM</div><div><div class="nm">Rita Marques</div><div class="rl">Manager · 2 clientes</div></div></div>
+      <div class="demouser" onclick="loginAs(4)"><div class="av" style="background:#2E7D32">AC</div><div><div class="nm">Ana Costa</div><div class="rl">Associate · 1 cliente</div></div></div>
+      <div class="demouser" onclick="loginAs(1)"><div class="av" style="background:#D04A02">AA</div><div><div class="nm">App Admin (DTT)</div><div class="rl">Equipa DTT · acesso total</div></div></div>
+      <div class="demouser" onclick="loginAs(99)"><div class="av" style="background:#6A1B9A">DT</div><div><div class="nm">User de Teste · Documentação</div><div class="rl">Arquitetura &amp; Regras (abas 01–09)</div></div></div>
     </div>
-    <nav>
-      <div class="navlbl">Visão Geral</div>
-      <div class="nav-item active" data-p="overview"><span class="n">01</span><span class="lbl">Resumo</span></div>
-      <div class="nav-item" data-p="flow"><span class="n">02</span><span class="lbl">Fluxo de Informação</span></div>
-      <div class="navlbl">Tecnologia</div>
-      <div class="nav-item" data-p="stack"><span class="n">03</span><span class="lbl">Stack por Stage</span></div>
-      <div class="nav-item" data-p="fabric"><span class="n">04</span><span class="lbl">Microsoft Fabric</span></div>
-      <div class="nav-item" data-p="cost"><span class="n">05</span><span class="lbl">Custo &amp; Dificuldade</span></div>
-      <div class="nav-item" data-p="reqs"><span class="n">06</span><span class="lbl">Requisitos</span></div>
-      <div class="navlbl">Regras de Negócio</div>
-      <div class="nav-item" data-p="decl"><span class="n">07</span><span class="lbl">Validações por Declaração</span></div>
-      <div class="nav-item" data-p="inputs"><span class="n">08</span><span class="lbl">Inputs e Origem</span></div>
-      <div class="nav-item" data-p="agents"><span class="n">09</span><span class="lbl">Agentes</span></div>
-      <div class="navlbl">Protótipo · Prod Exemplo</div>
-      <div class="nav-item prod" data-p="p-dash"><span class="n">10</span><span class="lbl">Dashboard</span></div>
-      <div class="nav-item prod" data-p="p-list"><span class="n">11</span><span class="lbl">Declarações</span></div>
-      <div class="nav-item prod" data-p="p-detail"><span class="n">12</span><span class="lbl">Detalhe &amp; Workflow</span></div>
-      <div class="nav-item prod" data-p="p-req"><span class="n">13</span><span class="lbl">Pedidos ao Cliente</span></div>
-    </nav>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <aside>
+    <div class="sidebrand"><span class="dotmark"></span><div><b>TaxFlow</b><small>DTT &amp; Associates</small></div></div>
+    <div class="scope" id="scopeBox"><div class="sl">Cliente em foco</div><select id="scopeSel" onchange="onScope()"></select></div>
+    <nav id="nav"></nav>
+    <div class="sideuser">
+      <div class="av" id="suAv" style="width:36px;height:36px;font-size:13px">RM</div>
+      <div class="info"><b id="suName">Rita Marques</b><span id="suRole">Manager</span></div>
+      <div class="lo" onclick="logout()" title="Sair"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></div>
+    </div>
   </aside>
-
   <main>
-
-    <!-- 01 OVERVIEW -->
-    <section class="page active" id="overview">
-      <div class="header"><div class="crumb">Visão Geral</div><h2>Resumo da Arquitetura</h2>
-        <p>Ingestão via ERP (Navision/BC), Excel e ficheiros auxiliares, normalizados para um esquema canónico único, validados, reconciliados e transformados nas declarações fiscais finais.</p></div>
-      <div class="content">
-        <div class="kpis">
-          <div class="kpi"><b>19+</b><span>Declarações fiscais (output)</span></div>
-          <div class="kpi"><b>28</b><span>Inputs mapeados</span></div>
-          <div class="kpi"><b>5</b><span>Stages do pipeline</span></div>
-          <div class="kpi"><b>9</b><span>Agentes especializados</span></div>
-        </div>
-        <div class="grid g3">
-          <div class="card"><h3><span class="num">01</span>Princípio Central</h3><p class="muted">Tudo o que entra é convertido para um único formato canónico "NAV-like" antes de qualquer validação.</p></div>
-          <div class="card"><h3><span class="num">02</span>Camadas de Dados</h3><p class="muted">Bronze (raw), Silver (canónico validado) e Gold (declarações) sobre um Lakehouse versionado.</p></div>
-          <div class="card"><h3><span class="num">03</span>Orquestração</h3><p class="muted">Disparo por calendário fiscal (dias 5, 10, 15, 20, 25, 31), com pedido automático de informação ao cliente.</p></div>
-        </div>
-        <div class="note"><b>Protótipo disponível:</b> as abas <b>10 a 13</b> (secção "Prod Exemplo") mostram como seria a aplicação real em desenvolvimento — dashboard, lista de declarações, detalhe com workflow e portal de pedidos.</div>
-      </div>
-    </section>
-
-    <!-- 02 FLOW -->
-    <section class="page" id="flow">
-      <div class="header"><div class="crumb">End-to-End</div><h2>Fluxo de Informação</h2><p>Cinco stages, da ingestão multi-origem até às declarações finais e análise.</p></div>
-      <div class="content"><div class="flow">
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">1</div><div class="st">Ingestão Multi-Origem</div><div class="layer">Bronze · Raw</div></div>
-          <div class="nodes"><div class="node"><div class="nt">Via A — NAV / BC</div><div class="nd">11 inputs diretos.</div></div><div class="node"><div class="nt">Via B — Calculável</div><div class="nd">3 inputs derivados.</div></div><div class="node"><div class="nt">Via C — Template/MDU</div><div class="nd">6+ inputs sem NAV.</div></div></div></div></div>
-        <div class="arrow">&#9660;</div>
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">2</div><div class="st">Normalização Canónica</div><div class="layer">Bronze &#8594; Silver</div></div>
-          <div class="nodes"><div class="node"><div class="nt">Conectores</div><div class="nd">OData/SQL, Excel, SAF-T.</div></div><div class="node"><div class="nt">Extração</div><div class="nd">OCR/LLM em PDFs.</div></div><div class="node"><div class="nt">Mapeamento</div><div class="nd">Schema único.</div></div></div></div></div>
-        <div class="arrow">&#9660;</div>
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">3</div><div class="st">Validação e Reconciliação</div><div class="layer">Silver</div></div>
-          <div class="nodes"><div class="node"><div class="nt">Validação</div><div class="nd">Schema, NIF/VIES, prazos.</div></div><div class="node"><div class="nt">Reconciliação</div><div class="nd">#243, #2424, #278.</div></div><div class="node"><div class="nt">Pedido Info</div><div class="nd">Gaps ao cliente.</div></div><div class="node"><div class="nt">Revisão</div><div class="nd">Fila humana.</div></div></div></div></div>
-        <div class="arrow">&#9660;</div>
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">4</div><div class="st">Consolidação e Geração</div><div class="layer">Silver &#8594; Gold</div></div>
-          <div class="nodes"><div class="node"><div class="nt">Agregação</div><div class="nd">N inputs por declaração.</div></div><div class="node"><div class="nt">Output</div><div class="nd">DP, M30, guias, CSV, SAF-T.</div></div><div class="node"><div class="nt">Portais</div><div class="nd">e-fatura/INE/AT.</div></div></div></div></div>
-        <div class="arrow">&#9660;</div>
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">5</div><div class="st">Análise e Monitorização</div><div class="layer">Gold</div></div>
-          <div class="nodes"><div class="node"><div class="nt">Reporting</div><div class="nd">Estado e calendário.</div></div><div class="node"><div class="nt">Anomalias</div><div class="nd">Variação YoY.</div></div><div class="node"><div class="nt">Linhagem</div><div class="nd">Drill-down auditoria.</div></div></div></div></div>
-      </div></div>
-    </section>
-
-    <!-- 03 STACK -->
-    <section class="page" id="stack">
-      <div class="header"><div class="crumb">Tecnologia · Stack Enterprise</div><h2>Stack Sugerida por Stage</h2><p>Tecnologias enterprise centradas no ecossistema Microsoft/Azure, com justificação por etapa.</p></div>
-      <div class="content">
-        <div class="card" style="margin-bottom:20px"><h3>1 · Ingestão / EL</h3>
-          <div class="stackrow"><div class="tech">Azure Data Factory</div><div class="why">Pipelines geridos, conectores nativos para BC/Navision, SQL e ficheiros.</div></div>
-          <div class="stackrow"><div class="tech">Logic Apps / Power Automate</div><div class="why">Captura de Excel/PDF de email, SharePoint e Teams.</div></div>
-          <div class="stackrow"><div class="tech">ADLS Gen2</div><div class="why">Landing zone para ficheiros raw, com retenção e versão.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>2 · Armazenamento / Lakehouse</h3>
-          <div class="stackrow"><div class="tech">Azure Databricks (Delta)</div><div class="why">Lakehouse ACID e time-travel para grandes volumes.</div></div>
-          <div class="stackrow"><div class="tech">Azure SQL / Synapse</div><div class="why">Modelo canónico relacional e warehouse.</div></div>
-          <div class="stackrow"><div class="tech">Microsoft Fabric (OneLake)</div><div class="why">Alternativa SaaS unificada.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>3 · Transformação / Validação</h3>
-          <div class="stackrow"><div class="tech">dbt + Spark</div><div class="why">Modelação versionada e linhagem automática.</div></div>
-          <div class="stackrow"><div class="tech">Delta Live Tables</div><div class="why">Pipelines declarativos com qualidade incorporada.</div></div>
-          <div class="stackrow"><div class="tech">Great Expectations</div><div class="why">Motor de regras: NIF/VIES, integridade, gate antes da Gold.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>4 · Agentes / IA</h3>
-          <div class="stackrow"><div class="tech">Azure AI Foundry</div><div class="why">Orquestração de agentes: mapeamento, extração, pedidos.</div></div>
-          <div class="stackrow"><div class="tech">AI Document Intelligence</div><div class="why">OCR de PDFs: certificados, atas, contratos, RFI.</div></div>
-          <div class="stackrow"><div class="tech">Azure OpenAI Service</div><div class="why">Campos ambíguos e redação de comunicações.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>5 · Orquestração</h3>
-          <div class="stackrow"><div class="tech">ADF Triggers</div><div class="why">Agendamento por calendário fiscal, retries e alertas.</div></div>
-          <div class="stackrow"><div class="tech">Databricks Workflows</div><div class="why">Jobs de transformação e qualidade entre camadas.</div></div>
-          <div class="stackrow"><div class="tech">Azure Monitor</div><div class="why">Logs, métricas e SLAs por obrigação.</div></div></div>
-        <div class="card"><h3>6 · Apresentação / BI &amp; Governança</h3>
-          <div class="stackrow"><div class="tech">Power BI</div><div class="why">Dashboards de estado, calendário e anomalias.</div></div>
-          <div class="stackrow"><div class="tech">Microsoft Purview</div><div class="why">Catálogo e linhagem input &#8594; declaração.</div></div>
-          <div class="stackrow"><div class="tech">Power Apps</div><div class="why">Portal de revisão e pedidos ao cliente.</div></div></div>
-      </div>
-    </section>
-
-    <!-- 04 FABRIC -->
-    <section class="page" id="fabric">
-      <div class="header"><div class="crumb">Tecnologia · SaaS</div><h2>Microsoft Fabric por Stage</h2><p>A mesma arquitetura mapeada para Microsoft Fabric, sobre o OneLake.</p></div>
-      <div class="content">
-        <div class="pmflow"><div class="pmtrack">
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg></div><div class="ph">Stage 1</div><div class="pt">Ingestão</div><div class="pf"><span>Data Factory</span><span>Dataflows Gen2</span><span>Mirroring</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg></div><div class="ph">Stage 2</div><div class="pt">Normalização<br>(OneLake)</div><div class="pf"><span>Lakehouse</span><span>Notebooks</span><span>Doc Intelligence</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="ph">Stage 3</div><div class="pt">Validação &amp;<br>Reconciliação</div><div class="pf"><span>Notebooks Spark</span><span>dbt</span><span>Data Agents</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8" y="14" width="7" height="7" rx="1"/></svg></div><div class="ph">Stage 4</div><div class="pt">Consolidação<br>&amp; Geração</div><div class="pf"><span>Warehouse</span><span>Data Pipelines</span><span>AI Functions</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div><div class="ph">Stage 5</div><div class="pt">Análise &amp;<br>Monitorização</div><div class="pf"><span>Power BI</span><span>Activator</span><span>Purview</span></div></div>
-        </div>
-        <div class="pmband"><div class="pmlayer bz" style="flex:1">Bronze</div><div class="pmlayer sv" style="flex:2">Silver</div><div class="pmlayer gd" style="flex:2">Gold</div></div>
-        <div class="pmloop"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg><span><b>Loop:</b> Monitoring Hub e Activator disparam por calendário fiscal e reencaminham gaps para o Pedido de Informação.</span></div></div>
-        <div class="grid g2">
-          <div class="card"><h3>Ingestão &amp; Lakehouse</h3><p><span class="fab">Data Factory</span><span class="fab">Dataflows Gen2</span><span class="fab">OneLake</span><span class="fab">Lakehouse</span><span class="fab">Warehouse</span></p><p class="muted" style="margin-top:10px">Ingestão low-code e armazenamento Delta sem cópias, num único OneLake.</p></div>
-          <div class="card"><h3>Transformação &amp; IA</h3><p><span class="fab">Notebooks Spark</span><span class="fab">dbt</span><span class="fab">Data Agents</span><span class="fab">AI Functions</span></p><p class="muted" style="margin-top:10px">Reconciliações em Spark e extração com IA sobre os mesmos dados.</p></div>
-          <div class="card"><h3>Orquestração</h3><p><span class="fab">Data Pipelines</span><span class="fab">Activator</span><span class="fab">Monitoring Hub</span></p><p class="muted" style="margin-top:10px">Agendamento por calendário fiscal e alertas por evento.</p></div>
-          <div class="card"><h3>BI &amp; Governança</h3><p><span class="fab">Power BI Direct Lake</span><span class="fab">Purview</span></p><p class="muted" style="margin-top:10px">Relatórios sobre a Gold e linhagem end-to-end no mesmo tenant.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 05 COST -->
-    <section class="page" id="cost">
-      <div class="header"><div class="crumb">Tecnologia · Avaliação</div><h2>Custo &amp; Dificuldade por Tecnologia</h2><p>Comparação relativa (1 = baixo, 5 = elevado). Indicativo; varia com volume e licenciamento.</p></div>
-      <div class="content">
-        <div class="costlegend">
-          <div><b>Preço</b><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Custo relativo (1–5)</div>
-          <div><b>Dificuldade</b><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Esforço (1–5)</div>
-        </div>
-        <div class="stagehdr fabhdr">Microsoft Fabric — por componente</div>
-        <div class="card fabcard" style="padding:0;overflow:hidden;margin-bottom:8px"><table>
-          <thead><tr><th style="width:230px">Componente</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead><tbody>
-          <tr><td><b>Fabric Capacity (F SKU)</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td><td class="lic">Capacidade reservada. Mínimo eleva entrada, previsível.</td></tr>
-          <tr><td><b>Notebooks (Spark)</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span></td><td class="lic">Exige skills PySpark.</td></tr>
-          <tr style="background:#FDF1EA"><td><b>Fabric — plataforma completa</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td><td class="lic">Custo alto, operação simples (tudo-em-um).</td></tr>
-        </tbody></table></div>
-        <div class="stagehdr">Alternativa modular Azure</div>
-        <div class="card" style="padding:0;overflow:hidden"><table>
-          <thead><tr><th style="width:230px">Tecnologia</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead><tbody>
-          <tr><td><b>Azure Data Factory</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td><td class="lic">PAYG. Conectores BC prontos.</td></tr>
-          <tr><td><b>Azure Databricks</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span></td><td class="lic">Potente, exige skills Spark.</td></tr>
-          <tr><td><b>Azure OpenAI</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span></td><td class="lic">PAYG por token.</td></tr>
-          <tr><td><b>Power BI</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td><td class="lic">Amplamente conhecido.</td></tr>
-        </tbody></table></div>
-        <div class="note"><b>Leitura rápida:</b> caminho mais barato/fácil = ADF + ADLS + Azure SQL + Power BI. IA/Databricks elevam custo e esforço. Fabric = custo de entrada alto mas operação simples.</div>
-      </div>
-    </section>
-
-    <!-- 06 REQS -->
-    <section class="page" id="reqs">
-      <div class="header"><div class="crumb">Funcionais &amp; Não-Funcionais</div><h2>Requisitos</h2><p>O que a plataforma garante para operar com fiabilidade e auditoria.</p></div>
-      <div class="content"><div class="grid g2">
-        <div class="card"><h3>Funcionais</h3><ul><li>Ingerir de NAV/BC, Excel/MDU e auxiliares (PDF/XML).</li><li>Normalizar para o esquema canónico único.</li><li>Validar e reconciliar por declaração.</li><li>Gerar pedido de informação ao cliente.</li><li>Produzir output oficial (DP, M30, guias, CSV, SAF-T).</li><li>Orquestrar por calendário fiscal.</li><li>Validar em portais externos com evidência.</li></ul></div>
-        <div class="card"><h3>Não-Funcionais</h3><ul><li><b>Auditabilidade:</b> linhagem completa.</li><li><b>Segurança:</b> RBAC, encriptação, RGPD.</li><li><b>Rastreabilidade:</b> versionamento de regras.</li><li><b>Resiliência:</b> retries e reprocessamento.</li><li><b>Escalabilidade:</b> multi-cliente e multi-período.</li><li><b>Observabilidade:</b> SLAs por prazo.</li><li><b>Reprodutibilidade:</b> time-travel por período.</li></ul></div>
-      </div></div>
-    </section>
-
-    <!-- 07 DECL -->
-    <section class="page" id="decl">
-      <div class="header"><div class="crumb">Motor de Regras</div><h2>Validações por Declaração</h2><p>Regras de cruzamento específicas, com prioridade (nº de inputs = risco).</p></div>
-      <div class="content">
-        <div class="legend"><span><span class="tag alta">ALTA</span> 8–9 inputs</span><span><span class="tag media">MÉDIA</span> 4–7</span><span><span class="tag normal">NORMAL</span> 1–3</span></div>
-        <input class="search" id="declSearch" placeholder="Filtrar declaração...">
-        <div id="declList">
-          <details open><summary>VAT — Declaração Periódica IVA <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Cruzar conta <code>#243</code> com IVA dedutível/liquidado.</li><li>Bases de vendas com SAF-T; campo 7 com EC Sales.</li><li>Regularizações com conta <code>#278</code>.</li></ul></div></details>
-          <details><summary>COPE — Banco de Portugal <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Depósitos + balancete de não residentes + COL.</li><li>Classificar por código estatístico.</li></ul></div></details>
-          <details><summary>Form 30 — Não Residentes <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Pagamentos a não residentes com débitos das contas 22.</li><li>Recolher RFI / certificados de residência.</li></ul></div></details>
-          <details><summary>CIT — Modelo 22 (IRC) <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Template atual; separador "Análise de Gastos".</li><li>Cruzar com DFs assinadas.</li></ul></div></details>
-          <details><summary>IEC — Impostos Especiais <span class="tag media">MÉDIA</span></summary><div class="body"><ul><li>Árvore NIF/CUP/IEC; cálculo = <code>Consumo &times; taxa</code>.</li></ul></div></details>
-          <details><summary>Intrastat <span class="tag media">MÉDIA</span></summary><div class="body"><ul><li>Cruzar com Recapitulativa e DP; gerar CSV para INE.</li></ul></div></details>
-          <details><summary>IMI / AIMI <span class="tag normal">NORMAL</span></summary><div class="body"><ul><li>Listagem de prédios a 31/12/N-1; alerta de variação VPT.</li></ul></div></details>
-        </div>
-      </div>
-    </section>
-
-    <!-- 08 INPUTS -->
-    <section class="page" id="inputs">
-      <div class="header"><div class="crumb">Origem &amp; Mapeamento</div><h2>Inputs e Declarações que Alimentam</h2><p>Dump completo de todos os inputs mapeados, com classificação por origem (NAV / calculável / não-NAV) e as declarações que cada um alimenta.</p></div>
-      <div class="content">
-        <div class="legend">
-          <span><span class="pill nav">NAV direto</span> do ERP</span>
-          <span><span class="pill calc">Calculável de NAV</span> derivado</span>
-          <span><span class="pill non">Não-NAV (template/MDU)</span> cliente/equipa</span>
-          <span style="margin-left:auto"><b style="color:var(--orange)">#</b> = nº de declarações alimentadas</span>
-        </div>
-
-        <div class="ofilter">
-          <button class="ofbtn active" data-o="all" onclick="filterInputs(this)">Todos <span class="cnt-b" id="cAll">20</span></button>
-          <button class="ofbtn" data-o="nav" onclick="filterInputs(this)">NAV <span class="cnt-b" id="cNav">11</span></button>
-          <button class="ofbtn" data-o="calc" onclick="filterInputs(this)">Calculável <span class="cnt-b" id="cCalc">3</span></button>
-          <button class="ofbtn" data-o="non" onclick="filterInputs(this)">Não-NAV <span class="cnt-b" id="cNon">6</span></button>
-        </div>
-
-        <input class="search" id="inSearch" placeholder="Filtrar input ou declaração (ex.: balancete, VAT, COPE)..." oninput="filterInputs()">
-        <div class="card" style="padding:0;overflow:hidden"><table id="inTable">
-          <thead><tr><th style="width:40px">#</th><th style="width:300px">Input</th><th style="width:120px">Origem</th><th>Declarações que alimenta</th><th class="cnt" style="width:50px">N.º</th></tr></thead><tbody>
-          <tr data-o="nav"><td>1</td><td>Balancete analítico mensal</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, WHT, DMIS, COPE, Form 30, SAF-T</td><td class="cnt">6</td></tr>
-          <tr data-o="calc"><td>2</td><td>Tabelas fiscais (IRS/IRC/TGIS/NC8/CDT)</td><td><span class="pill calc">Calculável</span></td><td>VAT, WHT, DMIS, Intrastat, Form 30, IMI, AIMI, IEC, DMR, CIT</td><td class="cnt">10</td></tr>
-          <tr data-o="nav"><td>3</td><td>Cadastro fornecedores enriquecido</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, WHT, DMIS, Intrastat, COPE, Form 30</td><td class="cnt">6</td></tr>
-          <tr data-o="nav"><td>4</td><td>Reconciliação fornecedores (AP)</td><td><span class="pill nav">NAV</span></td><td>VAT, WHT, DMIS, Intrastat, COPE, Form 30</td><td class="cnt">6</td></tr>
-          <tr data-o="nav"><td>5</td><td>Operações com não residentes</td><td><span class="pill nav">NAV</span></td><td>VAT, WHT, DMIS, COPE, Form 30, SAF-T Inv.</td><td class="cnt">6</td></tr>
-          <tr data-o="nav"><td>6</td><td>Reconciliação clientes (AR)</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, SAF-T Inv., Intrastat, COPE</td><td class="cnt">5</td></tr>
-          <tr data-o="nav"><td>7</td><td>Reconciliação bancária</td><td><span class="pill nav">NAV</span></td><td>DMIS, COPE, Form 30</td><td class="cnt">5</td></tr>
-          <tr data-o="nav"><td>8</td><td>SAF-T Faturação</td><td><span class="pill nav">NAV</span></td><td>SAF-T Inv., VAT, EC Sales</td><td class="cnt">3</td></tr>
-          <tr data-o="nav"><td>9</td><td>Operações intra-UE bens</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, SAF-T Inv., Intrastat</td><td class="cnt">4</td></tr>
-          <tr data-o="non"><td>10</td><td>Processamento salarial</td><td><span class="pill non">Não-NAV</span></td><td>DMR, DRSS, WHT (Cat. A)</td><td class="cnt">3</td></tr>
-          <tr data-o="non"><td>11</td><td>Contratos (financ./arrend./serviços)</td><td><span class="pill non">Não-NAV</span></td><td>WHT, DMIS, COPE, Form 30</td><td class="cnt">4</td></tr>
-          <tr data-o="calc"><td>12</td><td>Cadastro de imóveis</td><td><span class="pill calc">Calculável</span></td><td>IMI, AIMI, IES, CIT</td><td class="cnt">4</td></tr>
-          <tr data-o="nav"><td>13</td><td>Inventário valorizado</td><td><span class="pill nav">NAV</span></td><td>Inventories, IEC, IES, CIT</td><td class="cnt">4</td></tr>
-          <tr data-o="nav"><td>14</td><td>Balancete anual + DFs</td><td><span class="pill nav">NAV</span></td><td>CIT, IES, SAF-T Cont., PPC, PAC, Inventories</td><td class="cnt">6</td></tr>
-          <tr data-o="calc"><td>15</td><td>Modelo 22 N-1</td><td><span class="pill calc">Calculável</span></td><td>PPC, PAC, CIT</td><td class="cnt">3</td></tr>
-          <tr data-o="nav"><td>16</td><td>Cadastro ativos fixos + depreciações</td><td><span class="pill nav">NAV</span></td><td>CIT, IES</td><td class="cnt">2</td></tr>
-          <tr data-o="non"><td>17</td><td>Certificados residência + RFIs</td><td><span class="pill non">Não-NAV</span></td><td>WHT, Form 30</td><td class="cnt">2</td></tr>
-          <tr data-o="non"><td>18</td><td>Atas distribuição resultados</td><td><span class="pill non">Não-NAV</span></td><td>SF's, IES, CIT</td><td class="cnt">5</td></tr>
-          <tr data-o="non"><td>19</td><td>Mapa partes relacionadas / TP</td><td><span class="pill non">Não-NAV</span></td><td>CIT, IES, COPE, Form 30</td><td class="cnt">4</td></tr>
-          <tr data-o="non"><td>20</td><td>Dossier fiscal / Benefícios (RFAI/SIFIDE)</td><td><span class="pill non">Não-NAV</span></td><td>CIT, IES</td><td class="cnt">2</td></tr>
-        </tbody></table></div>
-        <p class="muted" id="inEmpty" style="display:none;text-align:center;padding:20px;font-size:13px">Sem inputs para este filtro.</p>
-
-        <h3 style="margin:30px 0 14px;font-size:17px;color:var(--ink);font-weight:600">Inputs detalhados por declaração (documentos de suporte)</h3>
-        <div id="declInputs">
-          <details open><summary>VAT — Declaração Periódica IVA</summary><div class="body"><ul>
-            <li>Balancete antes do apuramento do IVA;</li>
-            <li>Balancete da conta <code>#243</code> após o apuramento do IVA;</li>
-            <li>Mapa dos Códigos do IVA e Mapa Análise do IVA (do ERP) ou Mapa resumo de suporte à DP (template Excel);</li>
-            <li>Declaração Periódica do IVA (DP) do período N-1;</li>
-            <li>Link para a Declaração Recapitulativa do IVA do período N (se aplicável);</li>
-            <li>Comprovativo da Comunicação da faturação do período N (se aplicável);</li>
-            <li>Declaração da AT relativa aos IL e Comunicação de crédito do IVA (se aplicável).</li>
-          </ul></div></details>
-          <details><summary>EC Sales — Declaração Recapitulativa</summary><div class="body"><ul>
-            <li>Listagem de faturação de bens/serviços a entidades de outros Estados-membros;</li>
-            <li>Número de identificação fiscal dos clientes (no VIES);</li>
-            <li>Declaração Recapitulativa do IVA do período N-1;</li>
-            <li>Balancete da contabilidade.</li>
-          </ul></div></details>
-          <details><summary>SAF-T Faturação</summary><div class="body"><ul>
-            <li>Ficheiro SAF-T PT do ERP;</li>
-            <li>Listagem de faturação;</li>
-            <li>Balancete da contabilidade.</li>
-          </ul></div></details>
-          <details><summary>WHT &amp; Imposto de Selo (Retenções)</summary><div class="body"><ul>
-            <li>Rend. empresariais/profissionais: extrato conta <code>#2422</code>, confirmação de recibos no Portal AT, cópias de documentos com/sem retenção;</li>
-            <li>Rend. prediais: extrato conta <code>#2424</code> + cópias de documentos;</li>
-            <li>Imposto de selo: extrato conta <code>#244</code> + cópias de documentos;</li>
-            <li>Suporte dos cálculos efetuados (template disponível).</li>
-          </ul></div></details>
-          <details><summary>Intrastat</summary><div class="body"><ul>
-            <li>Listagem com informações de preenchimento (código mercadoria, valor, quantidade, kg, país origem/proveniência);</li>
-            <li>Dados da contabilidade;</li>
-            <li>Declaração Recapitulativa do IVA (expedição);</li>
-            <li>Declaração Periódica do IVA (aquisições fora do território nacional).</li>
-          </ul></div></details>
-          <details><summary>COPE — Banco de Portugal</summary><div class="body"><ul>
-            <li>Extrato da conta de depósitos à ordem;</li>
-            <li>Balancete de terceiros não residentes;</li>
-            <li>Balancete geral;</li>
-            <li>COL (template).</li>
-          </ul></div></details>
-          <details><summary>Form 30 — Modelo 30 (Não Residentes)</summary><div class="body"><ul>
-            <li>Listagem dos pagamentos de serviços a não residentes (do ERP ou preparada pela equipa/cliente);</li>
-            <li>Declaração Modelo 30 do período N-1;</li>
-            <li>Modelos RFI / certificados de residência;</li>
-            <li>NIFs Portugueses relativos a entidades não-residentes.</li>
-          </ul></div></details>
-          <details><summary>PPC / PAC — Pagamentos por Conta</summary><div class="body"><ul>
-            <li>Demonstrações Financeiras finais ou balancete final do período N-1;</li>
-            <li>Print dos "Pagamentos antecipados" no Portal AT (Entregar &gt; IRC);</li>
-            <li>Declaração Modelo 22 do período N-1.</li>
-          </ul></div></details>
-          <details><summary>IMI / AIMI</summary><div class="body"><ul>
-            <li>Listagem dos prédios rústicos e urbanos (à data de 31/12/N-1);</li>
-            <li>Documento de cobrança por parte da AT.</li>
-          </ul></div></details>
-          <details><summary>IUC — Imposto Único de Circulação</summary><div class="body"><ul>
-            <li>Listagem do Portal da AT com todos os veículos da empresa (mês/ano matrícula, cilindrada, emissão CO2, …).</li>
-          </ul></div></details>
-          <details><summary>IEC — Impostos Especiais de Consumo</summary><div class="body"><ul>
-            <li>Listagem da faturação com IEC cobrado e consumo de cada cliente;</li>
-            <li>Listagem de clientes com isenção total/parcial + certificados de isenção;</li>
-            <li>Cálculo manual = <code>Consumo &times; taxa aplicável no período</code>.</li>
-          </ul></div></details>
-          <details><summary>SAF-T Inventários</summary><div class="body"><ul>
-            <li>Ficheiro SAF-T de Inventários do ERP;</li>
-            <li>Documentos de suporte.</li>
-          </ul></div></details>
-          <details><summary>SAF-T Contabilidade</summary><div class="body"><ul>
-            <li>Ficheiro SAF-T PT do ERP;</li>
-            <li>Balancete da contabilidade.</li>
-          </ul></div></details>
-          <details><summary>CIT — Modelo 22 (IRC)</summary><div class="body"><ul>
-            <li>Balancete da contabilidade;</li>
-            <li>Demonstrações Financeiras assinadas;</li>
-            <li>Extratos e suportes documentais (extrato de contas, mapa ALD, multas, faturas, etc.);</li>
-            <li>Ficheiro disponibilizado no Digital Space.</li>
-          </ul></div></details>
-          <details><summary>IES — Informação Empresarial Simplificada</summary><div class="body"><ul>
-            <li>Demonstrações Financeiras e minutas assinadas;</li>
-            <li>Extratos e suportes documentais consoante o anexo aplicável;</li>
-            <li>Ficheiros disponibilizados no Digital Space.</li>
-          </ul></div></details>
-          <details><summary>Form 62 — Modelo 62</summary><div class="body"><ul>
-            <li>Designação e período fiscal do grupo;</li>
-            <li>NIF das entidades do grupo na jurisdição aplicável;</li>
-            <li>Identificação da entidade-mãe final (NIF, país, nome, morada);</li>
-            <li>Pontos de contacto (nome, cargo, email, telefone).</li>
-          </ul></div></details>
-        </div>
-
-        <div class="note"><b>Origem dos dados:</b> tabela e detalhes extraídos do documento "Outras Obrigações". Inputs com mais declarações dependentes (ex.: Tabelas fiscais — 10, Balancete — 6) são os de maior impacto: um erro propaga-se a várias obrigações.</div>
-      </div>
-    </section>
-
-    <!-- 09 AGENTS -->
-    <section class="page" id="agents">
-      <div class="header"><div class="crumb">Camada de Agentes</div><h2>Agentes Especializados</h2><p>Determinísticos (código) ou baseados em LLM/OCR.</p></div>
-      <div class="content"><div class="card" style="padding:0;overflow:hidden"><table>
-        <thead><tr><th>Agente</th><th>Função</th><th>Stage</th><th>Tipo</th></tr></thead><tbody>
-        <tr><td><b>Ingestion</b></td><td>Deteta origem e aplica template</td><td>Bronze&#8594;Silver</td><td><span class="tag det">Determinístico</span></td></tr>
-        <tr><td><b>Mapping</b></td><td>Converte para schema canónico</td><td>Bronze&#8594;Silver</td><td><span class="tag mix">Det.+LLM</span></td></tr>
-        <tr><td><b>Extraction</b></td><td>OCR/LLM em PDFs</td><td>Bronze&#8594;Silver</td><td><span class="tag llm">LLM/OCR</span></td></tr>
-        <tr><td><b>Reconciliation</b></td><td>Cruzamentos contabilísticos</td><td>Silver</td><td><span class="tag det">Determinístico</span></td></tr>
-        <tr><td><b>Validation</b></td><td>Regras, NIF/VIES, prazos</td><td>Silver</td><td><span class="tag det">Determinístico</span></td></tr>
-        <tr><td><b>Info-Request</b></td><td>Pedido de informação ao cliente</td><td>Silver</td><td><span class="tag mix">LLM+regras</span></td></tr>
-        <tr><td><b>Filing</b></td><td>Gera o output oficial</td><td>Gold</td><td><span class="tag det">Determinístico</span></td></tr>
-        <tr><td><b>Analytics</b></td><td>Anomalias e variação YoY</td><td>Gold</td><td><span class="tag llm">LLM+ML</span></td></tr>
-      </tbody></table></div></div>
-    </section>
-
-    <!-- ============ 10 PROD DASHBOARD ============ -->
-    <section class="page" id="p-dash">
-      <div class="prodbar">
-        <div class="logo"><span class="dotmark"></span>TaxFlow<small>DTT &amp; Associates</small></div>
-        <div class="spacer"></div>
-        <button class="pbtn" onclick="openModal('mNew')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Novo período</button>
-        <button class="pbtn"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>Relatórios</button>
-        <div class="bell" onclick="toast('3 declarações com prazo nos próximos 2 dias')"><svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="badge">3</span></div>
-        <div class="avatar">RM</div>
-      </div>
-      <div class="header"><div class="crumb">Prod Exemplo · Aba 10 <span class="devbadge">DEV PREVIEW</span></div><h2>Dashboard Operacional</h2><p>Visão executiva do estado das obrigações fiscais do período corrente — Maio 2026.</p></div>
-      <div class="content">
-        <div class="prodkpi">
-          <div class="pk"><div class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><b>14</b><span>Declarações submetidas</span><span class="delta up">▲ 2 vs. mês anterior</span></div>
-          <div class="pk"><div class="ico" style="background:var(--tangerine)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><b>5</b><span>Em preparação</span><span class="delta">prazo médio: 3 dias</span></div>
-          <div class="pk"><div class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><b>3</b><span>A aguardar cliente</span><span class="delta down">▲ 1 pedido novo</span></div>
-          <div class="pk"><div class="ico" style="background:var(--green)"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg></div><b>92%</b><span>Taxa de reconciliação OK</span><span class="delta up">▲ 4%</span></div>
-        </div>
-
-        <div class="split">
-          <div class="card"><h3>Submissões por mês</h3>
-            <div class="bars">
-              <div class="bar"><div class="col" style="height:55%"></div><small>Jan</small></div>
-              <div class="bar"><div class="col" style="height:70%"></div><small>Fev</small></div>
-              <div class="bar"><div class="col" style="height:48%"></div><small>Mar</small></div>
-              <div class="bar"><div class="col" style="height:82%"></div><small>Abr</small></div>
-              <div class="bar"><div class="col" style="height:90%"></div><small>Mai</small></div>
-              <div class="bar"><div class="col" style="height:30%"></div><small>Jun</small></div>
-            </div>
-          </div>
-          <div class="card"><h3>Atividade recente</h3>
-            <div class="timeline" style="margin-top:6px">
-              <div class="tevent done"><div class="tt">VAT Maio submetida</div><div class="td">há 2 horas · agente Filing</div></div>
-              <div class="tevent done"><div class="tt">Reconciliação #243 OK</div><div class="td">há 4 horas · agente Reconciliation</div></div>
-              <div class="tevent"><div class="tt">Pedido enviado — Cliente Alfa</div><div class="td">há 6 horas · falta RFI</div></div>
-              <div class="tevent pending"><div class="tt">Form 30 a aguardar certificado</div><div class="td">pendente · SLA 2 dias</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:20px"><h3>Calendário Fiscal — Maio 2026</h3>
-          <div class="calmonth">
-            <div class="dh">S</div><div class="dh">T</div><div class="dh">Q</div><div class="dh">Q</div><div class="dh">S</div><div class="dh">S</div><div class="dh">D</div>
-            <div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div><div class="cell"><span class="dn">1</span></div><div class="cell"><span class="dn">2</span></div><div class="cell"><span class="dn">3</span></div><div class="cell"><span class="dn">4</span></div>
-            <div class="cell due"><span class="dn">5</span><span class="ev">DMR</span></div><div class="cell"><span class="dn">6</span></div><div class="cell"><span class="dn">7</span></div><div class="cell"><span class="dn">8</span></div><div class="cell"><span class="dn">9</span></div><div class="cell due"><span class="dn">10</span><span class="ev">VAT</span></div><div class="cell"><span class="dn">11</span></div>
-            <div class="cell"><span class="dn">12</span></div><div class="cell"><span class="dn">13</span></div><div class="cell"><span class="dn">14</span></div><div class="cell due"><span class="dn">15</span><span class="ev amber">WHT</span></div><div class="cell"><span class="dn">16</span></div><div class="cell"><span class="dn">17</span></div><div class="cell"><span class="dn">18</span></div>
-            <div class="cell"><span class="dn">19</span></div><div class="cell due"><span class="dn">20</span><span class="ev">IVA DP</span></div><div class="cell"><span class="dn">21</span></div><div class="cell"><span class="dn">22</span></div><div class="cell"><span class="dn">23</span></div><div class="cell"><span class="dn">24</span></div><div class="cell due"><span class="dn">25</span><span class="ev amber">Intra</span></div>
-            <div class="cell"><span class="dn">26</span></div><div class="cell"><span class="dn">27</span></div><div class="cell"><span class="dn">28</span></div><div class="cell"><span class="dn">29</span></div><div class="cell"><span class="dn">30</span></div><div class="cell due"><span class="dn">31</span><span class="ev">M30</span></div><div class="cell empty"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 11 PROD LIST ============ -->
-    <section class="page" id="p-list">
-      <div class="prodbar">
-        <div class="logo"><span class="dotmark"></span>TaxFlow<small>DTT &amp; Associates</small></div>
-        <div class="spacer"></div>
-        <button class="pbtn primary" onclick="openModal('mNew')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nova declaração</button>
-        <div class="avatar">RM</div>
-      </div>
-      <div class="header"><div class="crumb">Prod Exemplo · Aba 11 <span class="devbadge">DEV PREVIEW</span></div><h2>Declarações</h2><p>Lista operacional de todas as declarações do período, com estado, progresso e ações.</p></div>
-      <div class="content">
-        <div class="toolbar">
-          <input class="inp grow" placeholder="Pesquisar declaração ou cliente..." id="listSearch" oninput="filterList()">
-          <select class="inp" id="listStatus" onchange="filterList()">
-            <option value="">Todos os estados</option><option value="submetida">Submetida</option><option value="preparação">Em preparação</option><option value="cliente">Aguarda cliente</option><option value="erro">Com erro</option>
-          </select>
-          <select class="inp"><option>Maio 2026</option><option>Abril 2026</option></select>
-          <button class="btn ghost sm" onclick="toast('Exportado para Excel (simulado)')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Exportar</button>
-        </div>
-        <div class="card" style="padding:0;overflow:hidden"><table id="listTable">
-          <thead><tr><th>Declaração</th><th>Cliente</th><th>Prazo</th><th>Progresso</th><th>Estado</th><th>Ação</th></tr></thead><tbody>
-          <tr><td><b>VAT — DP IVA</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Mensal</span></td><td>Alfa Indústria, SA</td><td>10 Mai</td><td><div class="progress"><span style="width:100%"></span></div></td><td><span class="status st-ok">Submetida</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-          <tr><td><b>Form 30</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Não residentes</span></td><td>Beta Trading, Lda</td><td>31 Mai</td><td><div class="progress"><span style="width:60%"></span></div></td><td><span class="status st-warn">Aguarda cliente</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-          <tr><td><b>WHT — Retenções</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Mensal</span></td><td>Alfa Indústria, SA</td><td>15 Mai</td><td><div class="progress"><span style="width:85%"></span></div></td><td><span class="status st-info">Em preparação</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-          <tr><td><b>Intrastat</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Expedição</span></td><td>Gama Logística, SA</td><td>25 Mai</td><td><div class="progress"><span style="width:40%"></span></div></td><td><span class="status st-err">Com erro</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-          <tr><td><b>COPE</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Banco de Portugal</span></td><td>Beta Trading, Lda</td><td>20 Mai</td><td><div class="progress"><span style="width:75%"></span></div></td><td><span class="status st-info">Em preparação</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-          <tr><td><b>EC Sales</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Recapitulativa</span></td><td>Gama Logística, SA</td><td>20 Mai</td><td><div class="progress"><span style="width:100%"></span></div></td><td><span class="status st-ok">Submetida</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-          <tr><td><b>DMR</b><br><span class="fmeta" style="font-size:11px;color:var(--grey-5)">Salários</span></td><td>Alfa Indústria, SA</td><td>10 Mai</td><td><div class="progress"><span style="width:100%"></span></div></td><td><span class="status st-ok">Submetida</span></td><td><button class="btn ghost sm" onclick="goDetail()">Abrir</button></td></tr>
-        </tbody></table></div>
-      </div>
-    </section>
-
-    <!-- ============ 12 PROD DETAIL ============ -->
-    <section class="page" id="p-detail">
-      <div class="prodbar">
-        <div class="logo"><span class="dotmark"></span>TaxFlow<small>DTT &amp; Associates</small></div>
-        <div class="spacer"></div>
-        <button class="pbtn" onclick="navTo('p-list')"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Voltar à lista</button>
-        <button class="pbtn primary" onclick="toast('Declaração submetida na AT (simulado) ✓')"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>Submeter</button>
-        <div class="avatar">RM</div>
-      </div>
-      <div class="header"><div class="crumb">Prod Exemplo · Aba 12 <span class="devbadge">DEV PREVIEW</span></div><h2>Form 30 — Beta Trading, Lda <span class="status st-warn" style="font-size:11px">Aguarda cliente</span></h2><p>Detalhe da declaração com workflow do pipeline, reconciliações, inputs e ações.</p></div>
-      <div class="content">
-        <div class="tabs">
-          <div class="tab active" onclick="switchTab(this,'t-flow')">Workflow</div>
-          <div class="tab" onclick="switchTab(this,'t-recon')">Reconciliações</div>
-          <div class="tab" onclick="switchTab(this,'t-inputs')">Inputs</div>
-          <div class="tab" onclick="switchTab(this,'t-prev')">Pré-visualização</div>
-        </div>
-
-        <div class="tabpane active" id="t-flow">
-          <div class="split">
-            <div class="card"><h3>Pipeline da declaração</h3>
-              <div class="timeline" style="margin-top:8px">
-                <div class="tevent done"><div class="tt">1 · Ingestão — 8 inputs detetados</div><div class="td">Concluído · 4 NAV + 2 calculáveis + 2 não-NAV</div></div>
-                <div class="tevent done"><div class="tt">2 · Normalização canónica</div><div class="td">Concluído · schema NAV-like aplicado</div></div>
-                <div class="tevent done"><div class="tt">3 · Reconciliação contas 22</div><div class="td">Concluído · 12 pagamentos a não residentes</div></div>
-                <div class="tevent"><div class="tt">4 · Validação — falta 1 certificado RFI</div><div class="td">Em curso · pedido enviado ao cliente</div></div>
-                <div class="tevent pending"><div class="tt">5 · Geração do draft Modelo 30</div><div class="td">Pendente</div></div>
-                <div class="tevent pending"><div class="tt">6 · Submissão na AT</div><div class="td">Pendente</div></div>
-              </div>
-            </div>
-            <div class="card"><h3>Resumo</h3>
-              <p class="muted" style="margin-bottom:14px">Pagamentos a não residentes sujeitos a retenção na fonte e respetivos certificados de residência.</p>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;justify-content:space-between"><span class="muted">Total pagamentos</span><b style="font-family:Consolas,monospace">€ 248.350,00</b></div>
-                <div style="display:flex;justify-content:space-between"><span class="muted">Retenção apurada</span><b style="font-family:Consolas,monospace">€ 31.420,00</b></div>
-                <div style="display:flex;justify-content:space-between"><span class="muted">Beneficiários</span><b>7</b></div>
-                <div style="display:flex;justify-content:space-between"><span class="muted">Certificados em falta</span><b style="color:var(--red)">1</b></div>
-              </div>
-              <button class="btn" style="width:100%;margin-top:18px;justify-content:center" onclick="openModal('mReq')"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>Pedir certificado ao cliente</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="tabpane" id="t-recon">
-          <div class="recon"><div class="ic ok"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><div class="info"><b>Contas 22 ↔ Pagamentos a não residentes</b><p>Débitos batem com a listagem de operações</p></div><div class="val st-ok" style="color:var(--green)">€ 248.350,00</div></div>
-          <div class="recon"><div class="ic ok"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><div class="info"><b>Retenção ↔ Tabela CDT aplicável</b><p>Taxas validadas por convenção</p></div><div class="val" style="color:var(--green)">€ 31.420,00</div></div>
-          <div class="recon"><div class="ic warn"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><div class="info"><b>Certificado de residência — Fornecedor X (DE)</b><p>Em falta — necessário para aplicar taxa reduzida</p></div><div class="val" style="color:var(--amber)">PENDENTE</div></div>
-          <div class="recon"><div class="ic ok"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><div class="info"><b>NIF não residentes ↔ Cadastro AT</b><p>6 de 7 validados; 1 solicitado à AT</p></div><div class="val" style="color:var(--green)">6/7</div></div>
-        </div>
-
-        <div class="tabpane" id="t-inputs">
-          <div class="filerow"><div class="fic">XLSX</div><div class="fn">Balancete_analitico_Mai2026.xlsx<div class="fmeta">NAV · 2,4 MB · validado</div></div><span class="status st-ok">OK</span></div>
-          <div class="filerow"><div class="fic">XML</div><div class="fn">SAFT_faturacao_Mai2026.xml<div class="fmeta">NAV · 8,1 MB · validado</div></div><span class="status st-ok">OK</span></div>
-          <div class="filerow"><div class="fic">PDF</div><div class="fn">Contratos_servicos_NR.pdf<div class="fmeta">Não-NAV · OCR extraído</div></div><span class="status st-ok">OK</span></div>
-          <div class="filerow"><div class="fic" style="background:var(--amber-bg);color:var(--amber)">PDF</div><div class="fn">Certificado_residencia_FornX.pdf<div class="fmeta">Não-NAV · em falta</div></div><span class="status st-warn">Falta</span></div>
-          <button class="btn ghost" style="margin-top:10px" onclick="toast('Upload de ficheiro (simulado)')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>Carregar ficheiro</button>
-        </div>
-
-        <div class="tabpane" id="t-prev">
-          <div class="card"><h3>Draft Modelo 30 — pré-visualização</h3>
-            <table><thead><tr><th>Beneficiário</th><th>País</th><th>Pagamento</th><th>Taxa</th><th>Retenção</th></tr></thead><tbody>
-              <tr><td>Fornecedor A</td><td>ES</td><td>€ 42.000</td><td>10%</td><td>€ 4.200</td></tr>
-              <tr><td>Fornecedor B</td><td>FR</td><td>€ 58.500</td><td>12%</td><td>€ 7.020</td></tr>
-              <tr><td>Fornecedor X</td><td>DE</td><td>€ 31.850</td><td style="color:var(--amber)">25% *</td><td>€ 7.962</td></tr>
-              <tr><td colspan="4" style="text-align:right"><b>Total</b></td><td><b>€ 31.420</b></td></tr>
-            </tbody></table>
-            <p class="muted" style="margin-top:12px;font-size:12px">* Fornecedor X com taxa cheia por falta de certificado — reduzirá para 15% após receção do RFI.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 13 PROD REQUESTS ============ -->
-    <section class="page" id="p-req">
-      <div class="prodbar">
-        <div class="logo"><span class="dotmark"></span>TaxFlow<small>DTT &amp; Associates</small></div>
-        <div class="spacer"></div>
-        <button class="pbtn primary" onclick="openModal('mReq')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Novo pedido</button>
-        <div class="avatar">RM</div>
-      </div>
-      <div class="header"><div class="crumb">Prod Exemplo · Aba 13 <span class="devbadge">DEV PREVIEW</span></div><h2>Pedidos de Informação ao Cliente</h2><p>Quando faltam inputs, a plataforma gera e acompanha pedidos estruturados aos clientes.</p></div>
-      <div class="content">
-        <div class="prodkpi" style="grid-template-columns:repeat(3,1fr)">
-          <div class="pk"><div class="ico" style="background:var(--amber)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><b>3</b><span>Pedidos em aberto</span></div>
-          <div class="pk"><div class="ico" style="background:var(--green)"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><b>11</b><span>Respondidos este mês</span></div>
-          <div class="pk"><div class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><b>1</b><span>Em atraso (SLA)</span></div>
-        </div>
-        <div class="card" style="padding:0;overflow:hidden"><table>
-          <thead><tr><th>Pedido</th><th>Cliente</th><th>Declaração</th><th>Itens</th><th>Enviado</th><th>Estado</th></tr></thead><tbody>
-          <tr><td><b>Certificado de residência (DE)</b></td><td>Beta Trading, Lda</td><td>Form 30</td><td><span class="chip req">1 em falta</span></td><td>há 6h</td><td><span class="status st-warn">Aguarda</span></td></tr>
-          <tr><td><b>Recibos de renda em falta</b></td><td>Gama Logística, SA</td><td>WHT</td><td><span class="chip req">3 em falta</span></td><td>há 1 dia</td><td><span class="status st-err">Em atraso</span></td></tr>
-          <tr><td><b>Atas de distribuição</b></td><td>Alfa Indústria, SA</td><td>IES</td><td><span class="chip got">recebido</span></td><td>há 2 dias</td><td><span class="status st-ok">Respondido</span></td></tr>
-          <tr><td><b>Mapa de partes relacionadas</b></td><td>Beta Trading, Lda</td><td>CIT</td><td><span class="chip req">1 em falta</span></td><td>há 3h</td><td><span class="status st-warn">Aguarda</span></td></tr>
-        </tbody></table></div>
-        <div class="note"><b>Automação:</b> o agente <b>Info-Request</b> deteta os gaps na fase de Validação, redige o email com a lista exata de documentos em falta e cria a entrada de tracking. As respostas do cliente entram pela ingestão e re-disparam a validação.</div>
-      </div>
-    </section>
-
-    <footer>Digital Transformation Team &amp; Associates</footer>
+    <div class="topbar">
+      <div class="pgtitle" id="topTitle">Dashboard<small id="topCrumb">Visão Geral</small></div>
+      <div class="sp"></div>
+      <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input placeholder="Pesquisar..."></div>
+      <button class="tbtn" onclick="openMsgs()" title="Mensagens"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="dot"></span></button>
+      <button class="tbtn" title="Notificações" onclick="toast('3 entregas com prazo nos próximos 2 dias')"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot"></span></button>
+    </div>
+    <div class="view" id="view"></div>
   </main>
 </div>
 
-<!-- ===== MODALS ===== -->
-<div class="modal-bg" id="mNew">
-  <div class="modal">
-    <div class="mh"><h4>Nova declaração</h4><button class="mx" onclick="closeModal('mNew')">&times;</button></div>
-    <div class="mb">
-      <div class="field"><label>Cliente</label><select><option>Alfa Indústria, SA</option><option>Beta Trading, Lda</option><option>Gama Logística, SA</option></select></div>
-      <div class="field"><label>Tipo de declaração</label><select><option>VAT — Declaração Periódica</option><option>Form 30 — Não Residentes</option><option>WHT — Retenções</option><option>Intrastat</option><option>COPE</option></select></div>
-      <div class="field"><label>Período</label><input type="month" value="2026-05"></div>
-      <div class="field"><label>Notas</label><textarea rows="3" placeholder="Observações opcionais..."></textarea></div>
-    </div>
-    <div class="mf"><button class="btn ghost" onclick="closeModal('mNew')">Cancelar</button><button class="btn" onclick="closeModal('mNew');toast('Declaração criada — ingestão iniciada ✓')">Criar declaração</button></div>
+<button class="fab-chat" id="fabChat" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="pulse"></span></button>
+<div class="chatwin" id="chatWin">
+  <div class="chathead">
+    <div class="bot"><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="14" r="1.2" fill="#fff"/><circle cx="15" cy="14" r="1.2" fill="#fff"/></svg></div>
+    <div class="bi"><b>Assistente TaxFlow</b><span>Online · Agente IA</span></div>
+    <button class="cx" onclick="toggleChat()">&times;</button>
+  </div>
+  <div class="chatbody" id="chatBody"></div>
+  <div class="chatfoot">
+    <input id="chatInput" placeholder="Pergunte algo..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="send" onclick="sendChat()"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
   </div>
 </div>
-
-<div class="modal-bg" id="mReq">
-  <div class="modal">
-    <div class="mh"><h4>Pedido de informação ao cliente</h4><button class="mx" onclick="closeModal('mReq')">&times;</button></div>
-    <div class="mb">
-      <p style="margin-bottom:14px">O agente <b>Info-Request</b> preparou este pedido automaticamente com base nos gaps detetados.</p>
-      <div class="field"><label>Destinatário</label><input value="financeiro@betatrading.pt"></div>
-      <div class="field"><label>Documentos em falta</label>
-        <div style="padding:10px 0"><span class="chip req">Certificado de residência fiscal — Fornecedor X (DE)</span></div>
-      </div>
-      <div class="field"><label>Mensagem</label><textarea rows="4">Exmos. Senhores, para concluir a Declaração Modelo 30 do período de Maio/2026, solicitamos o envio do certificado de residência fiscal do Fornecedor X (Alemanha), necessário à aplicação da taxa reduzida por convenção. Com os melhores cumprimentos.</textarea></div>
-      <div class="field"><label>Prazo de resposta (SLA)</label><select><option>2 dias úteis</option><option>5 dias úteis</option></select></div>
-    </div>
-    <div class="mf"><button class="btn ghost" onclick="closeModal('mReq')">Cancelar</button><button class="btn" onclick="closeModal('mReq');toast('Pedido enviado e em tracking ✓')">Enviar pedido</button></div>
-  </div>
-</div>
-
 <div class="toast" id="toast"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg">OK</span></div>
 
-<script>
-  const aside=document.getElementById('aside');
-  const toggle=document.getElementById('toggle');
-  const items=document.querySelectorAll('.nav-item');
-  const pages=document.querySelectorAll('.page');
-  function scrollTop(){
-    const m=document.querySelector('main');
-    m&&m.scrollTo({top:0,behavior:'auto'});
-    window.scrollTo({top:0,behavior:'auto'});
-  }
-  function navTo(id){
-    items.forEach(i=>i.classList.toggle('active',i.dataset.p===id));
-    pages.forEach(p=>p.classList.toggle('active',p.id===id));
-    aside.classList.add('collapsed');
-    scrollTop();
-  }
-  function goDetail(){navTo('p-detail');}
-  toggle.addEventListener('click',()=>aside.classList.toggle('collapsed'));
-  items.forEach(it=>it.addEventListener('click',()=>navTo(it.dataset.p)));
+<div class="modal-bg" id="mApply"><div class="modal">
+  <div class="mh"><h4>Candidatar-me a um cliente</h4><button class="mx" onclick="cm('mApply')">&times;</button></div>
+  <div class="mb"><p style="margin-bottom:14px">A candidatura entra como <b>Associate</b> (default) e segue para aprovação. Se o cliente já tiver <b>Manager</b>, ele aprova; senão, aprova o <b>App Admin</b>.</p>
+    <div class="field"><label>Cliente</label><select id="applyClient" class="inp" style="width:100%" onchange="applyHint()"></select></div>
+    <div class="field"><label>Role pretendido</label><select id="applyRole" class="inp" style="width:100%" onchange="applyHint()"><option>Associate</option><option>Senior</option><option>Manager</option></select></div>
+    <div class="note" id="applyApprover" style="font-size:12.5px"></div></div>
+  <div class="mf"><button class="btn ghost" onclick="cm('mApply')">Cancelar</button><button class="btn" onclick="submitApply()">Submeter candidatura</button></div>
+</div></div>
+<div class="modal-bg" id="mUser"><div class="modal wide">
+  <div class="mh"><h4 id="userTitle">Novo utilizador</h4><button class="mx" onclick="cm('mUser')">&times;</button></div>
+  <div class="mb"><div class="field row2"><div><label>Nome completo</label><input id="uName"></div><div><label>Email</label><input id="uEmail" type="email"></div></div>
+    <div class="field"><label><input type="checkbox" id="uAdmin" style="width:auto;margin-right:6px;vertical-align:middle">Equipa DTT / App Admin (acesso total)</label></div>
+    <div class="chk-section">Atribuir a clientes (role inicial)</div><p style="font-size:12px;margin-bottom:10px">Associate fica ativo; Senior/Manager geram pedido de aprovação.</p>
+    <div id="uClientAssign"></div></div>
+  <div class="mf"><button class="btn ghost" onclick="cm('mUser')">Cancelar</button><button class="btn" id="uSave" onclick="saveUser()">Criar utilizador</button></div>
+</div></div>
+<div class="modal-bg" id="mClient"><div class="modal wide">
+  <div class="mh"><h4 id="clientTitle">Novo cliente</h4><button class="mx" onclick="cm('mClient')">&times;</button></div>
+  <div class="mb"><div class="field row2"><div><label>Nome do cliente</label><input id="cName"></div><div><label>NIF</label><input id="cNif"></div></div>
+    <div class="chk-section">Inputs atualizados no NAV <span style="text-transform:none;font-weight:400;color:var(--grey-7)">(apenas inputs de origem NAV)</span></div>
+    <div class="checkgrid" id="cInputsGrid"></div>
+    <div class="chk-section">Declarações a usar</div><div class="checkgrid" id="cDeclGrid"></div></div>
+  <div class="mf"><button class="btn ghost" onclick="cm('mClient')">Cancelar</button><button class="btn" id="cSave" onclick="saveClient()">Criar cliente</button></div>
+</div></div>
+<div class="modal-bg" id="mMsgs"><div class="modal">
+  <div class="mh"><h4>Mensagens &amp; alertas</h4><button class="mx" onclick="cm('mMsgs')">&times;</button></div>
+  <div class="mb" id="msgsBody"></div><div class="mf"><button class="btn ghost" onclick="cm('mMsgs')">Fechar</button></div>
+</div></div>
 
-  // tabs
-  function switchTab(el,id){
-    const tabs=el.parentElement.querySelectorAll('.tab');
-    tabs.forEach(t=>t.classList.remove('active'));
-    el.classList.add('active');
-    const panes=el.closest('.content').querySelectorAll('.tabpane');
-    panes.forEach(p=>p.classList.toggle('active',p.id===id));
-  }
-  // modals
-  function openModal(id){document.getElementById(id).classList.add('open');}
-  function closeModal(id){document.getElementById(id).classList.remove('open');}
-  document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
-  // toast
-  let tTimer;
-  function toast(msg){
-    const t=document.getElementById('toast');
-    document.getElementById('toastMsg').textContent=msg;
-    t.classList.add('show');clearTimeout(tTimer);
-    tTimer=setTimeout(()=>t.classList.remove('show'),3200);
-  }
-  // search filters
-  const ds=document.getElementById('declSearch');
-  ds&&ds.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#declList details').forEach(d=>{d.style.display=d.textContent.toLowerCase().includes(q)?'':'none';});});
-  let inOrigin='all';
-  function filterInputs(btn){
-    if(btn){
-      inOrigin=btn.dataset.o;
-      document.querySelectorAll('.ofbtn').forEach(b=>b.classList.toggle('active',b===btn));
+<script>
+const ROLES=["Associate","Senior","Manager"];
+const NAV_INPUTS=["Balancete analítico mensal","Cadastro fornecedores enriquecido","Reconciliação fornecedores (AP)","Operações com não residentes","Reconciliação clientes (AR)","Reconciliação bancária","SAF-T Faturação","Operações intra-UE bens","Inventário valorizado","Balancete anual + DFs","Cadastro ativos fixos + depreciações"];
+const DECLS=["VAT (DP IVA)","EC Sales","SAF-T Faturação","WHT","Intrastat","COPE","Form 30","PPC/PAC","IMI/AIMI","IUC","IEC","SAF-T Inventários","SAF-T Contabilidade","CIT (M22)","IES","Form 62"];
+const DECL_INFO={
+ "VAT (DP IVA)":{inputs:[["Balancete antes do apuramento do IVA","NAV — exportação balancete"],["Balancete da conta #243","NAV — extrato de conta"],["Mapa Análise do IVA","NAV / Template Excel"],["DP do IVA do período N-1","Portal AT"]],tpl:"Template_VAT_DP.xlsx"},
+ "Form 30":{inputs:[["Listagem de pagamentos a não residentes","NAV / Equipa"],["Modelo 30 N-1","Portal AT"],["Modelos RFI / certificados de residência","Cliente"],["NIF Portugueses de não-residentes","Portal AT"]],tpl:"Template_Modelo30.xlsx"},
+ "WHT":{inputs:[["Extrato conta #2422","NAV"],["Extrato conta #2424","NAV"],["Cópias de documentos","Cliente"],["Suporte dos cálculos","Template"]],tpl:"Template_WHT.xlsx"},
+ "COPE":{inputs:[["Extrato depósitos à ordem","NAV"],["Balancete terceiros não residentes","NAV"],["Balancete geral","NAV"],["COL","Template"]],tpl:"Template_COPE_COL.xlsx"},
+ "Intrastat":{inputs:[["Listagem mercadorias (NC8, valor, kg)","NAV / Template"],["Declaração Recapitulativa","Portal AT"],["Declaração Periódica do IVA","Portal AT"]],tpl:"Template_Intrastat.csv"},
+ "EC Sales":{inputs:[["Listagem faturação intra-UE","NAV"],["NIF clientes (VIES)","VIES"],["Recapitulativa N-1","Portal AT"]],tpl:"Template_ECSales.xlsx"},
+ "CIT (M22)":{inputs:[["Balancete anual","NAV"],["Demonstrações Financeiras assinadas","Cliente"],["Análise de Gastos","Template"]],tpl:"Template_M22.xlsx"},
+ "IES":{inputs:[["Demonstrações Financeiras","Cliente"],["Anexos aplicáveis","Template"]],tpl:"Template_IES.xlsx"}
+};
+let CLIENTS=[
+ {id:1,name:"Alfa Indústria, SA",nif:"500 100 200",navInputs:["Balancete analítico mensal","SAF-T Faturação","Reconciliação fornecedores (AP)","Reconciliação clientes (AR)"],decls:["VAT (DP IVA)","WHT","Intrastat","EC Sales","Form 30"]},
+ {id:2,name:"Beta Trading, Lda",nif:"500 300 400",navInputs:["Balancete analítico mensal","Operações com não residentes","Reconciliação bancária"],decls:["VAT (DP IVA)","Form 30","COPE","CIT (M22)"]},
+ {id:3,name:"Gama Logística, SA",nif:"500 500 600",navInputs:["Balancete analítico mensal","Operações intra-UE bens","SAF-T Faturação"],decls:["VAT (DP IVA)","EC Sales","Intrastat"]}
+];
+let USERS=[
+ {id:1,name:"App Admin (DTT)",email:"admin@dtt.pt",isAdmin:true,color:"#D04A02",memberships:[]},
+ {id:2,name:"Rita Marques",email:"rita.marques@dtt.pt",isAdmin:false,color:"#1565C0",memberships:[{clientId:1,role:"Manager",status:"active"},{clientId:3,role:"Senior",status:"active"}]},
+ {id:3,name:"João Silva",email:"joao.silva@dtt.pt",isAdmin:false,color:"#6A1B9A",memberships:[{clientId:1,role:"Associate",status:"active"},{clientId:2,role:"Manager",status:"active"}]},
+ {id:4,name:"Ana Costa",email:"ana.costa@dtt.pt",isAdmin:false,color:"#2E7D32",memberships:[{clientId:3,role:"Associate",status:"active"}]},
+ {id:99,name:"User de Teste",email:"docs@dtt.pt",isAdmin:false,isDocs:true,color:"#6A1B9A",memberships:[]}
+];
+let APPROVALS=[
+ {id:1,userId:4,clientId:2,requestedRole:"Associate",kind:"join",status:"pending"},
+ {id:2,userId:3,clientId:3,requestedRole:"Senior",kind:"join",status:"pending"}
+];
+let DELIV=[
+ {id:1,clientId:1,decl:"VAT (DP IVA)",due:10,status:"ok",prog:100},
+ {id:2,clientId:1,decl:"WHT",due:15,status:"prep",prog:85},
+ {id:3,clientId:1,decl:"DMR",due:5,status:"ok",prog:100},
+ {id:4,clientId:1,decl:"EC Sales",due:20,status:"ok",prog:100},
+ {id:5,clientId:2,decl:"Form 30",due:31,status:"client",prog:60},
+ {id:6,clientId:2,decl:"COPE",due:20,status:"prep",prog:75},
+ {id:7,clientId:2,decl:"CIT (M22)",due:31,status:"late",prog:30},
+ {id:8,clientId:3,decl:"VAT (DP IVA)",due:20,status:"ok",prog:100},
+ {id:9,clientId:3,decl:"Intrastat",due:25,status:"late",prog:40},
+ {id:10,clientId:3,decl:"EC Sales",due:20,status:"ok",prog:100}
+];
+let MESSAGES=[
+ {id:1,clientId:2,type:"file",title:"Certificado de residência (DE) em falta",body:"Form 30 — Fornecedor X.",time:"há 6h",sev:"warn"},
+ {id:2,clientId:3,type:"file",title:"Recibos de renda em falta (3)",body:"WHT — documentos de suporte.",time:"há 1 dia",sev:"err"},
+ {id:3,clientId:1,type:"data",title:"Variação YoY > 30% no campo 3 do IVA",body:"Anomalia detetada pelo agente Analytics.",time:"há 2h",sev:"info"},
+ {id:4,clientId:2,type:"data",title:"NIF não validado no VIES",body:"1 fornecedor por confirmar.",time:"há 3h",sev:"warn"}
+];
+let LIVECHATS=[
+ {id:1,clientId:1,from:"Rita Marques",messages:[{me:false,t:"Bom dia, podem confirmar o prazo do Form 30?",time:"09:12"},{me:true,t:"Bom dia! É dia 31. Recebemos 6 de 7 certificados.",time:"09:15"}]},
+ {id:2,clientId:2,from:"João Silva",messages:[{me:false,t:"Falta algum documento para o COPE?",time:"ontem"}]}
+];
+let LOGS=[
+ {t:"08:02:11",lv:"INFO",m:"ADF trigger fiscal-day-5 disparado"},
+ {t:"08:02:48",lv:"OK",m:"Ingestão NAV Alfa Indústria concluída (11 inputs)"},
+ {t:"08:05:30",lv:"WARN",m:"VIES timeout — retry 1/3 (Beta Trading)"},
+ {t:"08:06:02",lv:"OK",m:"Reconciliação #243 Alfa Indústria = match"},
+ {t:"08:09:14",lv:"ERR",m:"Intrastat Gama: 4 linhas sem código NC8"},
+ {t:"08:10:00",lv:"INFO",m:"Agente Info-Request enviou pedido a Beta Trading"},
+ {t:"08:12:33",lv:"OK",m:"Draft Modelo 30 gerado (Beta Trading)"}
+];
+let AGENTSESS=[
+ {id:1,user:"Rita Marques",topic:"Prazo Form 30",msgs:4,resolved:true,sat:5},
+ {id:2,user:"Ana Costa",topic:"Onde obter SAF-T",msgs:3,resolved:true,sat:4},
+ {id:3,user:"João Silva",topic:"Falta certificado RFI",msgs:6,resolved:false,sat:0},
+ {id:4,user:"Rita Marques",topic:"Template IES",msgs:2,resolved:true,sat:5}
+];
+let SEQ={user:100,client:4,appr:3};
+let ME=null, SCOPE=null, CURPAGE="dash";
+
+const $=id=>document.getElementById(id);
+const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const clientById=id=>CLIENTS.find(c=>c.id===id);
+const userById=id=>USERS.find(u=>u.id===id);
+const roleBadge=r=>`<span class="role ${r.toLowerCase()}">${r}</span>`;
+const TODAY=14;
+function myClients(){return ME.isAdmin?CLIENTS.slice():CLIENTS.filter(c=>ME.memberships.some(m=>m.clientId===c.id&&m.status==='active'));}
+function myRole(clientId){const m=ME.memberships.find(x=>x.clientId===clientId&&x.status==='active');return m?m.role:null;}
+function isManagerPlus(clientId){if(ME.isAdmin)return true;return myRole(clientId)==='Manager';}
+function clientHasManager(cid){return USERS.some(u=>u.memberships.some(m=>m.clientId===cid&&m.role==='Manager'&&m.status==='active'));}
+function approverFor(cid){const mgr=USERS.find(u=>!u.isAdmin&&u.memberships.some(m=>m.clientId===cid&&m.role==='Manager'&&m.status==='active'));return mgr?{type:"Manager",name:mgr.name}:{type:"App Admin",name:"App Admin (DTT)"};}
+function statusPill(s){return ({ok:'<span class="st st-ok">Submetida</span>',prep:'<span class="st st-info">Em preparação</span>',client:'<span class="st st-warn">Aguarda cliente</span>',late:'<span class="st st-err">Em atraso</span>'})[s]||s;}
+function pendingApprCount(){let arr=APPROVALS.filter(a=>a.status==='pending');if(!ME.isAdmin){arr=arr.filter(a=>{const ap=approverFor(a.clientId);return ap.type==='Manager'&&ap.name===ME.name;});}return arr.length;}
+let tT;function toast(m){const t=$('toast');$('toastMsg').textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),3200);}
+function om(id){$(id).classList.add('open');}function cm(id){$(id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+function ssoLogin(){const email=($('authEmail').value||'').trim().toLowerCase();let u=USERS.find(x=>x.email.toLowerCase()===email);if(!u)u=userById(2);loginAs(u.id);}
+function loginAs(id){
+  ME=userById(id);
+  $('auth').classList.add('gone');
+  setTimeout(()=>{$('auth').style.display='none';$('app').classList.add('show');},250);
+  $('suAv').textContent=initials(ME.name);$('suAv').style.background=ME.color;
+  $('suName').textContent=ME.name;$('suRole').textContent=ME.isDocs?'Documentação · Demo':(ME.isAdmin?'Equipa DTT · Admin':'Colaborador');
+  buildScope();buildNav();
+  CURPAGE=ME.isDocs?'d-overview':(ME.isAdmin?'a-dash':'dash');
+  goto(CURPAGE);resetChat();
+}
+function logout(){location.reload();}
+
+function buildScope(){
+  const box=$('scopeBox');const sel=$('scopeSel');
+  if(ME.isAdmin||ME.isDocs){box.style.display='none';SCOPE=null;return;}
+  box.style.display='';
+  const cs=myClients();
+  sel.innerHTML='<option value="">— Visão geral —</option>'+cs.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  SCOPE=null;
+}
+function onScope(){const v=$('scopeSel').value;SCOPE=v?+v:null;if(SCOPE){goto('client');}else{goto('dash');}}
+
+const IC={
+ dash:'<path d="M3 13h8V3H3zM13 21h8V11h-8zM13 3v6h8V3zM3 21h8v-6H3z"/>',
+ cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ client:'<path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>',
+ msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+ dl:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/>',
+ chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+ track:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+ log:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
+ appr:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+ prof:'<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>',
+ layers:'<path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>',
+ cpu:'<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/>',
+ grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+ euro:'<path d="M18 7a6 6 0 1 0 0 10M5 9h7M5 13h6"/>',
+ check2:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+ rules:'<path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/>',
+ robot:'<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/>'
+};
+function buildNav(){
+  const nav=$('nav');let h='';
+  if(ME.isDocs){
+    h+=`<div class="navsec">Visão Geral</div>`;
+    h+=navItem('d-overview','dash','Resumo','01');
+    h+=navItem('d-flow','layers','Fluxo de Informação','02');
+    h+=`<div class="navsec">Tecnologia</div>`;
+    h+=navItem('d-stack','cpu','Stack por Stage','03');
+    h+=navItem('d-fabric','grid','Microsoft Fabric','04');
+    h+=navItem('d-cost','euro','Custo &amp; Dificuldade','05');
+    h+=navItem('d-reqs','check2','Requisitos','06');
+    h+=`<div class="navsec">Regras de Negócio</div>`;
+    h+=navItem('d-decl','rules','Validações por Declaração','07');
+    h+=navItem('d-inputs','client','Inputs e Origem','08');
+    h+=navItem('d-agents','robot','Agentes','09');
+  }else if(ME.isAdmin){
+    h+=`<div class="navsec">Equipa DTT</div>`;
+    h+=navItem('a-dash','dash','Dashboard');h+=navItem('a-cal','cal','Calendário Global');
+    h+=navItem('a-tracking','track','Tracking de Eventos');h+=navItem('a-logs','log','Logs');
+    h+=navItem('a-chat','chat','Chats &amp; Agente');
+    h+=`<div class="navsec">Gestão</div>`;
+    h+=navItem('a-clients','client','Clientes');h+=navItem('a-users','user','Utilizadores');
+    h+=navItem('a-appr','appr','Aprovações',pendingApprCount());
+  }else{
+    h+=`<div class="navsec">Pessoal</div>`;
+    h+=navItem('dash','dash','Dashboard');h+=navItem('cal','cal','Calendário');
+    h+=navItem('msgs','msg','Mensagens',MESSAGES.length);h+=navItem('profile','prof','O meu perfil');
+    h+=`<div class="navsec">Cliente em foco</div>`;
+    h+=navItem('client','client','Visão do cliente');h+=navItem('client-info','info','Info por Declaração');
+    h+=navItem('client-tpl','dl','Templates');
+    if(myClients().some(c=>isManagerPlus(c.id))){
+      h+=`<div class="navsec">Gestão (Manager)</div>`;
+      h+=navItem('client-team','user','Equipa &amp; Roles');h+=navItem('client-appr','appr','Aprovações',pendingApprCount());
+      h+=navItem('client-live','chat','Chat com DTT');
     }
-    const q=(document.getElementById('inSearch').value||'').toLowerCase();
-    let visible=0;
-    document.querySelectorAll('#inTable tbody tr').forEach(r=>{
-      const okText=r.textContent.toLowerCase().includes(q);
-      const okOrigin=(inOrigin==='all'||r.dataset.o===inOrigin);
-      const show=okText&&okOrigin;
-      r.style.display=show?'':'none';
-      if(show)visible++;
-    });
-    const empty=document.getElementById('inEmpty');
-    if(empty)empty.style.display=visible?'none':'block';
   }
-  function filterList(){
-    const q=(document.getElementById('listSearch').value||'').toLowerCase();
-    const s=(document.getElementById('listStatus').value||'').toLowerCase();
-    document.querySelectorAll('#listTable tbody tr').forEach(r=>{
-      const txt=r.textContent.toLowerCase();
-      r.style.display=(txt.includes(q)&&(s===''||txt.includes(s)))?'':'none';
-    });
-  }
+  nav.innerHTML=h;
+}
+function navItem(page,ico,label,num){
+  let right='';
+  if(typeof num==='string')right=`<span class="nn">${num}</span>`;
+  else if(num&&num>0)right=`<span class="nb">${num}</span>`;
+  return `<div class="nav-item" data-pg="${page}" onclick="goto('${page}')"><svg viewBox="0 0 24 24">${IC[ico]}</svg><span>${label}</span>${right}</div>`;
+}
+const TITLES={
+ dash:["Dashboard","Visão Geral"],cal:["Calendário","Entregas dos meus clientes"],msgs:["Mensagens","Dados e ficheiros em falta"],
+ profile:["O meu perfil","Clientes e candidaturas"],client:["Visão do cliente","Timeline, ficheiros e mensagens"],
+ 'client-info':["Info por Declaração","Inputs necessários e origem"],'client-tpl':["Templates","Downloads de preenchimento"],
+ 'client-team':["Equipa & Roles","Gestão de membros"],'client-appr':["Aprovações","Candidaturas a este cliente"],'client-live':["Chat com DTT","Linha direta"],
+ 'a-dash':["Dashboard DTT","Entregáveis e KPIs"],'a-cal':["Calendário Global","Entregáveis únicos"],'a-tracking':["Tracking de Eventos","Pipeline a decorrer"],
+ 'a-logs':["Logs","Auditoria do sistema"],'a-chat':["Chats & Agente","Live chat e sucesso de resolução"],
+ 'a-clients':["Clientes","Configuração e equipa"],'a-users':["Utilizadores","Gestão e roles"],'a-appr':["Aprovações","Clientes e promoções"],
+ 'd-overview':["Resumo da Arquitetura","Visão Geral · 01"],'d-flow':["Fluxo de Informação","End-to-End · 02"],
+ 'd-stack':["Stack por Stage","Tecnologia · 03"],'d-fabric':["Microsoft Fabric","Tecnologia · 04"],'d-cost':["Custo & Dificuldade","Tecnologia · 05"],
+ 'd-reqs':["Requisitos","Funcionais & Não-Funcionais · 06"],'d-decl':["Validações por Declaração","Motor de Regras · 07"],
+ 'd-inputs':["Inputs e Origem","Mapeamento · 08"],'d-agents':["Agentes Especializados","Camada de Agentes · 09"]
+};
+function goto(page){
+  CURPAGE=page;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.pg===page));
+  const t=TITLES[page]||["",""];$('topTitle').childNodes[0].nodeValue=t[0];$('topCrumb').textContent=t[1];
+  render(page);$('view').scrollTop=0;
+}
 </script>
-</body>
-</html>
+
+<script>
+function kpi(bg,ico,val,label,trend){return `<div class="kpi"><div class="ico ${bg}"><svg viewBox="0 0 24 24">${ico}</svg></div><b>${val}</b><span>${label}</span>${trend||''}</div>`;}
+const SVG={check:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',warn:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',bolt:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>'};
+function calendarHTML(deliv){
+  const byDay={};deliv.forEach(d=>{(byDay[d.day]=byDay[d.day]||[]).push(d);});
+  let cells='';for(let i=0;i<4;i++)cells+='<div class="cell empty"></div>';
+  for(let d=1;d<=31;d++){const evs=(byDay[d]||[]).map(e=>`<span class="ev ${e.kind}" title="${e.label}">${e.label}</span>`).join('');cells+=`<div class="cell ${d===TODAY?'today':''}"><span class="dn">${d}</span>${evs}</div>`;}
+  return `<div class="cal"><div class="dh">S</div><div class="dh">T</div><div class="dh">Q</div><div class="dh">Q</div><div class="dh">S</div><div class="dh">S</div><div class="dh">D</div>${cells}</div>`;
+}
+function delivKind(s){return s==='late'?'late':s==='client'?'warn':s==='ok'?'ok':'due';}
+function deliverablesFor(ids){return DELIV.filter(d=>ids.includes(d.clientId));}
+function upcoming31(list){return list.filter(d=>d.due>=TODAY&&d.due<=TODAY+31&&d.status!=='ok').length;}
+function lateCount(list){return list.filter(d=>d.status==='late').length;}
+function msgRow(m){const ic={warn:'bg-t',err:'bg-r',info:'bg-b'}[m.sev];const icon=m.type==='file'?SVG.doc:SVG.bolt;return `<div class="msg"><div class="mi ${ic}"><svg viewBox="0 0 24 24">${icon}</svg></div><div class="mc"><b>${m.title}</b><p>${clientById(m.clientId).name} · ${m.body}</p></div><span class="mt">${m.time}</span></div>`;}
+
+function pgDash(){
+  const cs=myClients();const list=deliverablesFor(cs.map(c=>c.id));
+  const subm=list.filter(d=>d.status==='ok').length,upc=upcoming31(list),late=lateCount(list);
+  const cal=list.map(d=>({day:d.due,label:d.decl.split(' ')[0],kind:delivKind(d.status)}));
+  const rows=list.sort((a,b)=>a.due-b.due).map(d=>`<tr><td><b>${d.decl}</b></td><td>${clientById(d.clientId).name}</td><td>${d.due} Mai</td><td><div class="prog"><span style="width:${d.prog}%"></span></div></td><td>${statusPill(d.status)}</td></tr>`).join('');
+  const msgs=MESSAGES.filter(m=>cs.some(c=>c.id===m.clientId)).slice(0,4).map(msgRow).join('');
+  return `<div class="grid g4" style="margin-bottom:22px">${kpi('bg-o',SVG.check,subm,'Entregas submetidas','<span class="trend up">▲ 2 vs. mês anterior</span>')}${kpi('bg-t',SVG.clock,upc,'Upcoming (31 dias)','<span class="trend">prazo médio 3 dias</span>')}${kpi('bg-r',SVG.warn,late,'Entregas em atraso','<span class="trend down">SLA excedido</span>')}${kpi('bg-g',SVG.user,cs.length,'Clientes atribuídos','')}</div>
+  <div class="grid" style="grid-template-columns:1.6fr 1fr"><div class="card pad0"><div style="padding:18px 22px"><h3 class="bb"><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--orange);fill:none;stroke-width:2">${SVG.doc}</svg>Próximas entregas</h3></div><table><thead><tr><th>Declaração</th><th>Cliente</th><th>Prazo</th><th>Progresso</th><th>Estado</th></tr></thead><tbody>${rows||'<tr class="empty"><td colspan=5>Sem entregas</td></tr>'}</tbody></table></div>
+  <div><div class="card"><h3 class="bb"><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--orange);fill:none;stroke-width:2">${SVG.msg}</svg>Mensagens recentes</h3>${msgs||'<p class="csub">Sem mensagens</p>'}</div></div></div>
+  <div class="card" style="margin-top:20px"><h3 class="bb"><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--orange);fill:none;stroke-width:2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Calendário — Maio 2026 · todos os meus clientes</h3>${calendarHTML(cal)}</div>`;
+}
+function pgCal(){
+  const cs=myClients();const list=deliverablesFor(cs.map(c=>c.id));const upc=upcoming31(list),late=lateCount(list);
+  const cal=list.map(d=>({day:d.due,label:`${d.decl.split(' ')[0]} · ${clientById(d.clientId).name.split(' ')[0]}`,kind:delivKind(d.status)}));
+  return `<div class="grid g3" style="margin-bottom:22px">${kpi('bg-t',SVG.clock,upc,'Upcoming — próximos 31 dias','')}${kpi('bg-r',SVG.warn,late,'Eventos em atraso','')}${kpi('bg-b',SVG.doc,list.length,'Total de entregas no mês','')}</div>
+  <div class="card"><h3 class="bb">Maio 2026 · entregas conjuntas dos clientes</h3>${calendarHTML(cal)}<div style="margin-top:16px;display:flex;gap:18px;flex-wrap:wrap;font-size:12px"><span><span class="ev due" style="display:inline-block;padding:2px 8px">prazo</span></span><span><span class="ev warn" style="display:inline-block;padding:2px 8px">aguarda cliente</span></span><span><span class="ev late" style="display:inline-block;padding:2px 8px">em atraso</span></span><span><span class="ev ok" style="display:inline-block;padding:2px 8px">submetida</span></span></div></div>`;
+}
+function pgMsgs(){
+  const cs=myClients();const list=MESSAGES.filter(m=>cs.some(c=>c.id===m.clientId));
+  const files=list.filter(m=>m.type==='file'),data=list.filter(m=>m.type==='data');
+  return `<div class="grid g3" style="margin-bottom:22px">${kpi('bg-r',SVG.warn,list.length,'Alertas ativos','')}${kpi('bg-t',SVG.doc,files.length,'Ficheiros em falta','')}${kpi('bg-b',SVG.bolt,data.length,'Avisos sobre dados','')}</div>
+  <div class="grid g2"><div class="card"><h3 class="bb">Ficheiros em falta</h3>${files.map(msgRow).join('')||'<p class="csub">Nenhum</p>'}</div><div class="card"><h3 class="bb">Avisos sobre dados</h3>${data.map(msgRow).join('')||'<p class="csub">Nenhum</p>'}</div></div>`;
+}
+function pgProfile(){
+  const active=ME.memberships.filter(m=>m.status==='active'),pend=ME.memberships.filter(m=>m.status==='pending');
+  const rows=active.map(m=>`<tr><td><b>${clientById(m.clientId).name}</b></td><td>${roleBadge(m.role)}</td><td>${clientById(m.clientId).decls.length} declarações</td><td><button class="btn ghost sm" onclick="SCOPE=${m.clientId};$('scopeSel').value='${m.clientId}';goto('client')">Abrir</button></td></tr>`).join('');
+  const pr=pend.map(m=>`<tr><td><b>${clientById(m.clientId).name}</b></td><td>${roleBadge(m.role)}</td><td><span class="st st-warn">Pendente aprovação</span></td><td></td></tr>`).join('');
+  return `<div class="profilehero"><div class="pav" style="background:${ME.color}">${initials(ME.name)}</div><div><h2>${ME.name}</h2><div class="pmail">${ME.email}</div><div class="ptags">${active.map(m=>roleBadge(m.role)+' ').join('')}</div></div></div>
+  <div class="toolbar"><h3 style="font-size:16px">Os meus clientes</h3><div class="grow"></div><button class="btn" onclick="openApply()"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Candidatar a novo cliente</button></div>
+  <div class="card pad0"><table><thead><tr><th>Cliente</th><th>Role</th><th>Detalhe</th><th></th></tr></thead><tbody>${rows||'<tr class="empty"><td colspan=4>Sem clientes</td></tr>'}${pr}</tbody></table></div>`;
+}
+function requireScope(){if(SCOPE)return true;const cs=myClients();if(cs.length){SCOPE=cs[0].id;$('scopeSel').value=SCOPE;return true;}return false;}
+function pgClient(){
+  if(!requireScope())return `<div class="card">Sem cliente atribuído.</div>`;
+  const c=clientById(SCOPE);const list=deliverablesFor([c.id]);const upc=upcoming31(list),late=lateCount(list);
+  const cal=list.map(d=>({day:d.due,label:d.decl.split(' ')[0],kind:delivKind(d.status)}));
+  const tl=list.sort((a,b)=>a.due-b.due).map(d=>`<div class="tlev ${d.status==='ok'?'done':d.status==='late'?'late':d.status==='client'?'':'pending'}"><div class="tt">${d.decl} — prazo ${d.due} Mai</div><div class="td">${({ok:'Submetida',prep:'Em preparação',client:'A aguardar cliente',late:'Em atraso'})[d.status]} · ${d.prog}%</div></div>`).join('');
+  const msgs=MESSAGES.filter(m=>m.clientId===c.id);const files=msgs.filter(m=>m.type==='file');
+  const mgr=isManagerPlus(c.id)?`<span class="role manager">Manager+</span>`:roleBadge(myRole(c.id)||'Associate');
+  return `<div class="toolbar"><h3 style="font-size:18px">${c.name} <span class="csub">· NIF ${c.nif}</span></h3><div class="grow"></div>${mgr}</div>
+  <div class="grid g3" style="margin-bottom:22px">${kpi('bg-t',SVG.clock,upc,'Upcoming (31 dias)','')}${kpi('bg-r',SVG.warn,late,'Eventos em atraso','')}${kpi('bg-b',SVG.doc,files.length,'Ficheiros em falta','')}</div>
+  <div class="grid" style="grid-template-columns:1.5fr 1fr"><div class="card"><h3 class="bb">Timeline de entregas</h3><div class="tl">${tl}</div></div><div class="card"><h3 class="bb">Ficheiros &amp; mensagens</h3>${msgs.map(msgRow).join('')||'<p class="csub">Sem pendências</p>'}</div></div>
+  <div class="card" style="margin-top:20px"><h3 class="bb">Calendário do cliente — Maio 2026</h3>${calendarHTML(cal)}</div>`;
+}
+function pgClientInfo(){
+  if(!requireScope())return `<div class="card">Sem cliente.</div>`;const c=clientById(SCOPE);
+  const blocks=c.decls.map(d=>{const info=DECL_INFO[d];if(!info)return `<details class="card" style="padding:0;margin-bottom:11px"><summary>${d}</summary><div class="body">Inputs gerais: balancete, extratos e suportes documentais.</div></details>`;const rows=info.inputs.map(i=>`<tr><td>${i[0]}</td><td><span class="chip o">${i[1]}</span></td></tr>`).join('');return `<div class="card" style="margin-bottom:14px"><h3 class="bb">${d}</h3><table><thead><tr><th>Input necessário</th><th>Onde obter</th></tr></thead><tbody>${rows}</tbody></table><div style="margin-top:12px"><button class="btn ghost sm" onclick="goto('client-tpl')"><svg viewBox="0 0 24 24">${IC.dl}</svg>Template: ${info.tpl}</button></div></div>`;}).join('');
+  return `<div class="note" style="margin-bottom:18px">Para o cliente <b>${c.name}</b>: que inputs cada declaração exige e onde obtê-los.</div>${blocks}`;
+}
+function pgClientTpl(){
+  if(!requireScope())return `<div class="card">Sem cliente.</div>`;const c=clientById(SCOPE);
+  const tpls=[...new Set(c.decls.map(d=>DECL_INFO[d]?.tpl).filter(Boolean))];const all=[...tpls,"Template_Balancete_NAV.xlsx","Template_Inventario.xlsx","Template_PartesRelacionadas.xlsx"];
+  return `<div class="note" style="margin-bottom:18px">Descarregue os templates de preenchimento de cada input (formato oficial DTT).</div>${all.map(t=>`<div class="dlcard"><div class="di">${t.split('.').pop().toUpperCase()}</div><div class="dn"><b>${t}</b><p>Template de preenchimento · v2026</p></div><button class="btn sm" onclick="toast('Download iniciado: ${t}')"><svg viewBox="0 0 24 24">${IC.dl}</svg>Download</button></div>`).join('')}`;
+}
+function pgClientTeam(){
+  if(!requireScope())return `<div class="card">Sem cliente.</div>`;const c=clientById(SCOPE);
+  if(!isManagerPlus(c.id))return `<div class="card">Acesso restrito a Manager+.</div>`;
+  const team=USERS.filter(u=>u.memberships.some(m=>m.clientId===c.id&&m.status==='active'));
+  const rows=team.map(u=>{const m=u.memberships.find(x=>x.clientId===c.id);const opts=ROLES.map(r=>`<option ${r===m.role?'selected':''}>${r}</option>`).join('');return `<tr><td><span class="miniav" style="background:${u.color}">${initials(u.name)}</span><b>${u.name}</b></td><td class="csub">${u.email}</td><td><select class="inp" onchange="changeRole(${u.id},${c.id},this.value)">${opts}</select></td><td><button class="btn ghost sm" onclick="removeMember(${u.id},${c.id})">Remover</button></td></tr>`;}).join('');
+  return `<div class="toolbar"><h3 style="font-size:16px">Equipa de ${c.name}</h3><div class="grow"></div><span class="role manager">Gestão Manager+</span></div><div class="note" style="margin-bottom:18px">Pode trocar roles dos membros.</div><div class="card pad0"><table><thead><tr><th>Membro</th><th>Email</th><th>Role</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function pgClientAppr(){
+  if(!requireScope())return `<div class="card">Sem cliente.</div>`;const c=clientById(SCOPE);
+  if(!isManagerPlus(c.id))return `<div class="card">Acesso restrito a Manager+.</div>`;
+  const list=APPROVALS.filter(a=>a.clientId===c.id);const rows=list.map(apprRow).join('');
+  return `<div class="note" style="margin-bottom:18px">Candidaturas e promoções para <b>${c.name}</b>.</div><div class="card pad0"><table><thead><tr><th>Candidato</th><th>Pedido</th><th>Aprovador</th><th>Estado</th><th>Ações</th></tr></thead><tbody>${rows||'<tr class="empty"><td colspan=5>Sem aprovações</td></tr>'}</tbody></table></div>`;
+}
+function pgClientLive(){
+  if(!requireScope())return `<div class="card">Sem cliente.</div>`;const c=clientById(SCOPE);
+  if(!isManagerPlus(c.id))return `<div class="card">O chat com a DTT é exclusivo de Managers.</div>`;
+  let chat=LIVECHATS.find(x=>x.clientId===c.id);if(!chat){chat={id:Date.now(),clientId:c.id,from:ME.name,messages:[]};LIVECHATS.push(chat);}
+  const bub=chat.messages.map(m=>`<div class="bub ${m.me?'me':'bot'}">${m.t}<div style="font-size:10px;opacity:.7;margin-top:3px">${m.time}</div></div>`).join('');
+  return `<div class="note" style="margin-bottom:16px">Linha direta <b>${c.name} → Equipa DTT</b>.</div><div class="livechat"><div class="lcbody" id="lcBody">${bub||'<div class="bub bot">Olá! Como podemos ajudar com '+c.name+'?</div>'}</div><div class="lcfoot"><input id="lcInput" placeholder="Escreva para a DTT..." onkeydown="if(event.key==='Enter')sendLive(${c.id})"><button class="btn" onclick="sendLive(${c.id})">Enviar</button></div></div>`;
+}
+function bindLiveScroll(){const b=$('lcBody');if(b)b.scrollTop=b.scrollHeight;}
+</script>
+
+<script>
+/* ===== ADMIN ===== */
+function allDeliv(){return DELIV.slice();}
+function pgAdminDash(){
+  const list=allDeliv();const subm=list.filter(d=>d.status==='ok').length,upc=upcoming31(list),late=lateCount(list);
+  return `<div class="grid g4" style="margin-bottom:22px">${kpi('bg-g',SVG.check,subm,'Entregáveis entregues','<span class="trend up">▲ 6%</span>')}${kpi('bg-t',SVG.clock,upc,'Upcoming (31 dias)','')}${kpi('bg-r',SVG.warn,late,'Em atraso','<span class="trend down">2 clientes</span>')}${kpi('bg-b',SVG.doc,list.length,'Total entregáveis','')}</div>
+  <div class="grid g2"><div class="card"><h3 class="bb">Entregas por mês</h3><div class="bar-chart">${[['Jan',55],['Fev',70],['Mar',48],['Abr',82],['Mai',90],['Jun',30]].map(b=>`<div class="b"><div class="col" style="height:${b[1]}%"></div><small>${b[0]}</small></div>`).join('')}</div></div>
+  <div class="card"><h3 class="bb">Distribuição de estados</h3><div class="donut" style="background:conic-gradient(var(--green) 0 ${subm/list.length*360}deg,var(--tangerine) 0 ${(subm+list.filter(d=>d.status==='prep').length)/list.length*360}deg,var(--amber) 0 ${(list.length-late)/list.length*360}deg,var(--red) 0 360deg)"><div class="inner"><b>${Math.round(subm/list.length*100)}%</b><span>submetidas</span></div></div>
+  <div style="margin-top:18px"><div class="legrow"><span class="sw" style="background:var(--green)"></span>Submetidas (${subm})</div><div class="legrow"><span class="sw" style="background:var(--tangerine)"></span>Em preparação (${list.filter(d=>d.status==='prep').length})</div><div class="legrow"><span class="sw" style="background:var(--amber)"></span>Aguarda cliente (${list.filter(d=>d.status==='client').length})</div><div class="legrow"><span class="sw" style="background:var(--red)"></span>Em atraso (${late})</div></div></div></div>`;
+}
+const UNIQUE_DEADLINES=[{day:5,label:"DMR",kind:"due"},{day:10,label:"VAT DP",kind:"due"},{day:15,label:"WHT",kind:"warn"},{day:20,label:"IVA / Recap.",kind:"due"},{day:25,label:"Intrastat",kind:"warn"},{day:31,label:"M30 / IES",kind:"due"}];
+function pgAdminCal(){return `<div class="grid g3" style="margin-bottom:22px">${kpi('bg-o',SVG.doc,UNIQUE_DEADLINES.length,'Entregáveis únicos no mês','')}${kpi('bg-t',SVG.clock,UNIQUE_DEADLINES.filter(d=>d.day>=TODAY).length,'Por entregar','')}${kpi('bg-g',SVG.check,UNIQUE_DEADLINES.filter(d=>d.day<TODAY).length,'Já passados','')}</div><div class="card"><h3 class="bb">Calendário Global · entregáveis únicos (independente de cliente)</h3>${calendarHTML(UNIQUE_DEADLINES)}<div class="note" style="margin-top:16px">Prazos legais únicos por tipo de obrigação; cada cliente herda os aplicáveis.</div></div>`;}
+function pgAdminTracking(){
+  const running=[{c:"Alfa Indústria",d:"VAT DP",stage:"Validação",prog:85,st:"prep"},{c:"Beta Trading",d:"Form 30",stage:"Aguarda RFI cliente",prog:60,st:"client"},{c:"Gama Logística",d:"Intrastat",stage:"Erro: 4 linhas sem NC8",prog:40,st:"late"},{c:"Beta Trading",d:"COPE",stage:"Reconciliação",prog:75,st:"prep"}];
+  return `<div class="card pad0"><div style="padding:18px 22px"><h3 class="bb">Pipeline a decorrer · eventos em tempo real</h3></div><table><thead><tr><th>Cliente</th><th>Declaração</th><th>Stage atual</th><th>Progresso</th><th>Estado</th></tr></thead><tbody>${running.map(r=>`<tr><td><b>${r.c}</b></td><td>${r.d}</td><td>${r.stage}</td><td><div class="prog"><span style="width:${r.prog}%"></span></div></td><td>${statusPill(r.st)}</td></tr>`).join('')}</tbody></table></div>
+  <div class="card" style="margin-top:20px"><h3 class="bb">Atividade dos agentes</h3><div class="tl"><div class="tlev done"><div class="tt">Ingestion — 11 inputs Alfa Indústria</div><div class="td">há 6 min · concluído</div></div><div class="tlev done"><div class="tt">Reconciliation #243 — match</div><div class="td">há 8 min</div></div><div class="tlev"><div class="tt">Info-Request — pedido a Beta Trading</div><div class="td">em curso</div></div><div class="tlev late"><div class="tt">Validation — Intrastat Gama erro NC8</div><div class="td">requer intervenção</div></div></div></div>`;
+}
+function pgAdminLogs(){return `<div class="toolbar"><h3 style="font-size:16px">Logs do sistema</h3><div class="grow"></div><button class="btn ghost sm" onclick="toast('Logs exportados (simulado)')"><svg viewBox="0 0 24 24">${IC.dl}</svg>Exportar</button></div><div class="card pad0">${LOGS.map(l=>`<div class="logline"><span class="lt">${l.t}</span><span class="lv ${l.lv}">${l.lv}</span><span>${l.m}</span></div>`).join('')}</div>`;}
+function pgAdminChat(){
+  const total=AGENTSESS.length,resolved=AGENTSESS.filter(s=>s.resolved).length,rate=Math.round(resolved/total*100);
+  const avgSat=(AGENTSESS.filter(s=>s.sat).reduce((a,s)=>a+s.sat,0)/AGENTSESS.filter(s=>s.sat).length).toFixed(1);
+  const rows=AGENTSESS.map(s=>`<tr><td><span class="miniav" style="background:${(USERS.find(u=>u.name===s.user)||{}).color||'#777'}">${initials(s.user)}</span><b>${s.user}</b></td><td>${s.topic}</td><td>${s.msgs}</td><td>${s.resolved?'<span class="st st-ok">Resolvido</span>':'<span class="st st-warn">Em aberto</span>'}</td><td>${s.sat?('★'.repeat(s.sat)):'—'}</td></tr>`).join('');
+  const live=LIVECHATS.map(ch=>`<div class="msg"><div class="mi bg-b"><svg viewBox="0 0 24 24">${SVG.msg}</svg></div><div class="mc"><b>${ch.from}</b><p>${clientById(ch.clientId).name} · ${ch.messages.length?ch.messages[ch.messages.length-1].t:'(nova conversa)'}</p></div><button class="btn ghost sm" onclick="toast('Abrir conversa (simulado)')">Responder</button></div>`).join('');
+  return `<div class="grid g4" style="margin-bottom:22px">${kpi('bg-b',SVG.msg,total,'Sessões do agente','')}${kpi('bg-g',SVG.check,rate+'%','Taxa de resolução','<span class="trend up">▲ 5%</span>')}${kpi('bg-t',SVG.bolt,avgSat,'Satisfação média (★)','')}${kpi('bg-o',SVG.user,LIVECHATS.length,'Live chats com clientes','')}</div>
+  <div class="grid g2"><div class="card"><h3 class="bb">Live chats (Managers → DTT)</h3>${live||'<p class="csub">Sem conversas</p>'}</div><div class="card pad0"><div style="padding:18px 22px"><h3 class="bb">Sessões do Agente IA</h3></div><table><thead><tr><th>Utilizador</th><th>Tópico</th><th>Msgs</th><th>Estado</th><th>Satisfação</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+function pgAdminClients(){
+  const grid=CLIENTS.map(c=>{const team=USERS.filter(u=>u.memberships.some(m=>m.clientId===c.id&&m.status==='active'));const hasMgr=clientHasManager(c.id);
+    return `<div class="card"><h3 class="bb"><span style="width:9px;height:9px;border-radius:50%;background:${hasMgr?'var(--green)':'var(--amber)'};display:inline-block"></span>${c.name}<span class="csub" style="margin:0 0 0 auto">NIF ${c.nif}</span></h3>
+    <div class="chk-section" style="margin-top:0">Inputs NAV (${c.navInputs.length})</div><div>${c.navInputs.map(i=>`<span class="chip got">${i}</span>`).join('')||'<span class="csub">—</span>'}</div>
+    <div class="chk-section">Declarações (${c.decls.length})</div><div>${c.decls.map(d=>`<span class="chip o">${d}</span>`).join('')}</div>
+    <div class="chk-section">Equipa ${hasMgr?'':'<span class="st st-warn" style="font-size:10px">sem Manager → App Admin</span>'}</div><div>${team.map(u=>{const m=u.memberships.find(x=>x.clientId===c.id);return `<span class="chip">${initials(u.name)} · ${m.role}</span>`;}).join('')||'<span class="csub">Sem equipa</span>'}</div>
+    <div style="margin-top:16px"><button class="btn ghost sm" onclick="openClient(${c.id})">Configurar</button></div></div>`;}).join('');
+  return `<div class="toolbar"><div class="grow"></div><button class="btn" onclick="openClient()"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Novo cliente</button></div><div class="grid g2">${grid}</div>`;
+}
+function pgAdminUsers(){
+  const rows=USERS.filter(u=>!u.isDocs).map(u=>{const active=u.memberships.filter(m=>m.status==='active'),pend=u.memberships.filter(m=>m.status==='pending');
+    let chips=active.map(m=>`${roleBadge(m.role)} <span class="csub" style="font-size:11px">${clientById(m.clientId).name}</span>`).join('<br>');
+    if(pend.length)chips+=(chips?'<br>':'')+pend.map(m=>`<span class="st st-warn" style="font-size:10px">pendente</span> <span class="csub" style="font-size:11px">${clientById(m.clientId).name} · ${m.role}</span>`).join('<br>');
+    return `<tr><td><span class="miniav" style="background:${u.color}">${initials(u.name)}</span><b>${u.name}</b></td><td class="csub">${u.email}</td><td>${u.isAdmin?'<span class="role admin">App Admin</span>':'—'}</td><td>${chips||'<span class="csub">—</span>'}</td><td><button class="btn ghost sm" onclick="openUser(${u.id})">Editar</button></td></tr>`;}).join('');
+  return `<div class="toolbar"><div class="grow"></div><button class="btn" onclick="openUser()"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>Novo utilizador</button></div><div class="card pad0"><table><thead><tr><th>Utilizador</th><th>Email</th><th>App Admin</th><th>Clientes &amp; Roles</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function pgAdminAppr(){
+  const list=APPROVALS;const rows=list.map(apprRow).join('');const pend=list.filter(a=>a.status==='pending').length;
+  return `<div class="grid g3" style="margin-bottom:22px">${kpi('bg-t',SVG.clock,pend,'Pendentes','')}${kpi('bg-g',SVG.check,list.filter(a=>a.status==='approved').length,'Aprovadas','')}${kpi('bg-r',SVG.warn,list.filter(a=>a.status==='rejected').length,'Rejeitadas','')}</div><div class="card pad0"><table><thead><tr><th>Candidato</th><th>Cliente</th><th>Pedido</th><th>Aprovador</th><th>Estado</th><th>Ações</th></tr></thead><tbody>${rows||'<tr class="empty"><td colspan=6>Sem aprovações</td></tr>'}</tbody></table></div><div class="note" style="margin-top:18px">Aprovador: <b>Manager do cliente</b> se existir, senão <b>App Admin</b>.</div>`;
+}
+function apprRow(a){const u=userById(a.userId);const c=clientById(a.clientId);if(!u||!c)return'';const ap=approverFor(a.clientId);
+  const st=a.status==='pending'?'<span class="st st-warn">Pendente</span>':a.status==='approved'?'<span class="st st-ok">Aprovada</span>':'<span class="st st-err">Rejeitada</span>';
+  const act=a.status==='pending'?`<button class="btn ok sm" onclick="decide(${a.id},true)">Aprovar</button> <button class="btn danger sm" onclick="decide(${a.id},false)">Rejeitar</button>`:'<span class="csub">—</span>';
+  return `<tr><td><span class="miniav" style="background:${u.color}">${initials(u.name)}</span><b>${u.name}</b></td><td>${c.name}</td><td>${a.kind==='join'?'Ingressar':'Promoção'} · ${roleBadge(a.requestedRole)}</td><td>${ap.type==='Manager'?'Manager — '+ap.name:'<span class="role admin">App Admin</span>'}</td><td>${st}</td><td>${act}</td></tr>`;}
+
+/* ===== ACTIONS ===== */
+function openMsgs(){const cs=(ME&&!ME.isAdmin&&!ME.isDocs)?myClients():CLIENTS;const list=MESSAGES.filter(m=>cs.some(c=>c.id===m.clientId));$('msgsBody').innerHTML=list.map(msgRow).join('')||'<p>Sem mensagens.</p>';om('mMsgs');}
+function openApply(){const sel=$('applyClient');const candidates=CLIENTS.filter(c=>!ME.memberships.some(m=>m.clientId===c.id&&m.status==='active'));sel.innerHTML=candidates.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')||'<option>(já pertence a todos)</option>';$('applyRole').value='Associate';applyHint();om('mApply');}
+function applyHint(){const cid=+$('applyClient').value;if(!cid)return;const ap=approverFor(cid);$('applyApprover').innerHTML=`<b>Aprovador:</b> ${ap.type==='Manager'?('Manager do cliente — '+ap.name):'App Admin (ainda não existe Manager)'}.`;}
+function submitApply(){const cid=+$('applyClient').value;const role=$('applyRole').value;if(!cid)return;if(!ME.memberships.some(m=>m.clientId===cid))ME.memberships.push({clientId:cid,role,status:'pending'});APPROVALS.push({id:SEQ.appr++,userId:ME.id,clientId:cid,requestedRole:role,kind:'join',status:'pending'});const ap=approverFor(cid);cm('mApply');toast(`Candidatura submetida → aprova ${ap.type==='Manager'?ap.name+' (Manager)':'App Admin'}`);buildNav();render(CURPAGE);}
+function decide(id,ok){const a=APPROVALS.find(x=>x.id===id);if(!a)return;const u=userById(a.userId);const m=u.memberships.find(x=>x.clientId===a.clientId);if(ok){a.status='approved';if(m){m.role=a.requestedRole;m.status='active';}else u.memberships.push({clientId:a.clientId,role:a.requestedRole,status:'active'});toast(`Aprovado: ${u.name} → ${a.requestedRole}`);}else{a.status='rejected';if(m&&m.status==='pending')u.memberships=u.memberships.filter(x=>!(x.clientId===a.clientId&&x.status==='pending'));toast(`Rejeitado: ${u.name}`);}buildNav();render(CURPAGE);}
+function changeRole(uid,cid,role){const u=userById(uid);const m=u.memberships.find(x=>x.clientId===cid);if(m){m.role=role;toast(`${u.name} → ${role}`);}}
+function removeMember(uid,cid){const u=userById(uid);u.memberships=u.memberships.filter(x=>x.clientId!==cid);toast('Membro removido');render(CURPAGE);}
+let editingUser=null;
+function openUser(id){editingUser=id||null;const u=id?userById(id):null;$('userTitle').textContent=u?'Editar utilizador':'Novo utilizador';$('uSave').textContent=u?'Guardar':'Criar utilizador';$('uName').value=u?u.name:'';$('uEmail').value=u?u.email:'';$('uAdmin').checked=u?u.isAdmin:false;
+  $('uClientAssign').innerHTML=CLIENTS.map(c=>{const m=u?u.memberships.find(x=>x.clientId===c.id):null;const ch=m?'checked':'';const role=m?m.role:'Associate';const opts=ROLES.map(r=>`<option ${r===role?'selected':''}>${r}</option>`).join('');return `<div class="checkitem ${ch?'on':''}"><input type="checkbox" class="uc" data-c="${c.id}" ${ch} onchange="this.closest('.checkitem').classList.toggle('on',this.checked)"><span class="ci-t">${c.name}</span><select class="inp ci-o ur" data-c="${c.id}" style="padding:5px 8px;font-size:12px">${opts}</select></div>`;}).join('');om('mUser');}
+function saveUser(){const name=$('uName').value.trim(),email=$('uEmail').value.trim();if(!name||!email)return toast('Preencha nome e email');const isAdmin=$('uAdmin').checked;const newM=[];let pend=0;const targetId=editingUser||SEQ.user;
+  document.querySelectorAll('#uClientAssign .checkitem').forEach(it=>{const cb=it.querySelector('.uc');if(!cb.checked)return;const cid=+cb.dataset.c;const role=it.querySelector('.ur').value;const ex=editingUser?userById(editingUser).memberships.find(m=>m.clientId===cid):null;if(ex&&ex.role===role){newM.push({...ex});}else if(role==='Associate'){newM.push({clientId:cid,role:'Associate',status:'active'});}else{newM.push({clientId:cid,role,status:'pending'});pend++;APPROVALS.push({id:SEQ.appr++,userId:targetId,clientId:cid,requestedRole:role,kind:'promote',status:'pending'});}});
+  if(editingUser){const u=userById(editingUser);u.name=name;u.email=email;u.isAdmin=isAdmin;u.memberships=newM;}else{USERS.push({id:SEQ.user++,name,email,isAdmin,color:['#1565C0','#6A1B9A','#2E7D32','#EF6C00'][USERS.length%4],memberships:newM});}cm('mUser');toast(pend?`Guardado · ${pend} role(s) para aprovação`:'Utilizador guardado ✓');buildNav();render(CURPAGE);}
+let editingClient=null;
+function openClient(id){editingClient=id||null;const c=id?clientById(id):null;$('clientTitle').textContent=c?'Configurar cliente':'Novo cliente';$('cSave').textContent=c?'Guardar':'Criar cliente';$('cName').value=c?c.name:'';$('cNif').value=c?c.nif:'';
+  $('cInputsGrid').innerHTML=NAV_INPUTS.map(i=>{const on=c&&c.navInputs.includes(i);return `<label class="checkitem ${on?'on':''}"><input type="checkbox" class="ci-nav" value="${i}" ${on?'checked':''} onchange="this.closest('.checkitem').classList.toggle('on',this.checked)"><span class="ci-t">${i}</span></label>`;}).join('');
+  $('cDeclGrid').innerHTML=DECLS.map(d=>{const on=c&&c.decls.includes(d);return `<label class="checkitem ${on?'on':''}"><input type="checkbox" class="ci-decl" value="${d}" ${on?'checked':''} onchange="this.closest('.checkitem').classList.toggle('on',this.checked)"><span class="ci-t">${d}</span></label>`;}).join('');om('mClient');}
+function saveClient(){const name=$('cName').value.trim();if(!name)return toast('Indique o nome');const nif=$('cNif').value.trim()||'—';const navInputs=[...document.querySelectorAll('#cInputsGrid .ci-nav:checked')].map(x=>x.value);const decls=[...document.querySelectorAll('#cDeclGrid .ci-decl:checked')].map(x=>x.value);if(editingClient){const c=clientById(editingClient);Object.assign(c,{name,nif,navInputs,decls});}else{CLIENTS.push({id:SEQ.client++,name,nif,navInputs,decls});}cm('mClient');toast('Cliente guardado ✓');buildScope();render(CURPAGE);}
+function sendLive(cid){const inp=$('lcInput');const t=inp.value.trim();if(!t)return;let chat=LIVECHATS.find(x=>x.clientId===cid);chat.messages.push({me:true,t,time:'agora'});inp.value='';render('client-live');bindLiveScroll();setTimeout(()=>{chat.messages.push({me:false,t:'Recebido! A equipa DTT responde em breve.',time:'agora'});if(CURPAGE==='client-live'){render('client-live');bindLiveScroll();}},900);}
+
+/* ===== CHATBOT ===== */
+let chatStarted=false;
+function toggleChat(){$('chatWin').classList.toggle('open');}
+function resetChat(){chatStarted=false;$('chatBody').innerHTML='';botSay("Olá "+(ME?ME.name.split(' ')[0]:'')+"! 👋 Sou o assistente TaxFlow. Em que posso ajudar?",["Entregas em atraso","Onde obtenho o SAF-T?","Falta algum ficheiro?","Prazo da próxima entrega"]);}
+function botSay(html,quick){const b=$('chatBody');const d=document.createElement('div');d.className='bub bot';d.innerHTML=html;b.appendChild(d);if(quick&&quick.length){const q=document.createElement('div');q.className='quickreplies';q.innerHTML=quick.map(x=>`<span class="qr" onclick="quick('${x.replace(/'/g,"")}')">${x}</span>`).join('');b.appendChild(q);}b.scrollTop=b.scrollHeight;}
+function meSay(t){const b=$('chatBody');const d=document.createElement('div');d.className='bub me';d.textContent=t;b.appendChild(d);b.scrollTop=b.scrollHeight;}
+function typing(on){const b=$('chatBody');if(on){const d=document.createElement('div');d.className='typing';d.id='typing';d.innerHTML='<i></i><i></i><i></i>';b.appendChild(d);b.scrollTop=b.scrollHeight;}else{const t=$('typing');if(t)t.remove();}}
+function quick(t){meSay(t);respond(t);}
+function sendChat(){const i=$('chatInput');const t=i.value.trim();if(!t)return;meSay(t);i.value='';respond(t);}
+function respond(text){typing(true);setTimeout(()=>{typing(false);const q=text.toLowerCase();let ans,quick=null;const cs=(ME&&!ME.isAdmin&&!ME.isDocs)?myClients():CLIENTS;const list=deliverablesFor(cs.map(c=>c.id));
+  if(q.includes('atraso')){const late=list.filter(d=>d.status==='late');ans=late.length?`Tem <b>${late.length}</b> entrega(s) em atraso: `+late.map(d=>`${d.decl} (${clientById(d.clientId).name})`).join(', ')+'.':'Nenhuma entrega em atraso! 🎉';quick=["Prazo da próxima entrega"];}
+  else if(q.includes('saf')||q.includes('obten')||q.includes('obter')||q.includes('onde')){ans="O <b>SAF-T de Faturação</b> é exportado do <b>NAV/Business Central</b> (módulo Tax Reporting).";quick=["Abrir templates"];}
+  else if(q.includes('falta')||q.includes('ficheiro')){const f=MESSAGES.filter(m=>cs.some(c=>c.id===m.clientId)&&m.type==='file');ans=f.length?`Em falta: `+f.map(m=>`${m.title} (${clientById(m.clientId).name})`).join('; ')+'.':'Não há ficheiros em falta ✅';quick=["Ver mensagens"];}
+  else if(q.includes('prazo')||q.includes('próxim')||q.includes('proxim')){const next=list.filter(d=>d.due>=TODAY&&d.status!=='ok').sort((a,b)=>a.due-b.due)[0];ans=next?`Próxima entrega: <b>${next.decl}</b> (${clientById(next.clientId).name}) dia <b>${next.due} Mai</b>, a ${next.prog}%.`:'Sem entregas próximas pendentes.';quick=["Ver calendário"];}
+  else if(q.includes('abrir templates')&&!ME.isDocs&&!ME.isAdmin){goto('client-tpl');ans="Abri a página de <b>Templates</b>. 📂";}
+  else if(q.includes('ver mensagens')&&!ME.isDocs&&!ME.isAdmin){goto('msgs');ans="Abri as suas <b>mensagens</b>. ✉️";}
+  else if(q.includes('ver calendário')||q.includes('calendario')){goto(ME.isAdmin?'a-cal':(ME.isDocs?'d-flow':'cal'));ans="Aqui está o <b>calendário</b>. 🗓️";}
+  else if(q.includes('obrigad')){ans="Sempre às ordens! 😊";}
+  else{ans="Posso ajudar com prazos, entregas em atraso, ficheiros em falta, onde obter inputs e templates.";quick=["Entregas em atraso","Prazo da próxima entrega"];}
+  botSay(ans,quick);},800);}
+
+/* ===== DOCS PAGES (01–09) ===== */
+function pgDocOverview(){
+  return `<div class="phead"><div class="crumb">Visão Geral · 01</div><h1>Resumo da Arquitetura</h1><p>Ingestão via ERP (Navision/BC), Excel e ficheiros auxiliares, normalizados para um esquema canónico único, validados, reconciliados e transformados nas declarações fiscais finais.</p></div>
+  <div class="grid g4" style="margin-bottom:22px"><div class="kpi"><b>19+</b><span>Declarações fiscais (output)</span></div><div class="kpi"><b>20</b><span>Inputs mapeados</span></div><div class="kpi"><b>5</b><span>Stages do pipeline</span></div><div class="kpi"><b>9</b><span>Agentes especializados</span></div></div>
+  <div class="grid g3"><div class="card"><h3><span class="num">01</span>Princípio Central</h3><p class="muted">Tudo o que entra é convertido para um único formato canónico "NAV-like" antes de qualquer validação.</p></div><div class="card"><h3><span class="num">02</span>Camadas de Dados</h3><p class="muted">Bronze (raw), Silver (canónico validado) e Gold (declarações) sobre um Lakehouse versionado.</p></div><div class="card"><h3><span class="num">03</span>Orquestração</h3><p class="muted">Disparo por calendário fiscal (dias 5, 10, 15, 20, 25, 31), com pedido automático de informação ao cliente.</p></div></div>
+  <div class="note" style="margin-top:20px"><b>Contexto:</b> este perfil de <b>Documentação</b> reproduz integralmente as abas 01 a 09 com a arquitetura, stack tecnológica, requisitos, regras de negócio e agentes.</div>`;
+}
+function pgDocFlow(){
+  const stage=(n,t,layer,nodes)=>`<div class="stage"><div class="sh"><div class="sn">${n}</div><div class="stt">${t}</div><div class="layer">${layer}</div></div><div class="nodes">${nodes.map(x=>`<div class="node"><div class="nt">${x[0]}</div><div class="nd">${x[1]}</div></div>`).join('')}</div></div>`;
+  return `<div class="phead"><div class="crumb">End-to-End · 02</div><h1>Fluxo de Informação</h1><p>Cinco stages, da ingestão multi-origem até às declarações finais e análise.</p></div><div class="flow">
+  ${stage(1,'Ingestão Multi-Origem','Bronze · Raw',[['Via A — NAV / BC','11 inputs diretos.'],['Via B — Calculável','3 inputs derivados.'],['Via C — Template/MDU','6+ inputs sem NAV.']])}<div class="arrow">&#9660;</div>
+  ${stage(2,'Normalização Canónica','Bronze → Silver',[['Conectores','OData/SQL, Excel, SAF-T.'],['Extração','OCR/LLM em PDFs.'],['Mapeamento','Schema único.']])}<div class="arrow">&#9660;</div>
+  ${stage(3,'Validação e Reconciliação','Silver',[['Validação','Schema, NIF/VIES, prazos.'],['Reconciliação','#243, #2424, #278.'],['Pedido Info','Gaps ao cliente.'],['Revisão','Fila humana.']])}<div class="arrow">&#9660;</div>
+  ${stage(4,'Consolidação e Geração','Silver → Gold',[['Agregação','N inputs por declaração.'],['Output','DP, M30, guias, CSV, SAF-T.'],['Portais','e-fatura/INE/AT.']])}<div class="arrow">&#9660;</div>
+  ${stage(5,'Análise e Monitorização','Gold',[['Reporting','Estado e calendário.'],['Anomalias','Variação YoY.'],['Linhagem','Drill-down auditoria.']])}</div>`;
+}
+function pgDocStack(){
+  const block=(t,rows)=>`<div class="card" style="margin-bottom:20px"><h3 class="bb">${t}</h3>${rows.map(r=>`<div class="stackrow"><div class="tech">${r[0]}</div><div class="why">${r[1]}</div></div>`).join('')}</div>`;
+  return `<div class="phead"><div class="crumb">Tecnologia · 03</div><h1>Stack Sugerida por Stage</h1><p>Tecnologias enterprise centradas no ecossistema Microsoft/Azure, com justificação por etapa.</p></div>
+  ${block('1 · Ingestão / EL',[['Azure Data Factory','Pipelines geridos, conectores nativos para BC/Navision, SQL e ficheiros.'],['Logic Apps / Power Automate','Captura de Excel/PDF de email, SharePoint e Teams.'],['ADLS Gen2','Landing zone para ficheiros raw, com retenção e versão.']])}
+  ${block('2 · Armazenamento / Lakehouse',[['Azure Databricks (Delta)','Lakehouse ACID e time-travel para grandes volumes.'],['Azure SQL / Synapse','Modelo canónico relacional e warehouse.'],['Microsoft Fabric (OneLake)','Alternativa SaaS unificada.']])}
+  ${block('3 · Transformação / Validação',[['dbt + Spark','Modelação versionada e linhagem automática.'],['Delta Live Tables','Pipelines declarativos com qualidade incorporada.'],['Great Expectations','Motor de regras: NIF/VIES, integridade, gate antes da Gold.']])}
+  ${block('4 · Agentes / IA',[['Azure AI Foundry','Orquestração de agentes: mapeamento, extração, pedidos.'],['AI Document Intelligence','OCR de PDFs: certificados, atas, contratos, RFI.'],['Azure OpenAI Service','Campos ambíguos e redação de comunicações.']])}
+  ${block('5 · Orquestração',[['ADF Triggers','Agendamento por calendário fiscal, retries e alertas.'],['Databricks Workflows','Jobs de transformação e qualidade entre camadas.'],['Azure Monitor','Logs, métricas e SLAs por obrigação.']])}
+  ${block('6 · Apresentação / BI &amp; Governança',[['Power BI','Dashboards de estado, calendário e anomalias.'],['Microsoft Purview','Catálogo e linhagem input → declaração.'],['Power Apps','Portal de revisão e pedidos ao cliente.']])}`;
+}
+function pgDocFabric(){
+  return `<div class="phead"><div class="crumb">Tecnologia · 04</div><h1>Microsoft Fabric por Stage</h1><p>A mesma arquitetura mapeada para Microsoft Fabric, sobre o OneLake.</p></div>
+  <div class="grid g2"><div class="card"><h3 class="bb">Ingestão &amp; Lakehouse</h3><p><span class="fab">Data Factory</span><span class="fab">Dataflows Gen2</span><span class="fab">OneLake</span><span class="fab">Lakehouse</span><span class="fab">Warehouse</span></p><p class="muted" style="margin-top:10px">Ingestão low-code e armazenamento Delta sem cópias, num único OneLake.</p></div>
+  <div class="card"><h3 class="bb">Transformação &amp; IA</h3><p><span class="fab">Notebooks Spark</span><span class="fab">dbt</span><span class="fab">Data Agents</span><span class="fab">AI Functions</span></p><p class="muted" style="margin-top:10px">Reconciliações em Spark e extração com IA sobre os mesmos dados.</p></div>
+  <div class="card"><h3 class="bb">Orquestração</h3><p><span class="fab">Data Pipelines</span><span class="fab">Activator</span><span class="fab">Monitoring Hub</span></p><p class="muted" style="margin-top:10px">Agendamento por calendário fiscal e alertas por evento.</p></div>
+  <div class="card"><h3 class="bb">BI &amp; Governança</h3><p><span class="fab">Power BI Direct Lake</span><span class="fab">Purview</span></p><p class="muted" style="margin-top:10px">Relatórios sobre a Gold e linhagem end-to-end no mesmo tenant.</p></div></div>`;
+}
+function dots(cost,n){let h='<span class="dots">';for(let i=0;i<5;i++)h+=`<span class="dot ${i<n?(cost?'on-cost':'on-diff'):''}"></span>`;return h+'</span>';}
+function pgDocCost(){
+  return `<div class="phead"><div class="crumb">Tecnologia · 05</div><h1>Custo &amp; Dificuldade por Tecnologia</h1><p>Comparação relativa (1 = baixo, 5 = elevado). Indicativo; varia com volume e licenciamento.</p></div>
+  <div class="costlegend"><div><b>Preço</b>${dots(1,3)} &nbsp;Custo relativo (1–5)</div><div><b>Dificuldade</b>${dots(0,3)} &nbsp;Esforço (1–5)</div></div>
+  <div class="stagehdr">Microsoft Fabric — por componente</div>
+  <div class="card pad0" style="margin-bottom:8px"><table><thead><tr><th style="width:230px">Componente</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead><tbody>
+  <tr><td><b>Fabric Capacity (F SKU)</b></td><td>${dots(1,4)}</td><td>${dots(0,2)}</td><td class="lic">Capacidade reservada. Mínimo eleva entrada, previsível.</td></tr>
+  <tr><td><b>Notebooks (Spark)</b></td><td>${dots(1,3)}</td><td>${dots(0,4)}</td><td class="lic">Exige skills PySpark.</td></tr>
+  <tr style="background:#FDF1EA"><td><b>Fabric — plataforma completa</b></td><td>${dots(1,4)}</td><td>${dots(0,2)}</td><td class="lic">Custo alto, operação simples (tudo-em-um).</td></tr></tbody></table></div>
+  <div class="stagehdr">Alternativa modular Azure</div>
+  <div class="card pad0"><table><thead><tr><th style="width:230px">Tecnologia</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead><tbody>
+  <tr><td><b>Azure Data Factory</b></td><td>${dots(1,2)}</td><td>${dots(0,2)}</td><td class="lic">PAYG. Conectores BC prontos.</td></tr>
+  <tr><td><b>Azure Databricks</b></td><td>${dots(1,4)}</td><td>${dots(0,4)}</td><td class="lic">Potente, exige skills Spark.</td></tr>
+  <tr><td><b>Azure OpenAI</b></td><td>${dots(1,4)}</td><td>${dots(0,3)}</td><td class="lic">PAYG por token.</td></tr>
+  <tr><td><b>Power BI</b></td><td>${dots(1,2)}</td><td>${dots(0,2)}</td><td class="lic">Amplamente conhecido.</td></tr></tbody></table></div>
+  <div class="note" style="margin-top:20px"><b>Leitura rápida:</b> caminho mais barato/fácil = ADF + ADLS + Azure SQL + Power BI. IA/Databricks elevam custo e esforço. Fabric = custo de entrada alto mas operação simples.</div>`;
+}
+function pgDocReqs(){
+  return `<div class="phead"><div class="crumb">Funcionais &amp; Não-Funcionais · 06</div><h1>Requisitos</h1><p>O que a plataforma garante para operar com fiabilidade e auditoria.</p></div>
+  <div class="grid g2"><div class="card"><h3 class="bb">Funcionais</h3><ul><li>Ingerir de NAV/BC, Excel/MDU e auxiliares (PDF/XML).</li><li>Normalizar para o esquema canónico único.</li><li>Validar e reconciliar por declaração.</li><li>Gerar pedido de informação ao cliente.</li><li>Produzir output oficial (DP, M30, guias, CSV, SAF-T).</li><li>Orquestrar por calendário fiscal.</li><li>Validar em portais externos com evidência.</li><li>Gestão de utilizadores e clientes com roles e aprovações.</li></ul></div>
+  <div class="card"><h3 class="bb">Não-Funcionais</h3><ul><li><b>Auditabilidade:</b> linhagem completa.</li><li><b>Segurança:</b> RBAC, encriptação, RGPD.</li><li><b>Rastreabilidade:</b> versionamento de regras.</li><li><b>Resiliência:</b> retries e reprocessamento.</li><li><b>Escalabilidade:</b> multi-cliente e multi-período.</li><li><b>Observabilidade:</b> SLAs por prazo.</li><li><b>Reprodutibilidade:</b> time-travel por período.</li></ul></div></div>`;
+}
+function pgDocDecl(){
+  const items=[['VAT — Declaração Periódica IVA','alta',['Cruzar conta <code>#243</code> com IVA dedutível/liquidado.','Bases de vendas com SAF-T; campo 7 com EC Sales.','Regularizações com conta <code>#278</code>.']],
+  ['COPE — Banco de Portugal','alta',['Depósitos + balancete de não residentes + COL.','Classificar por código estatístico.']],
+  ['Form 30 — Não Residentes','alta',['Pagamentos a não residentes com débitos das contas 22.','Recolher RFI / certificados de residência.']],
+  ['CIT — Modelo 22 (IRC)','alta',['Template atual; separador "Análise de Gastos".','Cruzar com DFs assinadas.']],
+  ['IEC — Impostos Especiais','media',['Árvore NIF/CUP/IEC; cálculo = <code>Consumo × taxa</code>.']],
+  ['Intrastat','media',['Cruzar com Recapitulativa e DP; gerar CSV para INE.']],
+  ['IMI / AIMI','normal',['Listagem de prédios a 31/12/N-1; alerta de variação VPT.']]];
+  return `<div class="phead"><div class="crumb">Motor de Regras · 07</div><h1>Validações por Declaração</h1><p>Regras de cruzamento específicas, com prioridade (nº de inputs = risco).</p></div>
+  <div class="legend"><span><span class="tag alta">ALTA</span> 8–9 inputs</span><span><span class="tag media">MÉDIA</span> 4–7</span><span><span class="tag normal">NORMAL</span> 1–3</span></div>
+  <input class="search-i" id="declSearch" placeholder="Filtrar declaração..." oninput="filterDecl()"><div id="declList">
+  ${items.map((it,i)=>`<details ${i===0?'open':''}><summary>${it[0]} <span class="tag ${it[1]}">${it[1].toUpperCase()}</span></summary><div class="body"><ul>${it[2].map(x=>`<li>${x}</li>`).join('')}</ul></div></details>`).join('')}</div>`;
+}
+function filterDecl(){const q=($('declSearch').value||'').toLowerCase();document.querySelectorAll('#declList details').forEach(d=>{d.style.display=d.textContent.toLowerCase().includes(q)?'':'none';});}
+const INPUTS_DATA=[
+ [1,"Balancete analítico mensal","nav","VAT, EC Sales, WHT, DMIS, COPE, Form 30, SAF-T",6],
+ [2,"Tabelas fiscais (IRS/IRC/TGIS/NC8/CDT)","calc","VAT, WHT, DMIS, Intrastat, Form 30, IMI, AIMI, IEC, DMR, CIT",10],
+ [3,"Cadastro fornecedores enriquecido","nav","VAT, EC Sales, WHT, DMIS, Intrastat, COPE, Form 30",6],
+ [4,"Reconciliação fornecedores (AP)","nav","VAT, WHT, DMIS, Intrastat, COPE, Form 30",6],
+ [5,"Operações com não residentes","nav","VAT, WHT, DMIS, COPE, Form 30, SAF-T Inv.",6],
+ [6,"Reconciliação clientes (AR)","nav","VAT, EC Sales, SAF-T Inv., Intrastat, COPE",5],
+ [7,"Reconciliação bancária","nav","DMIS, COPE, Form 30",5],
+ [8,"SAF-T Faturação","nav","SAF-T Inv., VAT, EC Sales",3],
+ [9,"Operações intra-UE bens","nav","VAT, EC Sales, SAF-T Inv., Intrastat",4],
+ [10,"Processamento salarial","non","DMR, DRSS, WHT (Cat. A)",3],
+ [11,"Contratos (financ./arrend./serviços)","non","WHT, DMIS, COPE, Form 30",4],
+ [12,"Cadastro de imóveis","calc","IMI, AIMI, IES, CIT",4],
+ [13,"Inventário valorizado","nav","Inventories, IEC, IES, CIT",4],
+ [14,"Balancete anual + DFs","nav","CIT, IES, SAF-T Cont., PPC, PAC, Inventories",6],
+ [15,"Modelo 22 N-1","calc","PPC, PAC, CIT",3],
+ [16,"Cadastro ativos fixos + depreciações","nav","CIT, IES",2],
+ [17,"Certificados residência + RFIs","non","WHT, Form 30",2],
+ [18,"Atas distribuição resultados","non","SF's, IES, CIT",5],
+ [19,"Mapa partes relacionadas / TP","non","CIT, IES, COPE, Form 30",4],
+ [20,"Dossier fiscal / Benefícios (RFAI/SIFIDE)","non","CIT, IES",2]];
+let inOrigin='all';
+function pgDocInputs(){
+  return `<div class="phead"><div class="crumb">Origem &amp; Mapeamento · 08</div><h1>Inputs e Declarações que Alimentam</h1><p>Todos os inputs mapeados, com classificação por origem (NAV / calculável / não-NAV) e as declarações que cada um alimenta.</p></div>
+  <div class="legend"><span><span class="pill nav">NAV direto</span></span><span><span class="pill calc">Calculável de NAV</span></span><span><span class="pill non">Não-NAV (template/MDU)</span></span><span style="margin-left:auto"><b style="color:var(--orange)">#</b> = nº de declarações</span></div>
+  <div class="ofilter"><button class="ofbtn active" data-o="all" onclick="filterInputs(this)">Todos <span class="cnt-b">20</span></button><button class="ofbtn" data-o="nav" onclick="filterInputs(this)">NAV <span class="cnt-b">11</span></button><button class="ofbtn" data-o="calc" onclick="filterInputs(this)">Calculável <span class="cnt-b">3</span></button><button class="ofbtn" data-o="non" onclick="filterInputs(this)">Não-NAV <span class="cnt-b">6</span></button></div>
+  <input class="search-i" id="inSearch" placeholder="Filtrar input ou declaração..." oninput="filterInputs()">
+  <div class="card pad0"><table id="inTable"><thead><tr><th style="width:40px">#</th><th style="width:300px">Input</th><th style="width:120px">Origem</th><th>Declarações que alimenta</th><th class="cnt" style="width:50px">N.º</th></tr></thead><tbody>
+  ${INPUTS_DATA.map(r=>`<tr data-o="${r[2]}"><td>${r[0]}</td><td>${r[1]}</td><td><span class="pill ${r[2]}">${({nav:'NAV',calc:'Calculável',non:'Não-NAV'})[r[2]]}</span></td><td>${r[3]}</td><td class="cnt">${r[4]}</td></tr>`).join('')}
+  </tbody></table></div><p class="muted" id="inEmpty" style="display:none;text-align:center;padding:20px">Sem inputs para este filtro.</p>
+  <div class="note" style="margin-top:18px"><b>Origem dos dados:</b> tabela extraída do documento "Outras Obrigações". Inputs NAV aparecem no menu do Cliente para indicar se estão atualizados.</div>`;
+}
+function filterInputs(btn){if(btn){inOrigin=btn.dataset.o;document.querySelectorAll('.ofbtn').forEach(b=>b.classList.toggle('active',b===btn));}const q=($('inSearch').value||'').toLowerCase();let vis=0;document.querySelectorAll('#inTable tbody tr').forEach(r=>{const okT=r.textContent.toLowerCase().includes(q),okO=(inOrigin==='all'||r.dataset.o===inOrigin);const show=okT&&okO;r.style.display=show?'':'none';if(show)vis++;});const e=$('inEmpty');if(e)e.style.display=vis?'none':'block';}
+function pgDocAgents(){
+  const ag=[['Ingestion','Deteta origem e aplica template','Bronze→Silver','det','Determinístico'],['Mapping','Converte para schema canónico','Bronze→Silver','mix','Det.+LLM'],['Extraction','OCR/LLM em PDFs','Bronze→Silver','llm','LLM/OCR'],['Reconciliation','Cruzamentos contabilísticos','Silver','det','Determinístico'],['Validation','Regras, NIF/VIES, prazos','Silver','det','Determinístico'],['Info-Request','Pedido de informação ao cliente','Silver','mix','LLM+regras'],['Filing','Gera o output oficial','Gold','det','Determinístico'],['Analytics','Anomalias e variação YoY','Gold','llm','LLM+ML']];
+  return `<div class="phead"><div class="crumb">Camada de Agentes · 09</div><h1>Agentes Especializados</h1><p>Determinísticos (código) ou baseados em LLM/OCR.</p></div>
+  <div class="card pad0"><table><thead><tr><th>Agente</th><th>Função</th><th>Stage</th><th>Tipo</th></tr></thead><tbody>${ag.map(a=>`<tr><td><b>${a[0]}</b></td><td>${a[1]}</td><td>${a[2]}</td><td><span class="tag ${a[3]}">${a[4]}</span></td></tr>`).join('')}</tbody></table></div>`;
+}
+
+/* ===== RENDER SWITCH ===== */
+function render(page){const v=$('view');switch(page){
+  case 'dash':v.innerHTML=pgDash();break;case 'cal':v.innerHTML=pgCal();break;case 'msgs':v.innerHTML=pgMsgs();break;case 'profile':v.innerHTML=pgProfile();break;
+  case 'client':v.innerHTML=pgClient();break;case 'client-info':v.innerHTML=pgClientInfo();break;case 'client-tpl':v.innerHTML=pgClientTpl();break;
+  case 'client-team':v.innerHTML=pgClientTeam();break;case 'client-appr':v.innerHTML=pgClientAppr();break;case 'client-live':v.innerHTML=pgClientLive();bindLiveScroll();break;
+  case 'a-dash':v.innerHTML=pgAdminDash();break;case 'a-cal':v.innerHTML=pgAdminCal();break;case 'a-tracking':v.innerHTML=pgAdminTracking();break;
+  case 'a-logs':v.innerHTML=pgAdminLogs();break;case 'a-chat':v.innerHTML=pgAdminChat();break;case 'a-clients':v.innerHTML=pgAdminClients();break;
+  case 'a-users':v.innerHTML=pgAdminUsers();break;case 'a-appr':v.innerHTML=pgAdminAppr();break;
+  case 'd-overview':v.innerHTML=pgDocOverview();break;case 'd-flow':v.innerHTML=pgDocFlow();break;case 'd-stack':v.innerHTML=pgDocStack();break;
+  case 'd-fabric':v.innerHTML=pgDocFabric();break;case 'd-cost':v.innerHTML=pgDocCost();break;case 'd-reqs':v.innerHTML=pgDocReqs();break;
+  case 'd-decl':v.innerHTML=pgDocDecl();break;case 'd-inputs':v.innerHTML=pgDocInputs();break;case 'd-agents':v.innerHTML=pgDocAgents();break;
+}}
+</script>
+</body></html>
