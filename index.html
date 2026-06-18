@@ -18,7 +18,7 @@
   a{color:inherit;text-decoration:none}
   .wrap{display:flex;min-height:100vh}
 
-  aside{width:var(--aside-w);flex-shrink:0;background:var(--ink);color:#fff;position:sticky;top:0;height:100vh;overflow:hidden;transition:width .25s ease;z-index:20}
+  aside{width:var(--aside-w);flex-shrink:0;background:var(--ink);color:#fff;position:sticky;top:0;height:100vh;overflow-y:auto;transition:width .25s ease;z-index:20}
   .topbar{height:6px;background:var(--orange)}
   .asidetop{display:flex;align-items:center;justify-content:flex-end;padding:12px 14px 4px}
   .toggle{width:34px;height:34px;border-radius:var(--r);background:#2b2b2b;border:1px solid #3a3a3a;cursor:pointer;display:grid;place-items:center;transition:.15s;flex-shrink:0}
@@ -46,7 +46,7 @@
   aside.collapsed:hover .nav-item{justify-content:flex-start;padding:11px 14px;gap:11px}
   aside.collapsed:hover .toggle svg{transform:rotate(0deg)}
 
-  main{flex:1;overflow:auto}
+  main{flex:1;overflow:auto;height:100vh}
   .header{background:var(--white);border-bottom:1px solid var(--line);padding:34px 56px 0}
   .header .crumb{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);font-weight:700}
   .header h2{font-size:30px;margin:8px 0 6px;color:var(--ink);font-weight:600}
@@ -156,7 +156,7 @@
   /* ======= PRODUTO (EXEMPLO PROD) ======= */
   .demobar{background:var(--tangerine);color:#fff;font-size:12px;font-weight:600;padding:8px 56px;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
   .demobar svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2}
-  .appbar{background:var(--ink);color:#fff;padding:14px 56px;display:flex;align-items:center;gap:18px}
+  .appbar{background:var(--ink);color:#fff;padding:14px 56px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   .appbar .logo{font-weight:700;font-size:15px;display:flex;align-items:center;gap:9px}
   .appbar .logo .sq{width:24px;height:24px;background:var(--orange);border-radius:5px;display:grid;place-items:center;font-size:13px}
   .appbar .tabs{display:flex;gap:4px;margin-left:14px}
@@ -259,10 +259,6 @@
   .calc-day.due{border-color:var(--orange);border-width:2px}
   .calev{font-size:9.5px;font-weight:700;padding:2px 5px;border-radius:3px;margin-top:4px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .calev.r{background:var(--red-l);color:var(--red)}.calev.a{background:var(--amber-l);color:var(--amber)}.calev.g{background:var(--green-l);color:var(--green)}.calev.b{background:var(--blue-l);color:var(--blue)}
-
-  .drop{border:2px dashed var(--grey-3);border-radius:var(--r);padding:34px;text-align:center;color:var(--grey-5);background:var(--paper);cursor:pointer;transition:.15s}
-  .drop:hover{border-color:var(--orange);color:var(--orange);background:#FDF1EA}
-  .drop svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.6;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -274,22 +270,22 @@
     </div>
     <nav>
       <div class="navlbl">Visão Geral</div>
-      <div class="nav-item active" data-p="overview" title="Resumo"><span class="n">01</span><span class="lbl">Resumo</span></div>
-      <div class="nav-item" data-p="flow" title="Fluxo de Informação"><span class="n">02</span><span class="lbl">Fluxo de Informação</span></div>
+      <div class="nav-item active" data-p="overview"><span class="n">01</span><span class="lbl">Resumo</span></div>
+      <div class="nav-item" data-p="flow"><span class="n">02</span><span class="lbl">Fluxo de Informação</span></div>
       <div class="navlbl">Tecnologia</div>
-      <div class="nav-item" data-p="stack" title="Stack por Stage"><span class="n">03</span><span class="lbl">Stack por Stage</span></div>
-      <div class="nav-item" data-p="fabric" title="Microsoft Fabric"><span class="n">04</span><span class="lbl">Microsoft Fabric</span></div>
-      <div class="nav-item" data-p="cost" title="Custo e Dificuldade"><span class="n">05</span><span class="lbl">Custo &amp; Dificuldade</span></div>
-      <div class="nav-item" data-p="reqs" title="Requisitos"><span class="n">06</span><span class="lbl">Requisitos</span></div>
+      <div class="nav-item" data-p="stack"><span class="n">03</span><span class="lbl">Stack por Stage</span></div>
+      <div class="nav-item" data-p="fabric"><span class="n">04</span><span class="lbl">Microsoft Fabric</span></div>
+      <div class="nav-item" data-p="cost"><span class="n">05</span><span class="lbl">Custo &amp; Dificuldade</span></div>
+      <div class="nav-item" data-p="reqs"><span class="n">06</span><span class="lbl">Requisitos</span></div>
       <div class="navlbl">Regras de Negócio</div>
-      <div class="nav-item" data-p="decl" title="Validações por Declaração"><span class="n">07</span><span class="lbl">Validações por Declaração</span></div>
-      <div class="nav-item" data-p="inputs" title="Inputs e Origem"><span class="n">08</span><span class="lbl">Inputs e Origem</span></div>
-      <div class="nav-item" data-p="agents" title="Agentes"><span class="n">09</span><span class="lbl">Agentes</span></div>
+      <div class="nav-item" data-p="decl"><span class="n">07</span><span class="lbl">Validações por Declaração</span></div>
+      <div class="nav-item" data-p="inputs"><span class="n">08</span><span class="lbl">Inputs e Origem</span></div>
+      <div class="nav-item" data-p="agents"><span class="n">09</span><span class="lbl">Agentes</span></div>
       <div class="navlbl">Produto (Exemplo Prod)</div>
-      <div class="nav-item demo" data-p="d-dash" title="App · Dashboard"><span class="n">10</span><span class="lbl">App · Dashboard</span></div>
-      <div class="nav-item demo" data-p="d-list" title="App · Declarações"><span class="n">11</span><span class="lbl">App · Declarações</span></div>
-      <div class="nav-item demo" data-p="d-detail" title="App · Detalhe Declaração"><span class="n">12</span><span class="lbl">App · Detalhe</span></div>
-      <div class="nav-item demo" data-p="d-requests" title="App · Pedidos ao Cliente"><span class="n">13</span><span class="lbl">App · Pedidos</span></div>
+      <div class="nav-item demo" data-p="d-dash"><span class="n">10</span><span class="lbl">App · Dashboard</span></div>
+      <div class="nav-item demo" data-p="d-list"><span class="n">11</span><span class="lbl">App · Declarações</span></div>
+      <div class="nav-item demo" data-p="d-detail"><span class="n">12</span><span class="lbl">App · Detalhe</span></div>
+      <div class="nav-item demo" data-p="d-requests"><span class="n">13</span><span class="lbl">App · Pedidos</span></div>
     </nav>
   </aside>
 
@@ -298,80 +294,75 @@
     <!-- 01 OVERVIEW -->
     <section class="page active" id="overview">
       <div class="header"><div class="crumb">Visão Geral</div><h2>Resumo da Arquitetura</h2>
-        <p>Ingestão via ERP (Navision/BC), ficheiros Excel e ficheiros auxiliares, normalizados para um esquema canónico único ("estilo NAV"), validados e reconciliados, consolidados numa base de dados central e transformados nas declarações fiscais finais.</p></div>
+        <p>Ingestão via ERP (Navision/BC), ficheiros Excel e auxiliares, normalizados para um esquema canónico único ("estilo NAV"), validados e reconciliados, consolidados e transformados nas declarações fiscais finais.</p></div>
       <div class="content">
         <div class="kpis">
-          <div class="kpi"><b>19+</b><span>Declarações fiscais (output)</span></div>
+          <div class="kpi"><b>19+</b><span>Declarações fiscais</span></div>
           <div class="kpi"><b>28</b><span>Inputs mapeados</span></div>
           <div class="kpi"><b>5</b><span>Stages do pipeline</span></div>
-          <div class="kpi"><b>9</b><span>Agentes especializados</span></div>
+          <div class="kpi"><b>9</b><span>Agentes</span></div>
         </div>
         <div class="grid g3">
-          <div class="card"><h3><span class="num">01</span>Princípio Central</h3><p class="muted">Tudo o que entra é convertido para um único formato canónico "NAV-like" antes de qualquer validação. A partir daí o motor é igual para todos os clientes, tenham ou não NAV.</p></div>
-          <div class="card"><h3><span class="num">02</span>Camadas de Dados</h3><p class="muted">Bronze (raw), Silver (canónico validado) e Gold (declarações) sobre um Lakehouse, com transformação versionada e testável.</p></div>
-          <div class="card"><h3><span class="num">03</span>Orquestração</h3><p class="muted">Disparo por calendário fiscal (dias 5, 10, 15, 20, 25, 31). Quando faltam inputs, gera automaticamente um pedido de informação ao cliente.</p></div>
+          <div class="card"><h3><span class="num">01</span>Princípio Central</h3><p class="muted">Tudo o que entra é convertido para um único formato canónico "NAV-like" antes de qualquer validação.</p></div>
+          <div class="card"><h3><span class="num">02</span>Camadas de Dados</h3><p class="muted">Bronze (raw), Silver (canónico validado) e Gold (declarações) sobre um Lakehouse.</p></div>
+          <div class="card"><h3><span class="num">03</span>Orquestração</h3><p class="muted">Disparo por calendário fiscal (5, 10, 15, 20, 25, 31). Faltando inputs, gera pedido ao cliente.</p></div>
         </div>
-        <div class="note"><b>Foco de risco:</b> as declarações com mais inputs — Form 30, CIT (Modelo 22), VAT, WHT e COPE — concentram o maior risco. Um erro num input propaga-se a várias declarações.</div>
+        <div class="note"><b>Foco de risco:</b> Form 30, CIT, VAT, WHT e COPE concentram o maior risco (8–9 inputs cada).</div>
       </div>
     </section>
 
     <!-- 02 FLOW -->
     <section class="page" id="flow">
-      <div class="header"><div class="crumb">End-to-End</div><h2>Fluxo de Informação</h2><p>Cinco stages, da ingestão multi-origem até às declarações finais e análise.</p></div>
+      <div class="header"><div class="crumb">End-to-End</div><h2>Fluxo de Informação</h2><p>Cinco stages, da ingestão multi-origem até às declarações finais.</p></div>
       <div class="content"><div class="flow">
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">1</div><div class="st">Ingestão Multi-Origem</div><div class="layer">Bronze · Raw</div></div><div class="nodes">
+        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">1</div><div class="st">Ingestão Multi-Origem</div><div class="layer">Bronze</div></div><div class="nodes">
           <div class="node"><div class="nt">Via A — NAV / BC</div><div class="nd">11 inputs diretos.</div></div>
-          <div class="node"><div class="nt">Via B — Calculável de NAV</div><div class="nd">3 inputs derivados.</div></div>
+          <div class="node"><div class="nt">Via B — Calculável</div><div class="nd">3 inputs derivados.</div></div>
           <div class="node"><div class="nt">Via C — Template / MDU</div><div class="nd">6+ inputs sem NAV.</div></div></div></div></div>
         <div class="arrow">&#9660;</div>
-        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">2</div><div class="st">Normalização para Esquema Canónico</div><div class="layer">Bronze &#8594; Silver</div></div><div class="nodes">
-          <div class="node"><div class="nt">Conectores</div><div class="nd">OData/SQL do BC, Excel, SAF-T (XML).</div></div>
+        <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">2</div><div class="st">Normalização Canónica</div><div class="layer">Bronze &#8594; Silver</div></div><div class="nodes">
+          <div class="node"><div class="nt">Conectores</div><div class="nd">OData/SQL, Excel, SAF-T.</div></div>
           <div class="node"><div class="nt">Extração</div><div class="nd">OCR/LLM em PDFs.</div></div>
           <div class="node"><div class="nt">Mapeamento</div><div class="nd">Schema único.</div></div></div></div></div>
         <div class="arrow">&#9660;</div>
         <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">3</div><div class="st">Validação e Reconciliação</div><div class="layer">Silver</div></div><div class="nodes">
-          <div class="node"><div class="nt">Validação</div><div class="nd">Schema, NIF/VIES, prazos.</div></div>
+          <div class="node"><div class="nt">Validação</div><div class="nd">Schema, NIF/VIES.</div></div>
           <div class="node"><div class="nt">Reconciliação</div><div class="nd">#243, #2424, #278.</div></div>
-          <div class="node"><div class="nt">Pedido de Informação</div><div class="nd">Gaps ao cliente.</div></div>
-          <div class="node"><div class="nt">Revisão Humana</div><div class="nd">Fila de exceções.</div></div></div></div></div>
+          <div class="node"><div class="nt">Pedido</div><div class="nd">Gaps ao cliente.</div></div></div></div></div>
         <div class="arrow">&#9660;</div>
         <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">4</div><div class="st">Consolidação e Geração</div><div class="layer">Silver &#8594; Gold</div></div><div class="nodes">
           <div class="node"><div class="nt">Agregação</div><div class="nd">N inputs por declaração.</div></div>
-          <div class="node"><div class="nt">Geração de Output</div><div class="nd">DP, IES, M30, guias, CSV, SAF-T.</div></div>
-          <div class="node"><div class="nt">Portais Externos</div><div class="nd">e-fatura / INE / AT.</div></div></div></div></div>
+          <div class="node"><div class="nt">Output</div><div class="nd">DP, IES, M30, CSV.</div></div>
+          <div class="node"><div class="nt">Portais</div><div class="nd">e-fatura / INE / AT.</div></div></div></div></div>
         <div class="arrow">&#9660;</div>
         <div class="stagewrap"><div class="stage"><div class="sh"><div class="sn">5</div><div class="st">Análise e Monitorização</div><div class="layer">Gold</div></div><div class="nodes">
-          <div class="node"><div class="nt">Reporting</div><div class="nd">Estado, calendário, KPIs.</div></div>
+          <div class="node"><div class="nt">Reporting</div><div class="nd">Estado, calendário.</div></div>
           <div class="node"><div class="nt">Anomalias</div><div class="nd">Variação ano-a-ano.</div></div>
-          <div class="node"><div class="nt">Linhagem</div><div class="nd">Drill-down até ao input.</div></div></div></div></div>
+          <div class="node"><div class="nt">Linhagem</div><div class="nd">Drill-down ao input.</div></div></div></div></div>
       </div></div>
     </section>
 
     <!-- 03 STACK -->
     <section class="page" id="stack">
-      <div class="header"><div class="crumb">Tecnologia · Stack Enterprise</div><h2>Stack Sugerida por Stage</h2><p>Tecnologias enterprise no ecossistema Microsoft/Azure, com justificação por etapa.</p></div>
+      <div class="header"><div class="crumb">Tecnologia</div><h2>Stack Sugerida por Stage</h2><p>Ecossistema Microsoft/Azure, com justificação por etapa.</p></div>
       <div class="content">
         <div class="card" style="margin-bottom:20px"><h3>1 · Ingestão / EL</h3>
-          <div class="stackrow"><div class="tech">Azure Data Factory</div><div class="why">Pipelines geridos, conectores nativos para BC/Navision.</div></div>
-          <div class="stackrow"><div class="tech">Logic Apps / Power Automate</div><div class="why">Captura de Excel/PDF de email, SharePoint, Teams.</div></div>
-          <div class="stackrow"><div class="tech">ADLS Gen2</div><div class="why">Landing zone para raw, com retenção e versão.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>2 · Armazenamento / Lakehouse</h3>
-          <div class="stackrow"><div class="tech">Azure Databricks</div><div class="why">Lakehouse Delta com ACID e time-travel.</div></div>
+          <div class="stackrow"><div class="tech">Azure Data Factory</div><div class="why">Pipelines geridos, conectores BC/Navision.</div></div>
+          <div class="stackrow"><div class="tech">Logic Apps / Power Automate</div><div class="why">Captura de Excel/PDF de email, SharePoint.</div></div>
+          <div class="stackrow"><div class="tech">ADLS Gen2</div><div class="why">Landing zone para raw.</div></div></div>
+        <div class="card" style="margin-bottom:20px"><h3>2 · Lakehouse</h3>
+          <div class="stackrow"><div class="tech">Azure Databricks</div><div class="why">Delta com ACID e time-travel.</div></div>
           <div class="stackrow"><div class="tech">Azure SQL / Synapse</div><div class="why">Modelo canónico relacional.</div></div>
-          <div class="stackrow"><div class="tech">Microsoft Fabric (OneLake)</div><div class="why">Alternativa SaaS unificada.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>3 · Transformação / Validação</h3>
+          <div class="stackrow"><div class="tech">Microsoft Fabric</div><div class="why">Alternativa SaaS unificada.</div></div></div>
+        <div class="card" style="margin-bottom:20px"><h3>3 · Transformação</h3>
           <div class="stackrow"><div class="tech">dbt + Spark</div><div class="why">Modelação versionada e testes.</div></div>
-          <div class="stackrow"><div class="tech">Delta Live Tables</div><div class="why">Pipelines declarativos com qualidade.</div></div>
+          <div class="stackrow"><div class="tech">Delta Live Tables</div><div class="why">Pipelines declarativos.</div></div>
           <div class="stackrow"><div class="tech">Great Expectations</div><div class="why">Regras fiscais declarativas.</div></div></div>
         <div class="card" style="margin-bottom:20px"><h3>4 · Agentes / IA</h3>
           <div class="stackrow"><div class="tech">Azure AI Foundry</div><div class="why">Orquestração de agentes.</div></div>
           <div class="stackrow"><div class="tech">AI Document Intelligence</div><div class="why">OCR de PDFs.</div></div>
-          <div class="stackrow"><div class="tech">Azure OpenAI</div><div class="why">Campos ambíguos e comunicações.</div></div></div>
-        <div class="card" style="margin-bottom:20px"><h3>5 · Orquestração</h3>
-          <div class="stackrow"><div class="tech">ADF Triggers</div><div class="why">Agendamento por calendário fiscal.</div></div>
-          <div class="stackrow"><div class="tech">Databricks Workflows</div><div class="why">Jobs entre camadas.</div></div>
-          <div class="stackrow"><div class="tech">Azure Monitor</div><div class="why">SLAs por obrigação.</div></div></div>
-        <div class="card"><h3>6 · BI e Governança</h3>
+          <div class="stackrow"><div class="tech">Azure OpenAI</div><div class="why">Campos ambíguos.</div></div></div>
+        <div class="card"><h3>5 · BI e Governança</h3>
           <div class="stackrow"><div class="tech">Power BI</div><div class="why">Dashboards de estado.</div></div>
           <div class="stackrow"><div class="tech">Microsoft Purview</div><div class="why">Catálogo e linhagem.</div></div>
           <div class="stackrow"><div class="tech">Power Apps</div><div class="why">Portal de revisão humana.</div></div></div>
@@ -380,23 +371,17 @@
 
     <!-- 04 FABRIC -->
     <section class="page" id="fabric">
-      <div class="header"><div class="crumb">Tecnologia · Implementação SaaS</div><h2>Microsoft Fabric por Stage</h2><p>Mapeamento da arquitetura para Microsoft Fabric sobre o OneLake.</p></div>
+      <div class="header"><div class="crumb">Implementação SaaS</div><h2>Microsoft Fabric por Stage</h2><p>Mapeamento da arquitetura para Microsoft Fabric sobre o OneLake.</p></div>
       <div class="content">
         <div class="pmflow"><div class="pmtrack">
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg></div><div class="ph">Stage 1</div><div class="pt">Ingestão</div><div class="pf"><span>Data Factory</span><span>Dataflows Gen2</span><span>Mirroring</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg></div><div class="ph">Stage 2</div><div class="pt">Normalização<br>(OneLake)</div><div class="pf"><span>Lakehouse</span><span>Notebooks</span><span>Doc Intelligence</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="ph">Stage 3</div><div class="pt">Validação &amp;<br>Reconciliação</div><div class="pf"><span>Notebooks Spark</span><span>dbt</span><span>Data Agents</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8" y="14" width="7" height="7" rx="1"/></svg></div><div class="ph">Stage 4</div><div class="pt">Consolidação<br>&amp; Geração</div><div class="pf"><span>Warehouse</span><span>Data Pipelines</span><span>AI Functions</span></div></div>
-          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div><div class="ph">Stage 5</div><div class="pt">Análise &amp;<br>Monitorização</div><div class="pf"><span>Power BI</span><span>Activator</span><span>Purview</span></div></div>
+          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg></div><div class="ph">Stage 1</div><div class="pt">Ingestão</div><div class="pf"><span>Data Factory</span><span>Mirroring</span></div></div>
+          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg></div><div class="ph">Stage 2</div><div class="pt">Normalização</div><div class="pf"><span>Lakehouse</span><span>Notebooks</span></div></div>
+          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="ph">Stage 3</div><div class="pt">Validação</div><div class="pf"><span>dbt</span><span>Data Agents</span></div></div>
+          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8" y="14" width="7" height="7" rx="1"/></svg></div><div class="ph">Stage 4</div><div class="pt">Geração</div><div class="pf"><span>Warehouse</span><span>AI Functions</span></div></div>
+          <div class="pmstep"><div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div><div class="ph">Stage 5</div><div class="pt">Análise</div><div class="pf"><span>Power BI</span><span>Activator</span></div></div>
         </div>
         <div class="pmband"><div class="pmlayer bz" style="flex:1">Bronze</div><div class="pmlayer sv" style="flex:2">Silver</div><div class="pmlayer gd" style="flex:2">Gold</div></div>
-        <div class="pmloop"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg><span><b>Loop de governança &amp; orquestração:</b> Monitoring Hub e Activator disparam por calendário fiscal e reencaminham gaps para o Pedido de Informação.</span></div>
-        </div>
-        <div class="grid g2">
-          <div class="card"><h3>1 · Ingestão</h3><p><span class="fab">Data Factory</span><span class="fab">Dataflows Gen2</span><span class="fab">Mirroring</span></p><p class="muted" style="margin-top:8px">Conector nativo de BC; ingestão sem servidores para a Bronze.</p></div>
-          <div class="card"><h3>2 · Lakehouse</h3><p><span class="fab">OneLake</span><span class="fab">Lakehouse</span><span class="fab">Warehouse</span></p><p class="muted" style="margin-top:8px">Bronze/Silver/Gold em Delta; "one copy" de dados.</p></div>
-          <div class="card"><h3>3 · Transformação</h3><p><span class="fab">Notebooks</span><span class="fab">dbt</span><span class="fab">Pipelines</span></p><p class="muted" style="margin-top:8px">Reconciliações pesadas; testes como gate da Gold.</p></div>
-          <div class="card"><h3>4 · IA</h3><p><span class="fab">Data Agents</span><span class="fab">AI Functions</span><span class="fab">Copilot</span></p><p class="muted" style="margin-top:8px">Agentes sobre o OneLake com governança nativa.</p></div>
+        <div class="pmloop"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg><span><b>Loop:</b> Monitoring Hub e Activator disparam por calendário fiscal.</span></div>
         </div>
         <div class="note">O Fabric concentra ingestão, lakehouse, transformação, IA, orquestração e BI num só serviço SaaS sobre o OneLake.</div>
       </div>
@@ -404,43 +389,43 @@
 
     <!-- 05 COST -->
     <section class="page" id="cost">
-      <div class="header"><div class="crumb">Tecnologia · Avaliação</div><h2>Custo &amp; Dificuldade por Tecnologia</h2><p>Escalas indicativas (1 = baixo, 5 = elevado).</p></div>
+      <div class="header"><div class="crumb">Avaliação</div><h2>Custo &amp; Dificuldade</h2><p>Escalas indicativas (1 = baixo, 5 = elevado).</p></div>
       <div class="content">
         <div class="costlegend">
-          <div><b>Preço</b><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Custo relativo (1–5)</div>
+          <div><b>Preço</b><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Custo (1–5)</div>
           <div><b>Dificuldade</b><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span> &nbsp;Esforço (1–5)</div>
         </div>
         <input class="search" id="costSearch" placeholder="Filtrar tecnologia...">
         <div id="costWrap">
           <div class="stagehdr fabhdr">Microsoft Fabric — por componente</div>
           <div class="card fabcard" style="padding:0;overflow:hidden;margin-bottom:8px"><table class="costTable">
-            <thead><tr><th style="width:230px">Componente Fabric</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead>
+            <thead><tr><th style="width:230px">Componente</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead>
             <tbody>
-              <tr><td><b>Fabric Capacity (F SKU)</b> <span class="fabtag">base</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Capacidade reservada partilhada. Mínimo eleva custo de entrada.</td></tr>
+              <tr><td><b>Fabric Capacity (F SKU)</b> <span class="fabtag">base</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Capacidade reservada. Mínimo eleva custo de entrada.</td></tr>
               <tr><td><b>Notebooks (Spark)</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">Exige skills PySpark.</td></tr>
               <tr><td><b>Data Agents / Copilot</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">Copilot exige F64 + consumo de IA.</td></tr>
-              <tr style="background:#FDF1EA"><td><b>FABRIC — plataforma completa</b> <span class="fabtag">total</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Custo elevado, operação simples (tudo-em-um).</td></tr>
+              <tr style="background:#FDF1EA"><td><b>FABRIC — completo</b> <span class="fabtag">total</span></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Custo elevado, operação simples.</td></tr>
             </tbody></table></div>
           <div class="stagehdr">Alternativa modular Azure</div>
           <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px"><table class="costTable">
             <thead><tr><th style="width:230px">Tecnologia</th><th style="width:150px">Preço</th><th style="width:160px">Dificuldade</th><th>Notas</th></tr></thead>
             <tbody>
-              <tr><td><b>Azure Data Factory</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">PAYG; conectores prontos para BC.</td></tr>
-              <tr><td><b>Azure Databricks</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">Potente mas exige Spark.</td></tr>
+              <tr><td><b>Azure Data Factory</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">PAYG; conectores BC.</td></tr>
+              <tr><td><b>Azure Databricks</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td class="lic">Exige Spark.</td></tr>
               <tr><td><b>Azure OpenAI</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span></span><span class="meterlbl">4/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">3/5</span></td><td class="lic">PAYG por token.</td></tr>
               <tr><td><b>Power BI</b></td><td><span class="dots"><span class="dot on-cost"></span><span class="dot on-cost"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td><span class="dots"><span class="dot on-diff"></span><span class="dot on-diff"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="meterlbl">2/5</span></td><td class="lic">Por utilizador ou capacidade.</td></tr>
             </tbody></table></div>
         </div>
-        <div class="note"><b>Leitura rápida:</b> caminho mais barato/fácil = ADF + ADLS + Azure SQL + Power BI. IA/Databricks elevam custo. Fabric = custo de entrada alto, operação simples.</div>
+        <div class="note"><b>Leitura rápida:</b> mais barato/fácil = ADF + ADLS + Azure SQL + Power BI. IA/Databricks elevam custo. Fabric = custo de entrada alto, operação simples.</div>
       </div>
     </section>
 
     <!-- 06 REQS -->
     <section class="page" id="reqs">
-      <div class="header"><div class="crumb">Funcionais &amp; Não-Funcionais</div><h2>Requisitos</h2><p>O que a plataforma tem de garantir.</p></div>
+      <div class="header"><div class="crumb">Requisitos</div><h2>Requisitos</h2><p>O que a plataforma tem de garantir.</p></div>
       <div class="content"><div class="grid g2">
-        <div class="card"><h3>Funcionais</h3><ul><li>Ingerir de NAV/BC, Excel/MDU e auxiliares.</li><li>Normalizar para o esquema canónico.</li><li>Validar e reconciliar por declaração.</li><li>Gerar pedido de informação ao cliente.</li><li>Produzir o output oficial.</li><li>Orquestrar por calendário fiscal.</li><li>Validação em portais externos.</li></ul></div>
-        <div class="card"><h3>Não-Funcionais</h3><ul><li><b>Auditabilidade:</b> linhagem completa.</li><li><b>Segurança:</b> RBAC, RGPD.</li><li><b>Rastreabilidade:</b> versionamento.</li><li><b>Resiliência:</b> retries.</li><li><b>Escalabilidade:</b> multi-cliente.</li><li><b>Observabilidade:</b> SLAs.</li><li><b>Reprodutibilidade:</b> time-travel.</li></ul></div>
+        <div class="card"><h3>Funcionais</h3><ul><li>Ingerir de NAV/BC, Excel/MDU e auxiliares.</li><li>Normalizar para o esquema canónico.</li><li>Validar e reconciliar por declaração.</li><li>Gerar pedido ao cliente.</li><li>Produzir o output oficial.</li><li>Orquestrar por calendário fiscal.</li></ul></div>
+        <div class="card"><h3>Não-Funcionais</h3><ul><li><b>Auditabilidade:</b> linhagem completa.</li><li><b>Segurança:</b> RBAC, RGPD.</li><li><b>Resiliência:</b> retries.</li><li><b>Escalabilidade:</b> multi-cliente.</li><li><b>Observabilidade:</b> SLAs.</li><li><b>Reprodutibilidade:</b> time-travel.</li></ul></div>
       </div></div>
     </section>
 
@@ -448,23 +433,22 @@
     <section class="page" id="decl">
       <div class="header"><div class="crumb">Motor de Regras</div><h2>Validações por Declaração</h2><p>Regras de cruzamento por declaração.</p></div>
       <div class="content">
-        <div class="legend"><span><span class="tag alta">ALTA</span> 8–9 inputs</span><span><span class="tag media">MÉDIA</span> 4–7</span><span><span class="tag normal">NORMAL</span> 1–3</span></div>
+        <div class="legend"><span><span class="tag alta">ALTA</span> 8–9</span><span><span class="tag media">MÉDIA</span> 4–7</span><span><span class="tag normal">NORMAL</span> 1–3</span></div>
         <input class="search" id="declSearch" placeholder="Filtrar declaração...">
         <div id="declList">
-          <details open><summary>VAT — Declaração Periódica IVA <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Cruzar conta <code>#243</code> com IVA dedutível/liquidado.</li><li>Bases de vendas com SAF-T; campo 7 com EC Sales.</li><li>Regularizações com conta <code>#278</code>.</li></ul></div></details>
-          <details><summary>COPE — Banco de Portugal <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Depósitos + balancete não residentes + COL.</li><li>Classificar por código estatístico.</li></ul></div></details>
-          <details><summary>Form 30 — Não Residentes <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Pagamentos a não residentes vs contas 22.</li><li>Recolher RFI / certificados.</li></ul></div></details>
-          <details><summary>CIT — Modelo 22 (IRC) <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Separador "Análise de Gastos".</li><li>Cruzar com DFs assinadas.</li></ul></div></details>
-          <details><summary>IEC — Impostos Especiais <span class="tag media">MÉDIA</span></summary><div class="body"><ul><li>Cálculo = consumo × taxa do período.</li></ul></div></details>
-          <details><summary>Intrastat <span class="tag media">MÉDIA</span></summary><div class="body"><ul><li>Cruzar com Recapitulativa e DP; gerar CSV para INE.</li></ul></div></details>
-          <details><summary>IMI / AIMI <span class="tag normal">NORMAL</span></summary><div class="body"><ul><li>Listagem de prédios a 31/12; alerta de variação de VPT.</li></ul></div></details>
+          <details open><summary>VAT — DP IVA <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Cruzar conta <code>#243</code> com IVA dedutível/liquidado.</li><li>Bases de vendas com SAF-T; campo 7 com EC Sales.</li></ul></div></details>
+          <details><summary>COPE — Banco de Portugal <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Depósitos + balancete não residentes.</li></ul></div></details>
+          <details><summary>Form 30 — Não Residentes <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Pagamentos a não residentes vs contas 22.</li></ul></div></details>
+          <details><summary>CIT — Modelo 22 <span class="tag alta">ALTA</span></summary><div class="body"><ul><li>Análise de Gastos; cruzar com DFs.</li></ul></div></details>
+          <details><summary>Intrastat <span class="tag media">MÉDIA</span></summary><div class="body"><ul><li>Cruzar com Recapitulativa; gerar CSV para INE.</li></ul></div></details>
+          <details><summary>IMI / AIMI <span class="tag normal">NORMAL</span></summary><div class="body"><ul><li>Listagem de prédios; alerta de VPT.</li></ul></div></details>
         </div>
       </div>
     </section>
 
     <!-- 08 INPUTS -->
     <section class="page" id="inputs">
-      <div class="header"><div class="crumb">Origem &amp; Mapeamento</div><h2>Inputs e Declarações que Alimentam</h2><p>Classificação por origem e impacto.</p></div>
+      <div class="header"><div class="crumb">Origem</div><h2>Inputs e Declarações</h2><p>Classificação por origem e impacto.</p></div>
       <div class="content">
         <div class="legend"><span><span class="pill nav">NAV</span> 11</span><span><span class="pill calc">Calculável</span> 3</span><span><span class="pill non">Não-NAV</span> 6+</span></div>
         <input class="search" id="inSearch" placeholder="Filtrar input...">
@@ -473,18 +457,16 @@
             <tr><td>Balancete analítico mensal</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, WHT, COPE, Form 30</td></tr>
             <tr><td>Tabelas fiscais</td><td><span class="pill calc">Calculável</span></td><td>VAT, WHT, IMI, IEC, CIT</td></tr>
             <tr><td>Reconciliação fornecedores (AP)</td><td><span class="pill nav">NAV</span></td><td>VAT, WHT, Intrastat, Form 30</td></tr>
-            <tr><td>SAF-T Faturação</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, SAF-T Inv.</td></tr>
+            <tr><td>SAF-T Faturação</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales</td></tr>
             <tr><td>Processamento salarial</td><td><span class="pill non">Não-NAV</span></td><td>DMR, DRSS, WHT</td></tr>
-            <tr><td>Certificados residência + RFIs</td><td><span class="pill non">Não-NAV</span></td><td>WHT, Form 30</td></tr>
             <tr><td>Cadastro de imóveis</td><td><span class="pill calc">Calculável</span></td><td>IMI, AIMI, IES, CIT</td></tr>
-            <tr><td>Mapa partes relacionadas / TP</td><td><span class="pill non">Não-NAV</span></td><td>CIT, IES, COPE, Form 30</td></tr>
           </tbody></table></div>
       </div>
     </section>
 
     <!-- 09 AGENTS -->
     <section class="page" id="agents">
-      <div class="header"><div class="crumb">Camada de Agentes</div><h2>Agentes Especializados</h2><p>Determinístico ou baseado em LLM/OCR.</p></div>
+      <div class="header"><div class="crumb">Agentes</div><h2>Agentes Especializados</h2><p>Determinístico ou baseado em LLM/OCR.</p></div>
       <div class="content"><div class="card" style="padding:0;overflow:hidden"><table>
         <thead><tr><th>Agente</th><th>Função</th><th>Stage</th><th>Tipo</th></tr></thead><tbody>
           <tr><td><b>Ingestion</b></td><td>Deteta origem e aplica template</td><td>Bronze→Silver</td><td><span class="tag det">Determinístico</span></td></tr>
@@ -498,87 +480,54 @@
         </tbody></table></div></div>
     </section>
 
-    <!-- ================= 10 · APP DASHBOARD ================= -->
+    <!-- 10 APP DASHBOARD -->
     <section class="page" id="d-dash">
       <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — Exemplo de produto em produção · dados fictícios</div>
       <div class="appbar">
-        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Cliente: Acme Industries, SA</span></div>
+        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Acme Industries, SA</span></div>
         <div class="tabs"><span class="tab on">Dashboard</span><span class="tab" data-goto="d-list">Declarações</span><span class="tab" data-goto="d-requests">Pedidos</span></div>
-        <div class="right">
-          <div class="bell" onclick="toast('3 notificações por ler')"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="nbadge">3</span></div>
-          <div class="avatar">JM</div>
-        </div>
+        <div class="right"><div class="bell" onclick="toast('3 notificações por ler')"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="nbadge">3</span></div><div class="avatar">JM</div></div>
       </div>
       <div class="content">
-        <div style="margin-bottom:22px">
-          <h2 style="font-size:24px;margin:0 0 4px">Período fiscal: Junho 2026</h2>
-          <p class="muted" style="font-size:14px">Visão geral do estado das obrigações fiscais e prazos a decorrer.</p>
-        </div>
+        <div style="margin-bottom:22px"><h2 style="font-size:24px;margin:0 0 4px">Período fiscal: Junho 2026</h2><p class="muted" style="font-size:14px">Estado das obrigações fiscais e prazos a decorrer.</p></div>
         <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
           <div class="stat b-green"><span class="lbl">Submetidas</span><span class="val">7</span><span class="sub">no prazo · 100%</span></div>
-          <div class="stat b-blue"><span class="lbl">Prontas a submeter</span><span class="val">3</span><span class="sub">aguardam aprovação</span></div>
+          <div class="stat b-blue"><span class="lbl">Prontas</span><span class="val">3</span><span class="sub">aguardam aprovação</span></div>
           <div class="stat b-amber"><span class="lbl">Em validação</span><span class="val">4</span><span class="sub">2 com avisos</span></div>
           <div class="stat b-red"><span class="lbl">Bloqueadas</span><span class="val">2</span><span class="sub">a aguardar cliente</span></div>
         </div>
         <div class="grid" style="grid-template-columns:1.4fr 1fr;gap:20px">
-          <div class="card">
-            <h3>Próximos prazos · Calendário fiscal</h3>
+          <div class="card"><h3>Calendário fiscal · Junho</h3>
             <div class="calwrap" style="margin-top:6px">
               <div class="calh">S</div><div class="calh">T</div><div class="calh">Q</div><div class="calh">Q</div><div class="calh">S</div><div class="calh">S</div><div class="calh">D</div>
-              <div class="calc-day muted2"><span class="dn">1</span></div>
-              <div class="calc-day"><span class="dn">2</span></div>
-              <div class="calc-day"><span class="dn">3</span></div>
-              <div class="calc-day"><span class="dn">4</span></div>
-              <div class="calc-day due"><span class="dn">5</span><span class="calev g">DMR ✓</span></div>
-              <div class="calc-day"><span class="dn">6</span></div>
-              <div class="calc-day muted2"><span class="dn">7</span></div>
-              <div class="calc-day"><span class="dn">8</span></div>
-              <div class="calc-day"><span class="dn">9</span></div>
-              <div class="calc-day due"><span class="dn">10</span><span class="calev g">DRSS ✓</span><span class="calev a">PPC</span></div>
-              <div class="calc-day"><span class="dn">11</span></div>
-              <div class="calc-day"><span class="dn">12</span></div>
-              <div class="calc-day"><span class="dn">13</span></div>
-              <div class="calc-day muted2"><span class="dn">14</span></div>
-              <div class="calc-day"><span class="dn">15</span></div>
-              <div class="calc-day"><span class="dn">16</span></div>
-              <div class="calc-day"><span class="dn">17</span></div>
-              <div class="calc-day due" style="border-color:var(--red);background:#FFF6F4"><span class="dn" style="color:var(--red)">18</span><span class="calev r">Hoje</span></div>
-              <div class="calc-day"><span class="dn">19</span></div>
-              <div class="calc-day due"><span class="dn">20</span><span class="calev r">VAT</span><span class="calev a">EC Sales</span></div>
-              <div class="calc-day muted2"><span class="dn">21</span></div>
-              <div class="calc-day"><span class="dn">22</span></div>
-              <div class="calc-day"><span class="dn">23</span></div>
-              <div class="calc-day"><span class="dn">24</span></div>
-              <div class="calc-day due"><span class="dn">25</span><span class="calev a">Intrastat</span><span class="calev b">Form 30</span></div>
-              <div class="calc-day"><span class="dn">26</span></div>
-              <div class="calc-day"><span class="dn">27</span></div>
-              <div class="calc-day muted2"><span class="dn">28</span></div>
-              <div class="calc-day"><span class="dn">29</span></div>
-              <div class="calc-day due"><span class="dn">30</span><span class="calev b">IES</span></div>
+              <div class="calc-day muted2"><span class="dn">1</span></div><div class="calc-day"><span class="dn">2</span></div><div class="calc-day"><span class="dn">3</span></div><div class="calc-day"><span class="dn">4</span></div><div class="calc-day due"><span class="dn">5</span><span class="calev g">DMR ✓</span></div><div class="calc-day"><span class="dn">6</span></div><div class="calc-day muted2"><span class="dn">7</span></div>
+              <div class="calc-day"><span class="dn">8</span></div><div class="calc-day"><span class="dn">9</span></div><div class="calc-day due"><span class="dn">10</span><span class="calev g">DRSS ✓</span><span class="calev a">PPC</span></div><div class="calc-day"><span class="dn">11</span></div><div class="calc-day"><span class="dn">12</span></div><div class="calc-day"><span class="dn">13</span></div><div class="calc-day muted2"><span class="dn">14</span></div>
+              <div class="calc-day"><span class="dn">15</span></div><div class="calc-day"><span class="dn">16</span></div><div class="calc-day"><span class="dn">17</span></div><div class="calc-day due" style="border-color:var(--red);background:#FFF6F4"><span class="dn" style="color:var(--red)">18</span><span class="calev r">Hoje</span></div><div class="calc-day"><span class="dn">19</span></div><div class="calc-day due"><span class="dn">20</span><span class="calev r">VAT</span><span class="calev a">EC Sales</span></div><div class="calc-day muted2"><span class="dn">21</span></div>
+              <div class="calc-day"><span class="dn">22</span></div><div class="calc-day"><span class="dn">23</span></div><div class="calc-day"><span class="dn">24</span></div><div class="calc-day due"><span class="dn">25</span><span class="calev a">Intrastat</span><span class="calev b">Form 30</span></div><div class="calc-day"><span class="dn">26</span></div><div class="calc-day"><span class="dn">27</span></div><div class="calc-day muted2"><span class="dn">28</span></div>
+              <div class="calc-day"><span class="dn">29</span></div><div class="calc-day due"><span class="dn">30</span><span class="calev b">IES</span></div>
             </div>
           </div>
-          <div class="card">
-            <h3>Atividade recente</h3>
+          <div class="card"><h3>Atividade recente</h3>
             <div class="timeline" style="margin-top:6px">
-              <div class="tlitem"><div class="tlt">VAT validada com sucesso</div><div class="tld">12 cruzamentos OK · 1 aviso resolvido</div><div class="tlm">Há 22 minutos · Agente Validation</div></div>
-              <div class="tlitem"><div class="tlt">Pedido enviado ao cliente</div><div class="tld">COPE — falta extrato bancário não residente</div><div class="tlm">Há 1 hora · Agente Info-Request</div></div>
-              <div class="tlitem"><div class="tlt">SAF-T Faturação ingerido</div><div class="tld">14.892 documentos · Bronze → Silver</div><div class="tlm">Há 3 horas · Agente Ingestion</div></div>
+              <div class="tlitem"><div class="tlt">VAT validada com sucesso</div><div class="tld">12 cruzamentos OK · 1 aviso</div><div class="tlm">Há 22 min · Agente Validation</div></div>
+              <div class="tlitem"><div class="tlt">Pedido enviado ao cliente</div><div class="tld">COPE — falta extrato bancário</div><div class="tlm">Há 1 hora · Agente Info-Request</div></div>
+              <div class="tlitem"><div class="tlt">SAF-T Faturação ingerido</div><div class="tld">14.892 documentos</div><div class="tlm">Há 3 horas · Agente Ingestion</div></div>
               <div class="tlitem"><div class="tlt">DMR submetida à AT</div><div class="tld">Comprovativo guardado</div><div class="tlm">Ontem · 14:08</div></div>
             </div>
           </div>
         </div>
         <div style="margin-top:22px;display:flex;gap:10px">
-          <button class="btn primary" data-goto="d-list"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg> Ver todas as declarações</button>
-          <button class="btn" onclick="toast('Relatório exportado (PDF)')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> Exportar relatório</button>
+          <button class="btn primary" data-goto="d-list"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg> Ver declarações</button>
+          <button class="btn" onclick="toast('Relatório exportado (PDF)')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> Exportar</button>
         </div>
       </div>
     </section>
 
-    <!-- ================= 11 · APP LISTA ================= -->
+    <!-- 11 APP LISTA -->
     <section class="page" id="d-list">
-      <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — Exemplo de produto em produção · dados fictícios</div>
+      <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — dados fictícios</div>
       <div class="appbar">
-        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Cliente: Acme Industries, SA</span></div>
+        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Acme Industries, SA</span></div>
         <div class="tabs"><span class="tab" data-goto="d-dash">Dashboard</span><span class="tab on">Declarações</span><span class="tab" data-goto="d-requests">Pedidos</span></div>
         <div class="right"><div class="avatar">JM</div></div>
       </div>
@@ -586,41 +535,31 @@
         <div style="margin-bottom:18px"><h2 style="font-size:24px;margin:0">Declarações · Junho 2026</h2></div>
         <div class="toolbar">
           <input class="input" id="dlSearch" placeholder="Pesquisar declaração...">
-          <select class="select" id="dlStatus">
-            <option value="">Todos os estados</option>
-            <option value="Submetida">Submetida</option>
-            <option value="Pronta">Pronta a submeter</option>
-            <option value="Em validação">Em validação</option>
-            <option value="Bloqueada">Bloqueada</option>
-          </select>
+          <select class="select" id="dlStatus"><option value="">Todos os estados</option><option>Submetida</option><option>Pronta</option><option>Em validação</option><option>Bloqueada</option></select>
           <select class="select" id="dlPrio"><option value="">Todas as prioridades</option><option>ALTA</option><option>MÉDIA</option><option>NORMAL</option></select>
-          <button class="btn" onclick="toast('Sincronizado com Fabric / OneLake')"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg> Sincronizar</button>
+          <button class="btn" onclick="toast('Sincronizado com OneLake')"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg> Sincronizar</button>
           <button class="btn primary" onclick="toast('Nova declaração criada')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nova</button>
         </div>
-        <div class="card" style="padding:0;overflow:hidden">
-          <table id="dlTable">
-            <thead><tr><th>Declaração</th><th>Prazo</th><th>Prioridade</th><th>Progresso</th><th>Estado</th><th style="text-align:right">Ações</th></tr></thead>
-            <tbody>
-              <tr class="rowclick" data-goto="d-detail"><td><b>VAT</b> — DP IVA<br><span class="muted" style="font-size:12px">Declaração Periódica</span></td><td>20 Jun</td><td><span class="tag alta">ALTA</span></td><td><div class="barmini"><i style="width:100%"></i></div></td><td><span class="badge ok">Pronta</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>COPE</b><br><span class="muted" style="font-size:12px">Banco de Portugal</span></td><td>25 Jun</td><td><span class="tag alta">ALTA</span></td><td><div class="barmini"><i style="width:55%"></i></div></td><td><span class="badge err">Bloqueada</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>Form 30</b><br><span class="muted" style="font-size:12px">Não Residentes</span></td><td>25 Jun</td><td><span class="tag alta">ALTA</span></td><td><div class="barmini"><i style="width:78%"></i></div></td><td><span class="badge warn">Em validação</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>EC Sales</b><br><span class="muted" style="font-size:12px">Recapitulativa</span></td><td>20 Jun</td><td><span class="tag media">MÉDIA</span></td><td><div class="barmini"><i style="width:90%"></i></div></td><td><span class="badge warn">Em validação</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>Intrastat</b><br><span class="muted" style="font-size:12px">INE</span></td><td>25 Jun</td><td><span class="tag media">MÉDIA</span></td><td><div class="barmini"><i style="width:100%"></i></div></td><td><span class="badge ok">Pronta</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>IES</b><br><span class="muted" style="font-size:12px">Inf. Empresarial</span></td><td>30 Jun</td><td><span class="tag media">MÉDIA</span></td><td><div class="barmini"><i style="width:40%"></i></div></td><td><span class="badge warn">Em validação</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>DMR</b><br><span class="muted" style="font-size:12px">Retenções mensais</span></td><td>5 Jun</td><td><span class="tag normal">NORMAL</span></td><td><div class="barmini"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge info">Submetida</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>PPC</b><br><span class="muted" style="font-size:12px">Pagamento por conta</span></td><td>10 Jun</td><td><span class="tag normal">NORMAL</span></td><td><div class="barmini"><i style="width:100%"></i></div></td><td><span class="badge ok">Pronta</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-              <tr class="rowclick" data-goto="d-detail"><td><b>IMI</b><br><span class="muted" style="font-size:12px">Imposto municipal</span></td><td>30 Jun</td><td><span class="tag normal">NORMAL</span></td><td><div class="barmini"><i style="width:30%"></i></div></td><td><span class="badge err">Bloqueada</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="card" style="padding:0;overflow:hidden"><table id="dlTable">
+          <thead><tr><th>Declaração</th><th>Prazo</th><th>Prioridade</th><th>Progresso</th><th>Estado</th><th style="text-align:right">Ações</th></tr></thead>
+          <tbody>
+            <tr class="rowclick" data-goto="d-detail"><td><b>VAT</b> — DP IVA</td><td>20 Jun</td><td><span class="tag alta">ALTA</span></td><td><div class="barmini"><i style="width:100%"></i></div></td><td><span class="badge ok">Pronta</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>COPE</b></td><td>25 Jun</td><td><span class="tag alta">ALTA</span></td><td><div class="barmini"><i style="width:55%"></i></div></td><td><span class="badge err">Bloqueada</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>Form 30</b></td><td>25 Jun</td><td><span class="tag alta">ALTA</span></td><td><div class="barmini"><i style="width:78%"></i></div></td><td><span class="badge warn">Em validação</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>EC Sales</b></td><td>20 Jun</td><td><span class="tag media">MÉDIA</span></td><td><div class="barmini"><i style="width:90%"></i></div></td><td><span class="badge warn">Em validação</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>Intrastat</b></td><td>25 Jun</td><td><span class="tag media">MÉDIA</span></td><td><div class="barmini"><i style="width:100%"></i></div></td><td><span class="badge ok">Pronta</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>IES</b></td><td>30 Jun</td><td><span class="tag media">MÉDIA</span></td><td><div class="barmini"><i style="width:40%"></i></div></td><td><span class="badge warn">Em validação</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>DMR</b></td><td>5 Jun</td><td><span class="tag normal">NORMAL</span></td><td><div class="barmini"><i style="width:100%;background:var(--green)"></i></div></td><td><span class="badge info">Submetida</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+            <tr class="rowclick" data-goto="d-detail"><td><b>IMI</b></td><td>30 Jun</td><td><span class="tag normal">NORMAL</span></td><td><div class="barmini"><i style="width:30%"></i></div></td><td><span class="badge err">Bloqueada</span></td><td style="text-align:right"><button class="btn sm" data-goto="d-detail">Abrir</button></td></tr>
+          </tbody></table></div>
       </div>
     </section>
 
-    <!-- ================= 12 · APP DETALHE ================= -->
+    <!-- 12 APP DETALHE -->
     <section class="page" id="d-detail">
-      <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — Exemplo de produto em produção · dados fictícios</div>
+      <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — dados fictícios</div>
       <div class="appbar">
-        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Cliente: Acme Industries, SA</span></div>
+        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Acme Industries, SA</span></div>
         <div class="tabs"><span class="tab" data-goto="d-dash">Dashboard</span><span class="tab on" data-goto="d-list">Declarações</span><span class="tab" data-goto="d-requests">Pedidos</span></div>
         <div class="right"><div class="avatar">JM</div></div>
       </div>
@@ -630,16 +569,13 @@
           <span class="muted" style="font-size:12px">Declarações / VAT — DP IVA</span>
         </div>
         <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:8px">
-          <div>
-            <h2 style="font-size:26px;margin:0 0 4px">VAT — Declaração Periódica de IVA <span class="badge ok" style="vertical-align:middle;margin-left:8px">Pronta</span></h2>
-            <p class="muted" style="font-size:13.5px">Período: Maio 2026 · Prazo de submissão: <b style="color:var(--orange)">20 Junho 2026</b> · Prioridade ALTA (9 inputs)</p>
-          </div>
+          <div><h2 style="font-size:26px;margin:0 0 4px">VAT — Declaração Periódica de IVA <span class="badge ok" style="vertical-align:middle;margin-left:8px">Pronta</span></h2>
+            <p class="muted" style="font-size:13.5px">Período: Maio 2026 · Prazo: <b style="color:var(--orange)">20 Junho 2026</b> · Prioridade ALTA (9 inputs)</p></div>
           <div style="display:flex;gap:10px">
             <button class="btn" onclick="toast('Pré-visualização gerada')"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Pré-visualizar</button>
             <button class="btn green" onclick="openModal('submitModal')"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg> Submeter à AT</button>
           </div>
         </div>
-
         <div class="progress" style="margin-top:18px;max-width:760px">
           <div class="pstep done"><div class="cir">✓</div>Ingestão</div>
           <div class="pstep done"><div class="cir">✓</div>Normalização</div>
@@ -647,69 +583,63 @@
           <div class="pstep curr"><div class="cir">4</div>Pronta</div>
           <div class="pstep"><div class="cir">5</div>Submetida</div>
         </div>
-
         <div class="subtabs2">
           <div class="subtab2 on" data-sec="sec-valid">Validações &amp; Cruzamentos</div>
           <div class="subtab2" data-sec="sec-inputs">Inputs &amp; Linhagem</div>
           <div class="subtab2" data-sec="sec-fields">Campos da declaração</div>
         </div>
-
         <div class="tabsec on" id="sec-valid">
           <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
             <div class="stat b-green"><span class="lbl">Cruzamentos OK</span><span class="val">10</span></div>
             <div class="stat b-amber"><span class="lbl">Avisos</span><span class="val">1</span></div>
             <div class="stat b-red"><span class="lbl">Erros</span><span class="val">0</span></div>
           </div>
-          <div class="vrow ok"><div class="vic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="vmain"><div class="vt">Conta #243 vs IVA liquidado/dedutível</div><div class="vd">Apuramento bate com o balancete antes de fecho.</div></div><div class="vval">€ 48.210,55</div></div>
-          <div class="vrow ok"><div class="vic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="vmain"><div class="vt">Bases de vendas vs SAF-T Faturação</div><div class="vd">14.892 documentos conciliados.</div></div><div class="vval">€ 1.204.330,00</div></div>
+          <div class="vrow ok"><div class="vic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="vmain"><div class="vt">Conta #243 vs IVA liquidado/dedutível</div><div class="vd">Apuramento bate com o balancete.</div></div><div class="vval">€ 48.210,55</div></div>
+          <div class="vrow ok"><div class="vic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="vmain"><div class="vt">Bases de vendas vs SAF-T</div><div class="vd">14.892 documentos conciliados.</div></div><div class="vval">€ 1.204.330,00</div></div>
           <div class="vrow ok"><div class="vic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="vmain"><div class="vt">Campo 7 vs EC Sales</div><div class="vd">Transmissões intra-UE coincidem.</div></div><div class="vval">€ 312.000,00</div></div>
-          <div class="vrow warn"><div class="vic"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0z"/></svg></div><div class="vmain"><div class="vt">Regularizações a favor vs conta #278</div><div class="vd">Diferença de € 120,00 — falta confirmar receção de 1 nota de crédito.</div></div><div class="vval" style="color:var(--amber)">⚠ Rever</div></div>
+          <div class="vrow warn"><div class="vic"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0z"/></svg></div><div class="vmain"><div class="vt">Regularizações vs conta #278</div><div class="vd">Diferença € 120,00 — falta 1 nota de crédito.</div></div><div class="vval" style="color:var(--amber)">⚠ Rever</div></div>
           <div style="margin-top:14px;display:flex;gap:10px">
-            <button class="btn sm" onclick="toast('Validações re-executadas — 11/11 OK')"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg> Re-executar validações</button>
-            <button class="btn sm" data-goto="d-requests"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H5.2L4 17.2V4z"/></svg> Pedir nota de crédito ao cliente</button>
+            <button class="btn sm" onclick="toast('Validações re-executadas — 11/11 OK')"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg> Re-executar</button>
+            <button class="btn sm" data-goto="d-requests">Pedir nota de crédito</button>
           </div>
         </div>
-
         <div class="tabsec" id="sec-inputs">
-          <p class="muted" style="margin-bottom:14px">Os 9 inputs que alimentam esta declaração e a respetiva origem.</p>
+          <p class="muted" style="margin-bottom:14px">Os 9 inputs que alimentam esta declaração.</p>
           <div class="card" style="padding:0;overflow:hidden"><table>
             <thead><tr><th>Input</th><th>Origem</th><th>Receção</th><th>Estado</th></tr></thead><tbody>
               <tr><td>Balancete analítico mensal</td><td><span class="pill nav">NAV/BC</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
               <tr><td>Mapa Análise IVA</td><td><span class="pill nav">NAV/BC</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
               <tr><td>SAF-T Faturação</td><td><span class="pill nav">NAV/BC</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
               <tr><td>Reconciliação clientes (AR)</td><td><span class="pill nav">NAV/BC</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
-              <tr><td>Operações intra-UE bens</td><td><span class="pill nav">NAV/BC</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
               <tr><td>Notas de crédito (PDF)</td><td><span class="pill non">Upload</span></td><td>Cliente · 16 Jun</td><td><span class="badge warn">1 em falta</span></td></tr>
               <tr><td>Tabelas fiscais (taxas)</td><td><span class="pill calc">Calculável</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
             </tbody></table></div>
         </div>
-
         <div class="tabsec" id="sec-fields">
-          <p class="muted" style="margin-bottom:14px">Campos calculados da Declaração Periódica (pré-preenchidos pelo motor).</p>
+          <p class="muted" style="margin-bottom:14px">Campos calculados (pré-preenchidos pelo motor).</p>
           <div class="card" style="padding:0;overflow:hidden"><table>
             <thead><tr><th>Campo</th><th>Descrição</th><th style="text-align:right">Valor</th></tr></thead><tbody>
-              <tr><td><code>1</code></td><td>Base — transmissões taxa normal</td><td style="text-align:right">€ 892.330,00</td></tr>
-              <tr><td><code>4</code></td><td>IVA liquidado taxa normal (23%)</td><td style="text-align:right">€ 205.235,90</td></tr>
+              <tr><td><code>1</code></td><td>Base — taxa normal</td><td style="text-align:right">€ 892.330,00</td></tr>
+              <tr><td><code>4</code></td><td>IVA liquidado (23%)</td><td style="text-align:right">€ 205.235,90</td></tr>
               <tr><td><code>7</code></td><td>Transmissões intra-UE</td><td style="text-align:right">€ 312.000,00</td></tr>
               <tr><td><code>20</code></td><td>IVA dedutível</td><td style="text-align:right">€ 157.025,35</td></tr>
-              <tr><td><code>61</code></td><td>Reporte do período anterior</td><td style="text-align:right">€ 0,00</td></tr>
-              <tr style="background:#FDF1EA"><td><b>91</b></td><td><b>IVA a entregar ao Estado</b></td><td style="text-align:right"><b>€ 48.210,55</b></td></tr>
+              <tr style="background:#FDF1EA"><td><b>91</b></td><td><b>IVA a entregar</b></td><td style="text-align:right"><b>€ 48.210,55</b></td></tr>
             </tbody></table></div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 13 · APP PEDIDOS ================= -->
+    <!-- 13 APP PEDIDOS -->
     <section class="page" id="d-requests">
-      <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — Exemplo de produto em produção · dados fictícios</div>
+      <div class="demobar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> PROTÓTIPO — dados fictícios</div>
       <div class="appbar">
-        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Cliente: Acme Industries, SA</span></div>
+        <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Acme Industries, SA</span></div>
         <div class="tabs"><span class="tab" data-goto="d-dash">Dashboard</span><span class="tab" data-goto="d-list">Declarações</span><span class="tab on">Pedidos</span></div>
         <div class="right"><div class="avatar">JM</div></div>
       </div>
       <div class="content">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px">
-          <div><h2 style="font-size:24px;margin:0 0 4px">Pedidos de Informação ao Cliente</h2><p class="muted" style="font-size:14px">Gaps de inputs detetados pelo motor que requerem resposta do cliente.</p></div>
+          <div><h2 style="font-size:24px;margin:0 0 4px">Pedidos de Informação ao Cliente</h2><p class="muted" style="font-size:14px">Gaps de inputs que requerem resposta do cliente.</p></div>
           <button class="btn primary" onclick="openModal('reqModal')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Novo pedido</button>
         </div>
         <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:22px">
@@ -717,3 +647,100 @@
           <div class="stat b-amber"><span class="lbl">Respondidos</span><span class="val">2</span><span class="sub">a aguardar revisão</span></div>
           <div class="stat b-green"><span class="lbl">Fechados</span><span class="val">8</span><span class="sub">este período</span></div>
         </div>
+        <div class="card" style="padding:0;overflow:hidden"><table>
+          <thead><tr><th>Pedido</th><th>Declaração</th><th>Enviado</th><th>Estado</th><th style="text-align:right">Ação</th></tr></thead><tbody>
+            <tr><td><b>Extrato bancário não residente</b><br><span class="muted" style="font-size:12px">Necessário para classificação COPE</span></td><td>COPE</td><td>Há 1 hora</td><td><span class="badge err">Pendente</span></td><td style="text-align:right"><button class="btn sm" onclick="toast('Lembrete enviado ao cliente')">Lembrar</button></td></tr>
+            <tr><td><b>Nota de crédito em falta</b><br><span class="muted" style="font-size:12px">Diferença de € 120,00 na conta #278</span></td><td>VAT</td><td>Há 3 horas</td><td><span class="badge err">Pendente</span></td><td style="text-align:right"><button class="btn sm" onclick="toast('Lembrete enviado ao cliente')">Lembrar</button></td></tr>
+            <tr><td><b>Listagem de prédios a 31/12</b><br><span class="muted" style="font-size:12px">Confirmar atualização de VPT</span></td><td>IMI</td><td>Ontem</td><td><span class="badge err">Pendente</span></td><td style="text-align:right"><button class="btn sm" onclick="toast('Lembrete enviado ao cliente')">Lembrar</button></td></tr>
+            <tr><td><b>Certificados de residência (RFI)</b><br><span class="muted" style="font-size:12px">2 não residentes sem certificado</span></td><td>Form 30</td><td>16 Jun</td><td><span class="badge warn">Respondido</span></td><td style="text-align:right"><button class="btn sm" onclick="toast('Resposta validada')">Rever</button></td></tr>
+            <tr><td><b>Atas de distribuição de resultados</b><br><span class="muted" style="font-size:12px">Para preenchimento IES</span></td><td>IES</td><td>14 Jun</td><td><span class="badge warn">Respondido</span></td><td style="text-align:right"><button class="btn sm" onclick="toast('Resposta validada')">Rever</button></td></tr>
+            <tr><td><b>Contratos de arrendamento</b><br><span class="muted" style="font-size:12px">Recibos em falta (conta #2424)</span></td><td>WHT</td><td>10 Jun</td><td><span class="badge ok">Fechado</span></td><td style="text-align:right"><button class="btn sm" onclick="toast('Pedido reaberto')">Reabrir</button></td></tr>
+          </tbody></table></div>
+      </div>
+    </section>
+
+    <footer>Digital Transformation Team MS</footer>
+  </main>
+</div>
+
+<!-- MODAIS -->
+<div class="modal-bg" id="submitModal">
+  <div class="modal">
+    <div class="mh"><h4>Submeter declaração à AT</h4><span class="xbtn" onclick="closeModal('submitModal')">&times;</span></div>
+    <div class="mb">
+      <p style="font-size:13.5px;color:var(--grey-7);margin-bottom:16px">Vais submeter a <b>VAT — DP IVA (Maio 2026)</b> no valor de <b>€ 48.210,55</b>. Existe 1 aviso por resolver.</p>
+      <label>Credenciais Portal das Finanças</label>
+      <input type="text" placeholder="NIF do sujeito passivo" value="500 123 456">
+      <label>Confirmação</label>
+      <select><option>Submeter mesmo com 1 aviso</option><option>Resolver aviso primeiro</option></select>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closeModal('submitModal')">Cancelar</button>
+      <button class="btn green" onclick="closeModal('submitModal');toast('Declaração submetida à AT ✓')">Confirmar submissão</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="reqModal">
+  <div class="modal">
+    <div class="mh"><h4>Novo pedido de informação</h4><span class="xbtn" onclick="closeModal('reqModal')">&times;</span></div>
+    <div class="mb">
+      <label>Declaração associada</label>
+      <select><option>VAT — DP IVA</option><option>COPE</option><option>Form 30</option><option>IES</option><option>IMI</option></select>
+      <label>Documento / informação em falta</label>
+      <input type="text" placeholder="Ex.: Extrato bancário de não residentes">
+      <label>Mensagem ao cliente</label>
+      <textarea rows="3" placeholder="Sugerida pelo agente Info-Request...">Caro cliente, para concluir a declaração precisamos do documento em falta até 2 dias úteis. Obrigado.</textarea>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closeModal('reqModal')">Cancelar</button>
+      <button class="btn primary" onclick="closeModal('reqModal');toast('Pedido enviado ao cliente ✓')">Enviar pedido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span id="toastMsg">OK</span></div>
+
+<script>
+  var aside=document.getElementById('aside');
+  var toggle=document.getElementById('toggle');
+  var items=document.querySelectorAll('.nav-item');
+  var pages=document.querySelectorAll('.page');
+  var mainEl=document.querySelector('main');
+
+  function scrollTop(){ if(mainEl) mainEl.scrollTop=0; window.scrollTo(0,0); }
+
+  function goTo(id){
+    pages.forEach(function(p){ p.classList.remove('active'); });
+    var target=document.getElementById(id);
+    if(target) target.classList.add('active');
+    items.forEach(function(i){ i.classList.toggle('active', i.getAttribute('data-p')===id); });
+    aside.classList.add('collapsed');
+    scrollTop();
+  }
+
+  // toggle slide
+  toggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    aside.classList.toggle('collapsed');
+  });
+
+  // menu navigation
+  items.forEach(function(it){
+    it.addEventListener('click', function(){ goTo(it.getAttribute('data-p')); });
+  });
+
+  // any element with data-goto (app tabs, buttons, rows)
+  document.addEventListener('click', function(e){
+    var el=e.target.closest('[data-goto]');
+    if(el){ e.preventDefault(); goTo(el.getAttribute('data-goto')); }
+  });
+
+  // sub-tabs (detalhe)
+  document.querySelectorAll('.subtab2').forEach(function(st){
+    st.addEventListener('click', function(){
+      var parent=st.closest('.content');
+      parent.querySelectorAll('.subtab2').forEach(function(s){ s.classList.remove('on'); });
+      parent.querySelectorAll('.tabsec').forEach(function(s){ s.classList.remove('on'); });
+      st.classList.add('on');
+      var sec=document.getElementById(st.getAttrib
