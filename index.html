@@ -32,7 +32,7 @@
   .wrap{display:flex;min-height:100vh}
 
   aside{width:var(--aside-w);flex-shrink:0;background:var(--ink);color:#fff;padding:0;
-    position:sticky;top:0;height:100vh;overflow:hidden;transition:width .25s ease}
+    position:sticky;top:0;height:100vh;overflow:hidden;transition:width .25s ease;z-index:20}
   .topbar{height:6px;background:var(--orange)}
   .asidetop{display:flex;align-items:center;justify-content:flex-end;padding:12px 14px 4px}
   .toggle{width:34px;height:34px;border-radius:var(--r);background:#2b2b2b;border:1px solid #3a3a3a;
@@ -56,6 +56,14 @@
   aside.collapsed .nav-item .lbl{opacity:0;width:0;overflow:hidden}
   aside.collapsed .nav-item{justify-content:center;padding:11px 0;gap:0}
   aside.collapsed .toggle svg{transform:rotate(180deg)}
+
+  /* hover expands when collapsed */
+  aside.collapsed:hover{width:var(--aside-w)}
+  aside.collapsed:hover .navlbl{opacity:1;height:auto;margin:18px 12px 8px}
+  aside.collapsed:hover .navlbl:first-child{margin-top:6px}
+  aside.collapsed:hover .nav-item .lbl{opacity:1;width:auto}
+  aside.collapsed:hover .nav-item{justify-content:flex-start;padding:11px 14px;gap:11px}
+  aside.collapsed:hover .toggle svg{transform:rotate(0deg)}
 
   main{flex:1;padding:0;overflow:auto;transition:max-width .25s}
   .header{background:var(--white);border-bottom:1px solid var(--line);padding:34px 56px 0}
@@ -662,7 +670,6 @@
     document.body.scrollTop=0;
   }
 
-  // toggle manual
   toggle.addEventListener('click',()=>aside.classList.toggle('collapsed'));
 
   items.forEach(it=>it.addEventListener('click',()=>{
@@ -670,7 +677,6 @@
     pages.forEach(p=>p.classList.remove('active'));
     it.classList.add('active');
     document.getElementById(it.dataset.p).classList.add('active');
-    // ao selecionar uma página, recolhe o menu
     aside.classList.add('collapsed');
     scrollTop();
   }));
