@@ -166,7 +166,7 @@
   .appbar .right{margin-left:auto;display:flex;align-items:center;gap:14px}
   .appbar .bell{position:relative;cursor:pointer}
   .appbar .bell svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8}
-  .appbar .bell .badge{position:absolute;top:-5px;right:-6px;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px}
+  .appbar .bell .nbadge{position:absolute;top:-5px;right:-6px;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px}
   .appbar .avatar{width:32px;height:32px;border-radius:50%;background:var(--tangerine);display:grid;place-items:center;font-weight:700;font-size:13px}
 
   .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
@@ -247,7 +247,7 @@
   .xbtn{cursor:pointer;color:var(--grey-5);font-size:22px;line-height:1}
   .xbtn:hover{color:var(--ink)}
 
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:14px 20px;border-radius:var(--r);font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:200;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(20px);transition:.3s;border-left:4px solid var(--green)}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:14px 20px;border-radius:var(--r);font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:200;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(20px);transition:.3s;border-left:4px solid var(--green);pointer-events:none}
   .toast.on{opacity:1;transform:translateY(0)}
   .toast svg{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:2.4}
 
@@ -505,16 +505,16 @@
         <div class="logo"><span class="sq">T</span> TaxFlow <span style="color:var(--grey-5);font-weight:400;font-size:12px">/ Cliente: Acme Industries, SA</span></div>
         <div class="tabs"><span class="tab on">Dashboard</span><span class="tab" data-goto="d-list">Declarações</span><span class="tab" data-goto="d-requests">Pedidos</span></div>
         <div class="right">
-          <div class="bell" onclick="toast('3 notificações por ler')"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="badge2 badge"></span><span class="badge" style="display:none"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span style="display:none"></span><span class="badge" hidden></span><span class="badge" hidden></span><span class="badge" hidden></span><span class="badge2 badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span class="badge"></span><span style="position:absolute;top:-5px;right:-6px;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px">3</span></div>
+          <div class="bell" onclick="toast('3 notificações por ler')"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="nbadge">3</span></div>
           <div class="avatar">JM</div>
         </div>
       </div>
       <div class="content">
-        <div class="header" style="padding:0 0 22px;border:none;background:transparent">
+        <div style="margin-bottom:22px">
           <h2 style="font-size:24px;margin:0 0 4px">Período fiscal: Junho 2026</h2>
-          <p style="padding:0;font-size:14px">Visão geral do estado das obrigações fiscais e prazos a decorrer.</p>
+          <p class="muted" style="font-size:14px">Visão geral do estado das obrigações fiscais e prazos a decorrer.</p>
         </div>
-        <div class="grid g3" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+        <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
           <div class="stat b-green"><span class="lbl">Submetidas</span><span class="val">7</span><span class="sub">no prazo · 100%</span></div>
           <div class="stat b-blue"><span class="lbl">Prontas a submeter</span><span class="val">3</span><span class="sub">aguardam aprovação</span></div>
           <div class="stat b-amber"><span class="lbl">Em validação</span><span class="val">4</span><span class="sub">2 com avisos</span></div>
@@ -583,14 +583,14 @@
         <div class="right"><div class="avatar">JM</div></div>
       </div>
       <div class="content">
-        <div class="header" style="padding:0 0 18px;border:none;background:transparent"><h2 style="font-size:24px;margin:0">Declarações · Junho 2026</h2></div>
+        <div style="margin-bottom:18px"><h2 style="font-size:24px;margin:0">Declarações · Junho 2026</h2></div>
         <div class="toolbar">
           <input class="input" id="dlSearch" placeholder="Pesquisar declaração...">
           <select class="select" id="dlStatus">
             <option value="">Todos os estados</option>
             <option value="Submetida">Submetida</option>
             <option value="Pronta">Pronta a submeter</option>
-            <option value="Validação">Em validação</option>
+            <option value="Em validação">Em validação</option>
             <option value="Bloqueada">Bloqueada</option>
           </select>
           <select class="select" id="dlPrio"><option value="">Todas as prioridades</option><option>ALTA</option><option>MÉDIA</option><option>NORMAL</option></select>
@@ -655,7 +655,7 @@
         </div>
 
         <div class="tabsec on" id="sec-valid">
-          <div class="grid g3" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
+          <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
             <div class="stat b-green"><span class="lbl">Cruzamentos OK</span><span class="val">10</span></div>
             <div class="stat b-amber"><span class="lbl">Avisos</span><span class="val">1</span></div>
             <div class="stat b-red"><span class="lbl">Erros</span><span class="val">0</span></div>
@@ -671,7 +671,7 @@
         </div>
 
         <div class="tabsec" id="sec-inputs">
-          <p class="muted" style="margin-bottom:14px">Os 9 inputs que alimentam esta declaração e a respetiva origem. Clica para ver a linhagem até à fonte.</p>
+          <p class="muted" style="margin-bottom:14px">Os 9 inputs que alimentam esta declaração e a respetiva origem.</p>
           <div class="card" style="padding:0;overflow:hidden"><table>
             <thead><tr><th>Input</th><th>Origem</th><th>Receção</th><th>Estado</th></tr></thead><tbody>
               <tr><td>Balancete analítico mensal</td><td><span class="pill nav">NAV/BC</span></td><td>Auto · 15 Jun</td><td><span class="badge ok">Validado</span></td></tr>
@@ -707,3 +707,13 @@
         <div class="tabs"><span class="tab" data-goto="d-dash">Dashboard</span><span class="tab" data-goto="d-list">Declarações</span><span class="tab on">Pedidos</span></div>
         <div class="right"><div class="avatar">JM</div></div>
       </div>
+      <div class="content">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px">
+          <div><h2 style="font-size:24px;margin:0 0 4px">Pedidos de Informação ao Cliente</h2><p class="muted" style="font-size:14px">Gaps de inputs detetados pelo motor que requerem resposta do cliente.</p></div>
+          <button class="btn primary" onclick="openModal('reqModal')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Novo pedido</button>
+        </div>
+        <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:22px">
+          <div class="stat b-red"><span class="lbl">Pendentes</span><span class="val">3</span><span class="sub">1 a bloquear prazo</span></div>
+          <div class="stat b-amber"><span class="lbl">Respondidos</span><span class="val">2</span><span class="sub">a aguardar revisão</span></div>
+          <div class="stat b-green"><span class="lbl">Fechados</span><span class="val">8</span><span class="sub">este período</span></div>
+        </div>
