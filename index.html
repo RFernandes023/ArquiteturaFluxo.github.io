@@ -76,7 +76,13 @@
   @media(max-width:1200px){.g4{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
   @media(max-width:760px){.g3,.g2,.g4{grid-template-columns:1fr}}
-
+  td.cnt{text-align:center;font-weight:700;color:var(--orange)}
+  .ofilter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .ofbtn{background:var(--white);border:1px solid var(--line);color:var(--grey-7);padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+  .ofbtn:hover{border-color:var(--orange);color:var(--orange)}
+  .ofbtn.active{background:var(--orange);border-color:var(--orange);color:#fff}
+  .ofbtn .cnt-b{font-size:11px;font-weight:700;background:rgba(0,0,0,.08);padding:1px 7px;border-radius:10px}
+  .ofbtn.active .cnt-b{background:rgba(255,255,255,.25);color:#fff}
   .card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px}
   .card h3{font-size:16px;margin-bottom:13px;color:var(--ink);font-weight:600;padding-bottom:11px;border-bottom:2px solid var(--grey-1)}
   .card h3 .num{color:var(--orange);margin-right:6px}
@@ -478,20 +484,139 @@
 
     <!-- 08 INPUTS -->
     <section class="page" id="inputs">
-      <div class="header"><div class="crumb">Origem &amp; Mapeamento</div><h2>Inputs e Declarações</h2><p>Classificação por origem e impacto a jusante.</p></div>
+      <div class="header"><div class="crumb">Origem &amp; Mapeamento</div><h2>Inputs e Declarações que Alimentam</h2><p>Dump completo de todos os inputs mapeados, com classificação por origem (NAV / calculável / não-NAV) e as declarações que cada um alimenta.</p></div>
       <div class="content">
-        <div class="legend"><span><span class="pill nav">NAV direto</span> 11</span><span><span class="pill calc">Calculável</span> 3</span><span><span class="pill non">Não-NAV</span> 6+</span></div>
-        <input class="search" id="inSearch" placeholder="Filtrar input...">
+        <div class="legend">
+          <span><span class="pill nav">NAV direto</span> do ERP</span>
+          <span><span class="pill calc">Calculável de NAV</span> derivado</span>
+          <span><span class="pill non">Não-NAV (template/MDU)</span> cliente/equipa</span>
+          <span style="margin-left:auto"><b style="color:var(--orange)">#</b> = nº de declarações alimentadas</span>
+        </div>
+
+        <div class="ofilter">
+          <button class="ofbtn active" data-o="all" onclick="filterInputs(this)">Todos <span class="cnt-b" id="cAll">20</span></button>
+          <button class="ofbtn" data-o="nav" onclick="filterInputs(this)">NAV <span class="cnt-b" id="cNav">11</span></button>
+          <button class="ofbtn" data-o="calc" onclick="filterInputs(this)">Calculável <span class="cnt-b" id="cCalc">3</span></button>
+          <button class="ofbtn" data-o="non" onclick="filterInputs(this)">Não-NAV <span class="cnt-b" id="cNon">6</span></button>
+        </div>
+
+        <input class="search" id="inSearch" placeholder="Filtrar input ou declaração (ex.: balancete, VAT, COPE)..." oninput="filterInputs()">
         <div class="card" style="padding:0;overflow:hidden"><table id="inTable">
-          <thead><tr><th>Input</th><th>Origem</th><th>Declarações</th></tr></thead><tbody>
-          <tr><td>Balancete analítico mensal</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, WHT, COPE, Form 30</td></tr>
-          <tr><td>Tabelas fiscais</td><td><span class="pill calc">Calculável</span></td><td>VAT, WHT, Intrastat, IMI, CIT</td></tr>
-          <tr><td>Reconciliação fornecedores (AP)</td><td><span class="pill nav">NAV</span></td><td>VAT, WHT, COPE, Form 30</td></tr>
-          <tr><td>SAF-T Faturação</td><td><span class="pill nav">NAV</span></td><td>SAF-T Inv., VAT, EC Sales</td></tr>
-          <tr><td>Processamento salarial</td><td><span class="pill non">Não-NAV</span></td><td>DMR, DRSS, WHT</td></tr>
-          <tr><td>Certificados residência + RFIs</td><td><span class="pill non">Não-NAV</span></td><td>WHT, Form 30</td></tr>
-          <tr><td>Mapa partes relacionadas / TP</td><td><span class="pill non">Não-NAV</span></td><td>CIT, IES, COPE, Form 30</td></tr>
+          <thead><tr><th style="width:40px">#</th><th style="width:300px">Input</th><th style="width:120px">Origem</th><th>Declarações que alimenta</th><th class="cnt" style="width:50px">N.º</th></tr></thead><tbody>
+          <tr data-o="nav"><td>1</td><td>Balancete analítico mensal</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, WHT, DMIS, COPE, Form 30, SAF-T</td><td class="cnt">6</td></tr>
+          <tr data-o="calc"><td>2</td><td>Tabelas fiscais (IRS/IRC/TGIS/NC8/CDT)</td><td><span class="pill calc">Calculável</span></td><td>VAT, WHT, DMIS, Intrastat, Form 30, IMI, AIMI, IEC, DMR, CIT</td><td class="cnt">10</td></tr>
+          <tr data-o="nav"><td>3</td><td>Cadastro fornecedores enriquecido</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, WHT, DMIS, Intrastat, COPE, Form 30</td><td class="cnt">6</td></tr>
+          <tr data-o="nav"><td>4</td><td>Reconciliação fornecedores (AP)</td><td><span class="pill nav">NAV</span></td><td>VAT, WHT, DMIS, Intrastat, COPE, Form 30</td><td class="cnt">6</td></tr>
+          <tr data-o="nav"><td>5</td><td>Operações com não residentes</td><td><span class="pill nav">NAV</span></td><td>VAT, WHT, DMIS, COPE, Form 30, SAF-T Inv.</td><td class="cnt">6</td></tr>
+          <tr data-o="nav"><td>6</td><td>Reconciliação clientes (AR)</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, SAF-T Inv., Intrastat, COPE</td><td class="cnt">5</td></tr>
+          <tr data-o="nav"><td>7</td><td>Reconciliação bancária</td><td><span class="pill nav">NAV</span></td><td>DMIS, COPE, Form 30</td><td class="cnt">5</td></tr>
+          <tr data-o="nav"><td>8</td><td>SAF-T Faturação</td><td><span class="pill nav">NAV</span></td><td>SAF-T Inv., VAT, EC Sales</td><td class="cnt">3</td></tr>
+          <tr data-o="nav"><td>9</td><td>Operações intra-UE bens</td><td><span class="pill nav">NAV</span></td><td>VAT, EC Sales, SAF-T Inv., Intrastat</td><td class="cnt">4</td></tr>
+          <tr data-o="non"><td>10</td><td>Processamento salarial</td><td><span class="pill non">Não-NAV</span></td><td>DMR, DRSS, WHT (Cat. A)</td><td class="cnt">3</td></tr>
+          <tr data-o="non"><td>11</td><td>Contratos (financ./arrend./serviços)</td><td><span class="pill non">Não-NAV</span></td><td>WHT, DMIS, COPE, Form 30</td><td class="cnt">4</td></tr>
+          <tr data-o="calc"><td>12</td><td>Cadastro de imóveis</td><td><span class="pill calc">Calculável</span></td><td>IMI, AIMI, IES, CIT</td><td class="cnt">4</td></tr>
+          <tr data-o="nav"><td>13</td><td>Inventário valorizado</td><td><span class="pill nav">NAV</span></td><td>Inventories, IEC, IES, CIT</td><td class="cnt">4</td></tr>
+          <tr data-o="nav"><td>14</td><td>Balancete anual + DFs</td><td><span class="pill nav">NAV</span></td><td>CIT, IES, SAF-T Cont., PPC, PAC, Inventories</td><td class="cnt">6</td></tr>
+          <tr data-o="calc"><td>15</td><td>Modelo 22 N-1</td><td><span class="pill calc">Calculável</span></td><td>PPC, PAC, CIT</td><td class="cnt">3</td></tr>
+          <tr data-o="nav"><td>16</td><td>Cadastro ativos fixos + depreciações</td><td><span class="pill nav">NAV</span></td><td>CIT, IES</td><td class="cnt">2</td></tr>
+          <tr data-o="non"><td>17</td><td>Certificados residência + RFIs</td><td><span class="pill non">Não-NAV</span></td><td>WHT, Form 30</td><td class="cnt">2</td></tr>
+          <tr data-o="non"><td>18</td><td>Atas distribuição resultados</td><td><span class="pill non">Não-NAV</span></td><td>SF's, IES, CIT</td><td class="cnt">5</td></tr>
+          <tr data-o="non"><td>19</td><td>Mapa partes relacionadas / TP</td><td><span class="pill non">Não-NAV</span></td><td>CIT, IES, COPE, Form 30</td><td class="cnt">4</td></tr>
+          <tr data-o="non"><td>20</td><td>Dossier fiscal / Benefícios (RFAI/SIFIDE)</td><td><span class="pill non">Não-NAV</span></td><td>CIT, IES</td><td class="cnt">2</td></tr>
         </tbody></table></div>
+        <p class="muted" id="inEmpty" style="display:none;text-align:center;padding:20px;font-size:13px">Sem inputs para este filtro.</p>
+
+        <h3 style="margin:30px 0 14px;font-size:17px;color:var(--ink);font-weight:600">Inputs detalhados por declaração (documentos de suporte)</h3>
+        <div id="declInputs">
+          <details open><summary>VAT — Declaração Periódica IVA</summary><div class="body"><ul>
+            <li>Balancete antes do apuramento do IVA;</li>
+            <li>Balancete da conta <code>#243</code> após o apuramento do IVA;</li>
+            <li>Mapa dos Códigos do IVA e Mapa Análise do IVA (do ERP) ou Mapa resumo de suporte à DP (template Excel);</li>
+            <li>Declaração Periódica do IVA (DP) do período N-1;</li>
+            <li>Link para a Declaração Recapitulativa do IVA do período N (se aplicável);</li>
+            <li>Comprovativo da Comunicação da faturação do período N (se aplicável);</li>
+            <li>Declaração da AT relativa aos IL e Comunicação de crédito do IVA (se aplicável).</li>
+          </ul></div></details>
+          <details><summary>EC Sales — Declaração Recapitulativa</summary><div class="body"><ul>
+            <li>Listagem de faturação de bens/serviços a entidades de outros Estados-membros;</li>
+            <li>Número de identificação fiscal dos clientes (no VIES);</li>
+            <li>Declaração Recapitulativa do IVA do período N-1;</li>
+            <li>Balancete da contabilidade.</li>
+          </ul></div></details>
+          <details><summary>SAF-T Faturação</summary><div class="body"><ul>
+            <li>Ficheiro SAF-T PT do ERP;</li>
+            <li>Listagem de faturação;</li>
+            <li>Balancete da contabilidade.</li>
+          </ul></div></details>
+          <details><summary>WHT &amp; Imposto de Selo (Retenções)</summary><div class="body"><ul>
+            <li>Rend. empresariais/profissionais: extrato conta <code>#2422</code>, confirmação de recibos no Portal AT, cópias de documentos com/sem retenção;</li>
+            <li>Rend. prediais: extrato conta <code>#2424</code> + cópias de documentos;</li>
+            <li>Imposto de selo: extrato conta <code>#244</code> + cópias de documentos;</li>
+            <li>Suporte dos cálculos efetuados (template disponível).</li>
+          </ul></div></details>
+          <details><summary>Intrastat</summary><div class="body"><ul>
+            <li>Listagem com informações de preenchimento (código mercadoria, valor, quantidade, kg, país origem/proveniência);</li>
+            <li>Dados da contabilidade;</li>
+            <li>Declaração Recapitulativa do IVA (expedição);</li>
+            <li>Declaração Periódica do IVA (aquisições fora do território nacional).</li>
+          </ul></div></details>
+          <details><summary>COPE — Banco de Portugal</summary><div class="body"><ul>
+            <li>Extrato da conta de depósitos à ordem;</li>
+            <li>Balancete de terceiros não residentes;</li>
+            <li>Balancete geral;</li>
+            <li>COL (template).</li>
+          </ul></div></details>
+          <details><summary>Form 30 — Modelo 30 (Não Residentes)</summary><div class="body"><ul>
+            <li>Listagem dos pagamentos de serviços a não residentes (do ERP ou preparada pela equipa/cliente);</li>
+            <li>Declaração Modelo 30 do período N-1;</li>
+            <li>Modelos RFI / certificados de residência;</li>
+            <li>NIFs Portugueses relativos a entidades não-residentes.</li>
+          </ul></div></details>
+          <details><summary>PPC / PAC — Pagamentos por Conta</summary><div class="body"><ul>
+            <li>Demonstrações Financeiras finais ou balancete final do período N-1;</li>
+            <li>Print dos "Pagamentos antecipados" no Portal AT (Entregar &gt; IRC);</li>
+            <li>Declaração Modelo 22 do período N-1.</li>
+          </ul></div></details>
+          <details><summary>IMI / AIMI</summary><div class="body"><ul>
+            <li>Listagem dos prédios rústicos e urbanos (à data de 31/12/N-1);</li>
+            <li>Documento de cobrança por parte da AT.</li>
+          </ul></div></details>
+          <details><summary>IUC — Imposto Único de Circulação</summary><div class="body"><ul>
+            <li>Listagem do Portal da AT com todos os veículos da empresa (mês/ano matrícula, cilindrada, emissão CO2, …).</li>
+          </ul></div></details>
+          <details><summary>IEC — Impostos Especiais de Consumo</summary><div class="body"><ul>
+            <li>Listagem da faturação com IEC cobrado e consumo de cada cliente;</li>
+            <li>Listagem de clientes com isenção total/parcial + certificados de isenção;</li>
+            <li>Cálculo manual = <code>Consumo &times; taxa aplicável no período</code>.</li>
+          </ul></div></details>
+          <details><summary>SAF-T Inventários</summary><div class="body"><ul>
+            <li>Ficheiro SAF-T de Inventários do ERP;</li>
+            <li>Documentos de suporte.</li>
+          </ul></div></details>
+          <details><summary>SAF-T Contabilidade</summary><div class="body"><ul>
+            <li>Ficheiro SAF-T PT do ERP;</li>
+            <li>Balancete da contabilidade.</li>
+          </ul></div></details>
+          <details><summary>CIT — Modelo 22 (IRC)</summary><div class="body"><ul>
+            <li>Balancete da contabilidade;</li>
+            <li>Demonstrações Financeiras assinadas;</li>
+            <li>Extratos e suportes documentais (extrato de contas, mapa ALD, multas, faturas, etc.);</li>
+            <li>Ficheiro disponibilizado no Digital Space.</li>
+          </ul></div></details>
+          <details><summary>IES — Informação Empresarial Simplificada</summary><div class="body"><ul>
+            <li>Demonstrações Financeiras e minutas assinadas;</li>
+            <li>Extratos e suportes documentais consoante o anexo aplicável;</li>
+            <li>Ficheiros disponibilizados no Digital Space.</li>
+          </ul></div></details>
+          <details><summary>Form 62 — Modelo 62</summary><div class="body"><ul>
+            <li>Designação e período fiscal do grupo;</li>
+            <li>NIF das entidades do grupo na jurisdição aplicável;</li>
+            <li>Identificação da entidade-mãe final (NIF, país, nome, morada);</li>
+            <li>Pontos de contacto (nome, cargo, email, telefone).</li>
+          </ul></div></details>
+        </div>
+
+        <div class="note"><b>Origem dos dados:</b> tabela e detalhes extraídos do documento "Outras Obrigações". Inputs com mais declarações dependentes (ex.: Tabelas fiscais — 10, Balancete — 6) são os de maior impacto: um erro propaga-se a várias obrigações.</div>
       </div>
     </section>
 
@@ -772,8 +897,24 @@
   // search filters
   const ds=document.getElementById('declSearch');
   ds&&ds.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#declList details').forEach(d=>{d.style.display=d.textContent.toLowerCase().includes(q)?'':'none';});});
-  const is=document.getElementById('inSearch');
-  is&&is.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#inTable tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});});
+  let inOrigin='all';
+  function filterInputs(btn){
+    if(btn){
+      inOrigin=btn.dataset.o;
+      document.querySelectorAll('.ofbtn').forEach(b=>b.classList.toggle('active',b===btn));
+    }
+    const q=(document.getElementById('inSearch').value||'').toLowerCase();
+    let visible=0;
+    document.querySelectorAll('#inTable tbody tr').forEach(r=>{
+      const okText=r.textContent.toLowerCase().includes(q);
+      const okOrigin=(inOrigin==='all'||r.dataset.o===inOrigin);
+      const show=okText&&okOrigin;
+      r.style.display=show?'':'none';
+      if(show)visible++;
+    });
+    const empty=document.getElementById('inEmpty');
+    if(empty)empty.style.display=visible?'none':'block';
+  }
   function filterList(){
     const q=(document.getElementById('listSearch').value||'').toLowerCase();
     const s=(document.getElementById('listStatus').value||'').toLowerCase();
