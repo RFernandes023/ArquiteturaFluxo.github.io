@@ -21,6 +21,8 @@
     --line:#DADADA;
     --line-d:#404040;
     --r:6px;
+    --aside-w:250px;
+    --aside-wc:64px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -29,40 +31,53 @@
   a{color:inherit;text-decoration:none}
   .wrap{display:flex;min-height:100vh}
 
-  aside{width:250px;flex-shrink:0;background:var(--ink);color:#fff;padding:0;
-    position:sticky;top:0;height:100vh;overflow:auto}
+  aside{width:var(--aside-w);flex-shrink:0;background:var(--ink);color:#fff;padding:0;
+    position:sticky;top:0;height:100vh;overflow:hidden;transition:width .25s ease}
   .topbar{height:6px;background:var(--orange)}
-  nav{padding:24px 14px;display:flex;flex-direction:column;gap:2px}
+  .asidetop{display:flex;align-items:center;justify-content:flex-end;padding:12px 14px 4px}
+  .toggle{width:34px;height:34px;border-radius:var(--r);background:#2b2b2b;border:1px solid #3a3a3a;
+    cursor:pointer;display:grid;place-items:center;transition:.15s;flex-shrink:0}
+  .toggle:hover{background:var(--orange);border-color:var(--orange)}
+  .toggle svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+  nav{padding:8px 14px 24px;display:flex;flex-direction:column;gap:2px}
   .navlbl{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--grey-5);
-    margin:20px 12px 8px}
-  .navlbl:first-child{margin-top:0}
+    margin:18px 12px 8px;white-space:nowrap;transition:opacity .15s}
+  .navlbl:first-child{margin-top:6px}
   .nav-item{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:var(--r);
-    font-size:13.5px;color:var(--grey-3);cursor:pointer;transition:.15s;border-left:3px solid transparent}
+    font-size:13.5px;color:var(--grey-3);cursor:pointer;transition:.15s;border-left:3px solid transparent;white-space:nowrap}
   .nav-item:hover{background:#262626;color:#fff}
   .nav-item.active{background:#2b2b2b;color:#fff;border-left-color:var(--orange)}
-  .nav-item .n{width:22px;font-size:12px;color:var(--orange);font-weight:700}
+  .nav-item .n{width:22px;font-size:12px;color:var(--orange);font-weight:700;flex-shrink:0;text-align:center}
+  .nav-item .lbl{transition:opacity .15s}
 
-  main{flex:1;padding:0 0 0;overflow:auto}
-  .header{background:var(--white);border-bottom:1px solid var(--line);padding:30px 48px 0}
+  /* collapsed state */
+  aside.collapsed{width:var(--aside-wc)}
+  aside.collapsed .navlbl{opacity:0;height:0;margin:0;overflow:hidden}
+  aside.collapsed .nav-item .lbl{opacity:0;width:0;overflow:hidden}
+  aside.collapsed .nav-item{justify-content:center;padding:11px 0;gap:0}
+  aside.collapsed .toggle svg{transform:rotate(180deg)}
+
+  main{flex:1;padding:0;overflow:auto;transition:max-width .25s}
+  .header{background:var(--white);border-bottom:1px solid var(--line);padding:34px 56px 0}
   .header .crumb{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);font-weight:700}
-  .header h2{font-size:26px;margin:8px 0 6px;color:var(--ink);font-weight:600}
-  .header p{color:var(--grey-7);max-width:820px;font-size:14px;padding-bottom:24px}
-  .content{padding:30px 48px}
+  .header h2{font-size:30px;margin:8px 0 6px;color:var(--ink);font-weight:600}
+  .header p{color:var(--grey-7);max-width:980px;font-size:15px;padding-bottom:26px}
+  .content{padding:34px 56px;max-width:1500px}
   .page{display:none}
   .page.active{display:block}
 
-  .grid{display:grid;gap:18px}
+  .grid{display:grid;gap:20px}
   .g2{grid-template-columns:repeat(2,1fr)}
   .g3{grid-template-columns:repeat(3,1fr)}
   @media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
   @media(max-width:760px){.g3,.g2{grid-template-columns:1fr}}
 
-  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px}
-  .card h3{font-size:15px;margin-bottom:12px;color:var(--ink);font-weight:600;
-    padding-bottom:10px;border-bottom:2px solid var(--grey-1)}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .card h3{font-size:16px;margin-bottom:13px;color:var(--ink);font-weight:600;
+    padding-bottom:11px;border-bottom:2px solid var(--grey-1)}
   .card h3 .num{color:var(--orange);margin-right:6px}
   .muted{color:var(--grey-7)}
-  .card ul{margin-left:18px;line-height:1.95;color:var(--grey-7)}
+  .card ul{margin-left:18px;line-height:2;color:var(--grey-7)}
   .card ul code,td code{background:var(--grey-1);padding:1px 6px;border-radius:4px;font-size:12.5px;
     color:var(--orange);font-weight:600}
 
@@ -72,55 +87,55 @@
   .pill.calc{border-color:var(--tangerine);color:var(--tangerine)}
   .pill.non{border-color:var(--black);color:var(--black);background:var(--grey-1)}
 
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:26px}
   @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
-  .kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px;
+  .kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:22px;
     border-top:3px solid var(--orange)}
-  .kpi b{font-size:30px;color:var(--ink);font-weight:700;display:block}
-  .kpi span{font-size:12px;color:var(--grey-7);margin-top:2px;display:block}
+  .kpi b{font-size:32px;color:var(--ink);font-weight:700;display:block}
+  .kpi span{font-size:12.5px;color:var(--grey-7);margin-top:2px;display:block}
 
   .flow{display:flex;flex-direction:column;gap:6px}
   .stagewrap{position:relative}
   .stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);
-    padding:18px 20px;border-left:4px solid var(--orange)}
+    padding:20px 22px;border-left:4px solid var(--orange)}
   .stage .sh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
   .stage .sn{width:28px;height:28px;background:var(--orange);color:#fff;border-radius:var(--r);
     display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0}
-  .stage .st{font-size:15px;font-weight:600;color:var(--ink)}
+  .stage .st{font-size:15.5px;font-weight:600;color:var(--ink)}
   .stage .layer{margin-left:auto;font-size:10px;letter-spacing:1px;text-transform:uppercase;
     color:var(--grey-5);background:var(--grey-1);padding:4px 10px;border-radius:3px}
   .nodes{display:flex;flex-wrap:wrap;gap:12px}
-  .node{flex:1;min-width:170px;background:var(--paper);border:1px solid var(--line);
-    border-radius:var(--r);padding:13px 14px}
-  .node .nt{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px}
-  .node .nd{font-size:12px;color:var(--grey-7)}
+  .node{flex:1;min-width:190px;background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--r);padding:14px 16px}
+  .node .nt{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
+  .node .nd{font-size:12.5px;color:var(--grey-7)}
   .arrow{text-align:center;color:var(--grey-3);font-size:16px;padding:2px 0}
 
-  .stackrow{display:flex;align-items:flex-start;gap:16px;padding:15px 0;border-bottom:1px solid var(--grey-1)}
+  .stackrow{display:flex;align-items:flex-start;gap:18px;padding:16px 0;border-bottom:1px solid var(--grey-1)}
   .stackrow:last-child{border-bottom:none}
-  .stackrow .tech{width:240px;flex-shrink:0;font-weight:600;color:var(--ink);font-size:13.5px}
-  .stackrow .why{flex:1;color:var(--grey-7);font-size:13px}
+  .stackrow .tech{width:260px;flex-shrink:0;font-weight:600;color:var(--ink);font-size:14px}
+  .stackrow .why{flex:1;color:var(--grey-7);font-size:13.5px}
 
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
   th{font-size:11px;text-transform:uppercase;letter-spacing:.6px;background:var(--ink);color:#fff;font-weight:600}
   th:first-child{border-radius:var(--r) 0 0 0}
   th:last-child{border-radius:0 var(--r) 0 0}
   tbody tr:nth-child(even){background:var(--paper)}
   tbody tr:hover{background:#FDF1EA}
 
-  .fab{display:inline-block;font-size:11px;font-weight:600;padding:4px 10px;border-radius:3px;
+  .fab{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:3px;
     background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);margin:2px 4px 2px 0}
 
-  details{border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;background:var(--white);overflow:hidden}
-  summary{padding:15px 18px;cursor:pointer;font-weight:600;font-size:14px;list-style:none;
+  details{border:1px solid var(--line);border-radius:var(--r);margin-bottom:11px;background:var(--white);overflow:hidden}
+  summary{padding:16px 20px;cursor:pointer;font-weight:600;font-size:14.5px;list-style:none;
     display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
   summary::-webkit-details-marker{display:none}
   summary::after{content:'+';font-size:18px;color:var(--orange);font-weight:700}
   details[open] summary::after{content:'\2013'}
   details[open] summary{border-bottom:1px solid var(--grey-1)}
-  details .body{padding:14px 18px;font-size:13px;color:var(--grey-7)}
-  details .body ul{margin-left:18px;line-height:1.85}
+  details .body{padding:15px 20px;font-size:13.5px;color:var(--grey-7)}
+  details .body ul{margin-left:18px;line-height:1.9}
 
   .tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
   .tag.alta{background:var(--orange);color:#fff}
@@ -130,63 +145,66 @@
   .tag.llm{background:var(--orange);color:#fff}
   .tag.mix{background:var(--tangerine);color:#fff}
 
-  .legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:18px;font-size:12.5px;color:var(--grey-7);
+  .legend{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:20px;font-size:13px;color:var(--grey-7);
     align-items:center}
-  .note{border-left:4px solid var(--orange);background:#FDF1EA;padding:14px 18px;
-    border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--grey-9);margin-top:18px}
-  .search{width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--line);
-    background:var(--white);color:var(--black);font-size:13.5px;margin-bottom:16px}
+  .note{border-left:4px solid var(--orange);background:#FDF1EA;padding:16px 20px;
+    border-radius:0 var(--r) var(--r) 0;font-size:13.5px;color:var(--grey-9);margin-top:20px}
+  .search{width:100%;padding:13px 16px;border-radius:var(--r);border:1px solid var(--line);
+    background:var(--white);color:var(--black);font-size:14px;margin-bottom:18px}
   .search:focus{outline:none;border-color:var(--orange)}
-  footer{padding:18px 48px;border-top:3px solid var(--orange);font-size:12px;color:var(--ink);
+  footer{padding:20px 56px;border-top:3px solid var(--orange);font-size:12.5px;color:var(--ink);
     background:var(--white);font-weight:600;letter-spacing:.3px}
 
-  /* ===== Fabric PM Flow diagram ===== */
-  .pmflow{background:var(--ink);border-radius:var(--r);padding:34px 26px;overflow-x:auto;margin-bottom:22px}
+  /* PM FLOW */
+  .pmflow{background:var(--ink);border-radius:var(--r);padding:38px 30px;overflow-x:auto;margin-bottom:24px}
   .pmtrack{display:flex;align-items:stretch;gap:0;min-width:1050px}
   .pmstep{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 6px}
-  .pmico{width:62px;height:62px;border-radius:50%;background:linear-gradient(160deg,var(--orange),var(--orange-l));
-    display:grid;place-items:center;margin-bottom:12px;box-shadow:0 6px 16px rgba(208,74,2,.4);position:relative;z-index:2}
-  .pmico svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .pmico{width:66px;height:66px;border-radius:50%;background:linear-gradient(160deg,var(--orange),var(--orange-l));
+    display:grid;place-items:center;margin-bottom:13px;box-shadow:0 6px 16px rgba(208,74,2,.4);position:relative;z-index:2}
+  .pmico svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .pmstep .ph{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tangerine);font-weight:700;margin-bottom:4px}
-  .pmstep .pt{font-size:13px;font-weight:600;color:#fff;margin-bottom:8px;line-height:1.3}
+  .pmstep .pt{font-size:13.5px;font-weight:600;color:#fff;margin-bottom:9px;line-height:1.3}
   .pmstep .pf{display:flex;flex-direction:column;gap:4px;align-items:center}
   .pmstep .pf span{font-size:10.5px;color:#cfcfcf;background:#2b2b2b;border:1px solid #3a3a3a;
     padding:3px 8px;border-radius:3px;white-space:nowrap}
-  /* connector line + arrow between steps */
-  .pmstep:not(:last-child)::after{content:'';position:absolute;top:31px;left:calc(50% + 40px);
-    right:calc(-50% + 40px);height:3px;background:repeating-linear-gradient(90deg,var(--tangerine) 0 8px,transparent 8px 14px);z-index:1}
-  .pmstep:not(:last-child)::before{content:'';position:absolute;top:25px;right:calc(-50% + 34px);
+  .pmstep:not(:last-child)::after{content:'';position:absolute;top:33px;left:calc(50% + 42px);
+    right:calc(-50% + 42px);height:3px;background:repeating-linear-gradient(90deg,var(--tangerine) 0 8px,transparent 8px 14px);z-index:1}
+  .pmstep:not(:last-child)::before{content:'';position:absolute;top:27px;right:calc(-50% + 36px);
     width:0;height:0;border-left:9px solid var(--tangerine);border-top:7px solid transparent;
     border-bottom:7px solid transparent;z-index:2}
-  /* layer band under the flow */
-  .pmband{display:flex;min-width:1050px;margin-top:26px;gap:8px}
-  .pmlayer{flex:1;text-align:center;padding:9px;border-radius:4px;font-size:11px;font-weight:700;
+  .pmband{display:flex;min-width:1050px;margin-top:28px;gap:8px}
+  .pmlayer{flex:1;text-align:center;padding:10px;border-radius:4px;font-size:11px;font-weight:700;
     letter-spacing:1px;text-transform:uppercase;color:#fff}
   .pmlayer.bz{background:#5C5C5C}
   .pmlayer.sv{background:#8a8a8a}
   .pmlayer.gd{background:var(--orange)}
   .pmloop{min-width:1050px;margin-top:14px;background:#2b2b2b;border:1px dashed var(--tangerine);
-    border-radius:var(--r);padding:10px 16px;font-size:12px;color:#e0e0e0;display:flex;align-items:center;gap:10px}
+    border-radius:var(--r);padding:11px 18px;font-size:12.5px;color:#e0e0e0;display:flex;align-items:center;gap:10px}
   .pmloop svg{width:18px;height:18px;stroke:var(--tangerine);fill:none;stroke-width:2;flex-shrink:0}
   @media(max-width:760px){.pmstep .pt{font-size:11px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <aside>
+  <aside id="aside">
     <div class="topbar"></div>
+    <div class="asidetop">
+      <button class="toggle" id="toggle" title="Recolher / expandir menu">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
     <nav>
       <div class="navlbl">Visão Geral</div>
-      <div class="nav-item active" data-p="overview"><span class="n">01</span> Resumo</div>
-      <div class="nav-item" data-p="flow"><span class="n">02</span> Fluxo de Informação</div>
+      <div class="nav-item active" data-p="overview" title="Resumo"><span class="n">01</span><span class="lbl">Resumo</span></div>
+      <div class="nav-item" data-p="flow" title="Fluxo de Informação"><span class="n">02</span><span class="lbl">Fluxo de Informação</span></div>
       <div class="navlbl">Tecnologia</div>
-      <div class="nav-item" data-p="stack"><span class="n">03</span> Stack por Stage</div>
-      <div class="nav-item" data-p="fabric"><span class="n">04</span> Microsoft Fabric</div>
-      <div class="nav-item" data-p="reqs"><span class="n">05</span> Requisitos</div>
+      <div class="nav-item" data-p="stack" title="Stack por Stage"><span class="n">03</span><span class="lbl">Stack por Stage</span></div>
+      <div class="nav-item" data-p="fabric" title="Microsoft Fabric"><span class="n">04</span><span class="lbl">Microsoft Fabric</span></div>
+      <div class="nav-item" data-p="reqs" title="Requisitos"><span class="n">05</span><span class="lbl">Requisitos</span></div>
       <div class="navlbl">Regras de Negócio</div>
-      <div class="nav-item" data-p="decl"><span class="n">06</span> Validações por Declaração</div>
-      <div class="nav-item" data-p="inputs"><span class="n">07</span> Inputs e Origem</div>
-      <div class="nav-item" data-p="agents"><span class="n">08</span> Agentes</div>
+      <div class="nav-item" data-p="decl" title="Validações por Declaração"><span class="n">06</span><span class="lbl">Validações por Declaração</span></div>
+      <div class="nav-item" data-p="inputs" title="Inputs e Origem"><span class="n">07</span><span class="lbl">Inputs e Origem</span></div>
+      <div class="nav-item" data-p="agents" title="Agentes"><span class="n">08</span><span class="lbl">Agentes</span></div>
     </nav>
   </aside>
 
@@ -297,31 +315,31 @@
         complementada por ferramentas standard de mercado.</p>
       </div>
       <div class="content">
-        <div class="card" style="margin-bottom:18px"><h3>1 · Ingestão / EL <span style="font-weight:400;color:var(--grey-5);font-size:12px">— extract &amp; load</span></h3>
+        <div class="card" style="margin-bottom:20px"><h3>1 · Ingestão / EL <span style="font-weight:400;color:var(--grey-5);font-size:12px">— extract &amp; load</span></h3>
           <div class="stackrow"><div class="tech">Azure Data Factory</div><div class="why">Pipelines de ingestão geridos, com conectores nativos para Dynamics 365 BC / Navision, SQL e ficheiros.</div></div>
           <div class="stackrow"><div class="tech">Logic Apps / Power Automate</div><div class="why">Captura de ficheiros Excel/PDF de email, SharePoint e Teams; orquestração de aprovações.</div></div>
           <div class="stackrow"><div class="tech">Azure Data Lake Storage Gen2</div><div class="why">Landing zone para ficheiros raw, com retenção e versão para auditoria.</div></div>
           <p class="muted" style="margin-top:12px"><b>Porquê:</b> ADF é o standard enterprise para integração com Dynamics/BC; ADLS preserva o original para efeitos de auditoria.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>2 · Armazenamento / Lakehouse <span style="font-weight:400;color:var(--grey-5);font-size:12px">— Bronze · Silver · Gold</span></h3>
+        <div class="card" style="margin-bottom:20px"><h3>2 · Armazenamento / Lakehouse <span style="font-weight:400;color:var(--grey-5);font-size:12px">— Bronze · Silver · Gold</span></h3>
           <div class="stackrow"><div class="tech">Azure Databricks (Delta Lake)</div><div class="why">Lakehouse com tabelas ACID e time-travel; standard de mercado para grandes volumes (SAF-T).</div></div>
           <div class="stackrow"><div class="tech">Azure SQL / Synapse</div><div class="why">Base de dados canónica relacional e warehouse para o modelo das declarações.</div></div>
           <div class="stackrow"><div class="tech">Microsoft Fabric (OneLake)</div><div class="why">Alternativa SaaS unificada — ver página dedicada "Microsoft Fabric".</div></div>
           <p class="muted" style="margin-top:12px"><b>Porquê:</b> Databricks dá fiabilidade transacional e escala; Azure SQL/Synapse é robusto para o modelo canónico relacional.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>3 · Transformação / Validação <span style="font-weight:400;color:var(--grey-5);font-size:12px">— Silver</span></h3>
+        <div class="card" style="margin-bottom:20px"><h3>3 · Transformação / Validação <span style="font-weight:400;color:var(--grey-5);font-size:12px">— Silver</span></h3>
           <div class="stackrow"><div class="tech">dbt + Spark (PySpark / SQL)</div><div class="why">Modelação versionada, testes de dados e documentação/linhagem automática.</div></div>
           <div class="stackrow"><div class="tech">Databricks Workflows / Delta Live Tables</div><div class="why">Pipelines declarativos de transformação com qualidade incorporada (expectations).</div></div>
           <div class="stackrow"><div class="tech">Great Expectations</div><div class="why">Motor de regras fiscais declarativo: NIF/VIES, integridade, gate antes da Gold.</div></div>
           <p class="muted" style="margin-top:12px"><b>Porquê:</b> dbt + DLT tornam as regras de cruzamento testáveis e auditáveis, com linhagem para revisão.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>4 · Agentes / IA <span style="font-weight:400;color:var(--grey-5);font-size:12px">— extração &amp; decisão</span></h3>
+        <div class="card" style="margin-bottom:20px"><h3>4 · Agentes / IA <span style="font-weight:400;color:var(--grey-5);font-size:12px">— extração &amp; decisão</span></h3>
           <div class="stackrow"><div class="tech">Azure AI Foundry / Semantic Kernel</div><div class="why">Orquestração de agentes empresariais: mapeamento, extração e pedido de informação.</div></div>
           <div class="stackrow"><div class="tech">Azure AI Document Intelligence</div><div class="why">OCR e extração estruturada de PDFs: certificados de residência, atas, contratos, RFI.</div></div>
           <div class="stackrow"><div class="tech">Azure OpenAI Service</div><div class="why">Campos ambíguos, redação de pedidos ao cliente e classificação de operações, em ambiente governado.</div></div>
           <p class="muted" style="margin-top:12px"><b>Porquê:</b> regras determinísticas para dados tabulares; IA apenas para texto não estruturado, num serviço empresarial seguro.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>5 · Orquestração <span style="font-weight:400;color:var(--grey-5);font-size:12px">— scheduling</span></h3>
+        <div class="card" style="margin-bottom:20px"><h3>5 · Orquestração <span style="font-weight:400;color:var(--grey-5);font-size:12px">— scheduling</span></h3>
           <div class="stackrow"><div class="tech">Azure Data Factory (triggers)</div><div class="why">Agendamento orientado ao calendário fiscal; dependências, retries e alertas por prazo.</div></div>
           <div class="stackrow"><div class="tech">Databricks Workflows</div><div class="why">Orquestração de jobs de transformação e qualidade entre camadas.</div></div>
           <div class="stackrow"><div class="tech">Azure Monitor / Log Analytics</div><div class="why">Observabilidade: logs, métricas e SLAs por obrigação fiscal.</div></div>
@@ -346,81 +364,71 @@
       </div>
       <div class="content">
 
-        <!-- ===== PM FLOW DIAGRAM ===== -->
         <div class="pmflow">
           <div class="pmtrack">
-
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg></div>
               <div class="ph">Stage 1</div>
               <div class="pt">Ingestão</div>
               <div class="pf"><span>Data Factory</span><span>Dataflows Gen2</span><span>Mirroring</span></div>
             </div>
-
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><circle cx="8" cy="6" r="1.4" fill="#fff" stroke="none"/><circle cx="14" cy="12" r="1.4" fill="#fff" stroke="none"/><circle cx="10" cy="18" r="1.4" fill="#fff" stroke="none"/></svg></div>
               <div class="ph">Stage 2</div>
               <div class="pt">Normalização<br>(OneLake)</div>
               <div class="pf"><span>Lakehouse</span><span>Notebooks</span><span>Doc Intelligence</span></div>
             </div>
-
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
               <div class="ph">Stage 3</div>
               <div class="pt">Validação &amp;<br>Reconciliação</div>
               <div class="pf"><span>Notebooks Spark</span><span>dbt</span><span>Data Agents</span></div>
             </div>
-
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8" y="14" width="7" height="7" rx="1"/><path d="M6.5 10v2.5h11V10"/><path d="M11.5 12.5V14"/></svg></div>
               <div class="ph">Stage 4</div>
               <div class="pt">Consolidação<br>&amp; Geração</div>
               <div class="pf"><span>Warehouse</span><span>Data Pipelines</span><span>AI Functions</span></div>
             </div>
-
             <div class="pmstep">
               <div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
               <div class="ph">Stage 5</div>
               <div class="pt">Análise &amp;<br>Monitorização</div>
               <div class="pf"><span>Power BI (Direct Lake)</span><span>Activator</span><span>Purview</span></div>
             </div>
-
           </div>
-
           <div class="pmband">
             <div class="pmlayer bz" style="flex:1">Bronze</div>
             <div class="pmlayer sv" style="flex:2">Silver</div>
             <div class="pmlayer gd" style="flex:2">Gold</div>
           </div>
-
           <div class="pmloop">
             <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg>
             <span><b>Loop de governança &amp; orquestração:</b> Monitoring Hub e Activator disparam por calendário fiscal (dias 5, 10, 15, 20, 25, 31) e reencaminham gaps para o Pedido de Informação ao cliente.</span>
           </div>
         </div>
-        <!-- ===== /PM FLOW ===== -->
 
-        <div class="card" style="margin-bottom:18px"><h3>1 · Ingestão / EL</h3>
+        <div class="card" style="margin-bottom:20px"><h3>1 · Ingestão / EL</h3>
           <p><span class="fab">Data Factory (Pipelines)</span><span class="fab">Dataflows Gen2</span><span class="fab">Mirroring</span></p>
           <p class="muted" style="margin-top:10px"><b>Como:</b> Dataflows Gen2 e Pipelines com conector nativo para Dynamics 365 BC; ingestão de Excel/SharePoint; <i>Mirroring</i> de bases de dados para replicação contínua. SAF-T (XML) e ficheiros caem na <b>Bronze</b> do OneLake.</p>
           <p class="muted" style="margin-top:6px"><b>Porquê:</b> ingestão totalmente gerida e sem servidores, com conectores prontos para o ecossistema Microsoft.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>2 · Armazenamento / Lakehouse</h3>
+        <div class="card" style="margin-bottom:20px"><h3>2 · Armazenamento / Lakehouse</h3>
           <p><span class="fab">OneLake</span><span class="fab">Lakehouse (Delta)</span><span class="fab">Warehouse</span></p>
           <p class="muted" style="margin-top:10px"><b>Como:</b> camadas Bronze/Silver/Gold como tabelas Delta no <b>Lakehouse</b>; o <b>Warehouse</b> serve o modelo canónico relacional das declarações. Tudo num único OneLake, sem cópias.</p>
           <p class="muted" style="margin-top:6px"><b>Porquê:</b> "one copy" de dados elimina duplicação entre engenharia e analytics; formato Delta aberto.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>3 · Transformação / Validação</h3>
+        <div class="card" style="margin-bottom:20px"><h3>3 · Transformação / Validação</h3>
           <p><span class="fab">Notebooks (Spark)</span><span class="fab">dbt no Fabric</span><span class="fab">Data Pipelines</span></p>
           <p class="muted" style="margin-top:10px"><b>Como:</b> Notebooks PySpark/SQL para reconciliações pesadas (cruzamentos #243, #2424, #278); dbt para modelação versionada; testes de qualidade como gate antes da <b>Gold</b>.</p>
           <p class="muted" style="margin-top:6px"><b>Porquê:</b> compute Spark escalável integrado no mesmo espaço de trabalho, sem mover dados.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>4 · Agentes / IA</h3>
+        <div class="card" style="margin-bottom:20px"><h3>4 · Agentes / IA</h3>
           <p><span class="fab">Fabric Data Agents</span><span class="fab">Azure AI Foundry</span><span class="fab">AI Functions</span><span class="fab">Copilot</span></p>
           <p class="muted" style="margin-top:10px"><b>Como:</b> <i>Data Agents</i> do Fabric para consulta e orquestração sobre os dados; integração com Azure AI Foundry / Document Intelligence para extração de PDFs; <i>AI Functions</i> para classificação e enriquecimento dentro de notebooks.</p>
           <p class="muted" style="margin-top:6px"><b>Porquê:</b> agentes operam diretamente sobre o OneLake, com governança e segurança nativas.</p>
         </div>
-        <div class="card" style="margin-bottom:18px"><h3>5 · Orquestração</h3>
+        <div class="card" style="margin-bottom:20px"><h3>5 · Orquestração</h3>
           <p><span class="fab">Data Pipelines (Scheduler)</span><span class="fab">Activator</span><span class="fab">Monitoring Hub</span></p>
           <p class="muted" style="margin-top:10px"><b>Como:</b> agendamento dos pipelines pelo calendário fiscal (5, 10, 15, 20, 25, 31); <i>Activator</i> dispara ações por evento (chegada de ficheiro, gap de input); <i>Monitoring Hub</i> para SLAs por obrigação.</p>
           <p class="muted" style="margin-top:6px"><b>Porquê:</b> orquestração e monitorização integradas, sem ferramentas externas.</p>
@@ -468,7 +476,7 @@
             </ul>
           </div>
         </div>
-        <div class="card" style="margin-top:18px"><h3>Governança de Dados</h3>
+        <div class="card" style="margin-top:20px"><h3>Governança de Dados</h3>
           <div class="grid g3">
             <div><b>Qualidade</b><p class="muted">Great Expectations / Delta Live Tables — testes por declaração.</p></div>
             <div><b>Catálogo</b><p class="muted">Microsoft Purview — glossário fiscal e ownership.</p></div>
@@ -641,19 +649,32 @@
 </div>
 
 <script>
-  const items = document.querySelectorAll('.nav-item');
-  const pages = document.querySelectorAll('.page');
-  items.forEach(it=>it.addEventListener('click',()=>{
-    items.forEach(i=>i.classList.remove('active'));
-    pages.forEach(p=>p.classList.remove('active'));
-    it.classList.add('active');
-    document.getElementById(it.dataset.p).classList.add('active');
+  const aside=document.getElementById('aside');
+  const toggle=document.getElementById('toggle');
+  const items=document.querySelectorAll('.nav-item');
+  const pages=document.querySelectorAll('.page');
+
+  function scrollTop(){
     const m=document.querySelector('main');
     m&&m.scrollTo({top:0,behavior:'auto'});
     window.scrollTo({top:0,behavior:'auto'});
     document.documentElement.scrollTop=0;
     document.body.scrollTop=0;
+  }
+
+  // toggle manual
+  toggle.addEventListener('click',()=>aside.classList.toggle('collapsed'));
+
+  items.forEach(it=>it.addEventListener('click',()=>{
+    items.forEach(i=>i.classList.remove('active'));
+    pages.forEach(p=>p.classList.remove('active'));
+    it.classList.add('active');
+    document.getElementById(it.dataset.p).classList.add('active');
+    // ao selecionar uma página, recolhe o menu
+    aside.classList.add('collapsed');
+    scrollTop();
   }));
+
   const ds=document.getElementById('declSearch');
   ds&&ds.addEventListener('input',e=>{
     const q=e.target.value.toLowerCase();
