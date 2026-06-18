@@ -29,7 +29,6 @@
   a{color:inherit;text-decoration:none}
   .wrap{display:flex;min-height:100vh}
 
-  /* Sidebar */
   aside{width:250px;flex-shrink:0;background:var(--ink);color:#fff;padding:0;
     position:sticky;top:0;height:100vh;overflow:auto}
   .topbar{height:6px;background:var(--orange)}
@@ -43,7 +42,6 @@
   .nav-item.active{background:#2b2b2b;color:#fff;border-left-color:var(--orange)}
   .nav-item .n{width:22px;font-size:12px;color:var(--orange);font-weight:700}
 
-  /* Main */
   main{flex:1;padding:0 0 0;overflow:auto}
   .header{background:var(--white);border-bottom:1px solid var(--line);padding:30px 48px 0}
   .header .crumb{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);font-weight:700}
@@ -74,7 +72,6 @@
   .pill.calc{border-color:var(--tangerine);color:var(--tangerine)}
   .pill.non{border-color:var(--black);color:var(--black);background:var(--grey-1)}
 
-  /* KPIs */
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
   @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
   .kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px;
@@ -82,7 +79,6 @@
   .kpi b{font-size:30px;color:var(--ink);font-weight:700;display:block}
   .kpi span{font-size:12px;color:var(--grey-7);margin-top:2px;display:block}
 
-  /* Flow */
   .flow{display:flex;flex-direction:column;gap:6px}
   .stagewrap{position:relative}
   .stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);
@@ -100,13 +96,11 @@
   .node .nd{font-size:12px;color:var(--grey-7)}
   .arrow{text-align:center;color:var(--grey-3);font-size:16px;padding:2px 0}
 
-  /* Stack rows */
   .stackrow{display:flex;align-items:flex-start;gap:16px;padding:15px 0;border-bottom:1px solid var(--grey-1)}
   .stackrow:last-child{border-bottom:none}
   .stackrow .tech{width:240px;flex-shrink:0;font-weight:600;color:var(--ink);font-size:13.5px}
   .stackrow .why{flex:1;color:var(--grey-7);font-size:13px}
 
-  /* Tables */
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
   th{font-size:11px;text-transform:uppercase;letter-spacing:.6px;background:var(--ink);color:#fff;font-weight:600}
@@ -115,11 +109,9 @@
   tbody tr:nth-child(even){background:var(--paper)}
   tbody tr:hover{background:#FDF1EA}
 
-  /* Fabric service chip */
   .fab{display:inline-block;font-size:11px;font-weight:600;padding:4px 10px;border-radius:3px;
     background:#FDF1EA;color:var(--orange);border:1px solid var(--orange);margin:2px 4px 2px 0}
 
-  /* Accordion */
   details{border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;background:var(--white);overflow:hidden}
   summary{padding:15px 18px;cursor:pointer;font-weight:600;font-size:14px;list-style:none;
     display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
@@ -145,18 +137,42 @@
   .search{width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--line);
     background:var(--white);color:var(--black);font-size:13.5px;margin-bottom:16px}
   .search:focus{outline:none;border-color:var(--orange)}
-  .subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-  .subtab{padding:8px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--white);
-    cursor:pointer;font-size:12.5px;font-weight:600;color:var(--grey-7);transition:.15s}
-  .subtab:hover{border-color:var(--orange)}
-  .subtab.active{background:var(--orange);color:#fff;border-color:var(--orange)}
   footer{padding:18px 48px;border-top:3px solid var(--orange);font-size:12px;color:var(--ink);
     background:var(--white);font-weight:600;letter-spacing:.3px}
+
+  /* ===== Fabric PM Flow diagram ===== */
+  .pmflow{background:var(--ink);border-radius:var(--r);padding:34px 26px;overflow-x:auto;margin-bottom:22px}
+  .pmtrack{display:flex;align-items:stretch;gap:0;min-width:1050px}
+  .pmstep{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 6px}
+  .pmico{width:62px;height:62px;border-radius:50%;background:linear-gradient(160deg,var(--orange),var(--orange-l));
+    display:grid;place-items:center;margin-bottom:12px;box-shadow:0 6px 16px rgba(208,74,2,.4);position:relative;z-index:2}
+  .pmico svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .pmstep .ph{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tangerine);font-weight:700;margin-bottom:4px}
+  .pmstep .pt{font-size:13px;font-weight:600;color:#fff;margin-bottom:8px;line-height:1.3}
+  .pmstep .pf{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .pmstep .pf span{font-size:10.5px;color:#cfcfcf;background:#2b2b2b;border:1px solid #3a3a3a;
+    padding:3px 8px;border-radius:3px;white-space:nowrap}
+  /* connector line + arrow between steps */
+  .pmstep:not(:last-child)::after{content:'';position:absolute;top:31px;left:calc(50% + 40px);
+    right:calc(-50% + 40px);height:3px;background:repeating-linear-gradient(90deg,var(--tangerine) 0 8px,transparent 8px 14px);z-index:1}
+  .pmstep:not(:last-child)::before{content:'';position:absolute;top:25px;right:calc(-50% + 34px);
+    width:0;height:0;border-left:9px solid var(--tangerine);border-top:7px solid transparent;
+    border-bottom:7px solid transparent;z-index:2}
+  /* layer band under the flow */
+  .pmband{display:flex;min-width:1050px;margin-top:26px;gap:8px}
+  .pmlayer{flex:1;text-align:center;padding:9px;border-radius:4px;font-size:11px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;color:#fff}
+  .pmlayer.bz{background:#5C5C5C}
+  .pmlayer.sv{background:#8a8a8a}
+  .pmlayer.gd{background:var(--orange)}
+  .pmloop{min-width:1050px;margin-top:14px;background:#2b2b2b;border:1px dashed var(--tangerine);
+    border-radius:var(--r);padding:10px 16px;font-size:12px;color:#e0e0e0;display:flex;align-items:center;gap:10px}
+  .pmloop svg{width:18px;height:18px;stroke:var(--tangerine);fill:none;stroke-width:2;flex-shrink:0}
+  @media(max-width:760px){.pmstep .pt{font-size:11px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <!-- SIDEBAR -->
   <aside>
     <div class="topbar"></div>
     <nav>
@@ -174,7 +190,6 @@
     </nav>
   </aside>
 
-  <!-- MAIN -->
   <main>
 
     <!-- OVERVIEW -->
@@ -330,6 +345,61 @@
         Para cada stage, o serviço Fabric a utilizar e a justificação.</p>
       </div>
       <div class="content">
+
+        <!-- ===== PM FLOW DIAGRAM ===== -->
+        <div class="pmflow">
+          <div class="pmtrack">
+
+            <div class="pmstep">
+              <div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg></div>
+              <div class="ph">Stage 1</div>
+              <div class="pt">Ingestão</div>
+              <div class="pf"><span>Data Factory</span><span>Dataflows Gen2</span><span>Mirroring</span></div>
+            </div>
+
+            <div class="pmstep">
+              <div class="pmico"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><circle cx="8" cy="6" r="1.4" fill="#fff" stroke="none"/><circle cx="14" cy="12" r="1.4" fill="#fff" stroke="none"/><circle cx="10" cy="18" r="1.4" fill="#fff" stroke="none"/></svg></div>
+              <div class="ph">Stage 2</div>
+              <div class="pt">Normalização<br>(OneLake)</div>
+              <div class="pf"><span>Lakehouse</span><span>Notebooks</span><span>Doc Intelligence</span></div>
+            </div>
+
+            <div class="pmstep">
+              <div class="pmico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div class="ph">Stage 3</div>
+              <div class="pt">Validação &amp;<br>Reconciliação</div>
+              <div class="pf"><span>Notebooks Spark</span><span>dbt</span><span>Data Agents</span></div>
+            </div>
+
+            <div class="pmstep">
+              <div class="pmico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8" y="14" width="7" height="7" rx="1"/><path d="M6.5 10v2.5h11V10"/><path d="M11.5 12.5V14"/></svg></div>
+              <div class="ph">Stage 4</div>
+              <div class="pt">Consolidação<br>&amp; Geração</div>
+              <div class="pf"><span>Warehouse</span><span>Data Pipelines</span><span>AI Functions</span></div>
+            </div>
+
+            <div class="pmstep">
+              <div class="pmico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
+              <div class="ph">Stage 5</div>
+              <div class="pt">Análise &amp;<br>Monitorização</div>
+              <div class="pf"><span>Power BI (Direct Lake)</span><span>Activator</span><span>Purview</span></div>
+            </div>
+
+          </div>
+
+          <div class="pmband">
+            <div class="pmlayer bz" style="flex:1">Bronze</div>
+            <div class="pmlayer sv" style="flex:2">Silver</div>
+            <div class="pmlayer gd" style="flex:2">Gold</div>
+          </div>
+
+          <div class="pmloop">
+            <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg>
+            <span><b>Loop de governança &amp; orquestração:</b> Monitoring Hub e Activator disparam por calendário fiscal (dias 5, 10, 15, 20, 25, 31) e reencaminham gaps para o Pedido de Informação ao cliente.</span>
+          </div>
+        </div>
+        <!-- ===== /PM FLOW ===== -->
+
         <div class="card" style="margin-bottom:18px"><h3>1 · Ingestão / EL</h3>
           <p><span class="fab">Data Factory (Pipelines)</span><span class="fab">Dataflows Gen2</span><span class="fab">Mirroring</span></p>
           <p class="muted" style="margin-top:10px"><b>Como:</b> Dataflows Gen2 e Pipelines com conector nativo para Dynamics 365 BC; ingestão de Excel/SharePoint; <i>Mirroring</i> de bases de dados para replicação contínua. SAF-T (XML) e ficheiros caem na <b>Bronze</b> do OneLake.</p>
@@ -578,7 +648,6 @@
     pages.forEach(p=>p.classList.remove('active'));
     it.classList.add('active');
     document.getElementById(it.dataset.p).classList.add('active');
-    // scroll para o topo da página (artifact + main)
     const m=document.querySelector('main');
     m&&m.scrollTo({top:0,behavior:'auto'});
     window.scrollTo({top:0,behavior:'auto'});
