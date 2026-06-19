@@ -1906,61 +1906,85 @@
       ];
       const DATABASES = [
         {
-            id: "users",
-            name: "Users",
-            layer: "Core App",
-            description:
+          id: "users",
+          name: "Users",
+          layer: "Core App",
+          description:
             "Base de dados de utilizadores da plataforma, incluindo perfil, email, cor visual, flags de admin/documentação e ligação a clientes através de memberships.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do utilizador."],
             ["name", "varchar(150)", "Nome visível do utilizador."],
             ["email", "varchar(200)", "Email organizacional usado no login."],
-            ["isAdmin", "boolean", "Indica se o utilizador pertence à equipa DTT/Admin."],
+            [
+              "isAdmin",
+              "boolean",
+              "Indica se o utilizador pertence à equipa DTT/Admin.",
+            ],
             ["isDocs", "boolean", "Indica se é o User de Teste/documentação."],
-            ["color", "varchar(20)", "Cor usada no avatar e identificação visual."],
+            [
+              "color",
+              "varchar(20)",
+              "Cor usada no avatar e identificação visual.",
+            ],
             ["createdAt", "datetime", "Data de criação do utilizador."],
-            ["updatedAt", "datetime", "Última atualização do perfil."]
-            ]
+            ["updatedAt", "datetime", "Última atualização do perfil."],
+          ],
         },
         {
-            id: "clients",
-            name: "Clients",
-            layer: "Core App",
-            description:
+          id: "clients",
+          name: "Clients",
+          layer: "Core App",
+          description:
             "Base de dados dos clientes configurados na plataforma, incluindo NIF, nome e declarações fiscais aplicáveis.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do cliente."],
             ["name", "varchar(200)", "Nome legal/comercial do cliente."],
             ["nif", "varchar(20)", "Número de identificação fiscal."],
-            ["status", "varchar(30)", "Estado do cliente: active, inactive, onboarding."],
+            [
+              "status",
+              "varchar(30)",
+              "Estado do cliente: active, inactive, onboarding.",
+            ],
             ["createdAt", "datetime", "Data de criação do cliente."],
-            ["updatedAt", "datetime", "Última alteração da ficha do cliente."]
-            ]
+            ["updatedAt", "datetime", "Última alteração da ficha do cliente."],
+          ],
         },
         {
-            id: "memberships",
-            name: "ClientMemberships",
-            layer: "RBAC",
-            description:
+          id: "memberships",
+          name: "ClientMemberships",
+          layer: "RBAC",
+          description:
             "Tabela de relação entre utilizadores e clientes. Define que utilizador tem acesso a que cliente e com que role.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único da relação."],
             ["userId", "int", "Referência para Users.id."],
             ["clientId", "int", "Referência para Clients.id."],
-            ["role", "varchar(50)", "Role no cliente: Associate, Senior, Manager."],
-            ["status", "varchar(30)", "Estado: active, pending, rejected, inactive."],
-            ["approvedBy", "int", "Utilizador que aprovou a associação, quando aplicável."],
+            [
+              "role",
+              "varchar(50)",
+              "Role no cliente: Associate, Senior, Manager.",
+            ],
+            [
+              "status",
+              "varchar(30)",
+              "Estado: active, pending, rejected, inactive.",
+            ],
+            [
+              "approvedBy",
+              "int",
+              "Utilizador que aprovou a associação, quando aplicável.",
+            ],
             ["approvedAt", "datetime", "Data/hora da aprovação."],
-            ["createdAt", "datetime", "Data de pedido/criação da relação."]
-            ]
+            ["createdAt", "datetime", "Data de pedido/criação da relação."],
+          ],
         },
         {
-            id: "approvals",
-            name: "Approvals",
-            layer: "Workflow",
-            description:
+          id: "approvals",
+          name: "Approvals",
+          layer: "Workflow",
+          description:
             "Base de dados dos pedidos de acesso, candidaturas a clientes e alterações de role. Suporta aprovação por Manager ou DTT.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do pedido."],
             ["userId", "int", "Utilizador que pediu acesso ou alteração."],
             ["clientId", "int", "Cliente associado ao pedido."],
@@ -1969,22 +1993,34 @@
             ["status", "varchar(30)", "Estado: pending, approved, rejected."],
             ["requestedAt", "datetime", "Data/hora do pedido."],
             ["decidedAt", "datetime", "Data/hora da decisão."],
-            ["approverType", "varchar(30)", "Tipo de aprovador: manager ou dtt."],
-            ["managerApproverId", "int", "Manager responsável quando aplicável."],
+            [
+              "approverType",
+              "varchar(30)",
+              "Tipo de aprovador: manager ou dtt.",
+            ],
+            [
+              "managerApproverId",
+              "int",
+              "Manager responsável quando aplicável.",
+            ],
             ["businessReason", "text", "Justificação de negócio do pedido."],
             ["expectedHoursMonth", "decimal(8,2)", "Horas mensais estimadas."],
-            ["clientPortfolioImpact", "varchar(30)", "Impacto: Baixo, Médio, Alto."],
+            [
+              "clientPortfolioImpact",
+              "varchar(30)",
+              "Impacto: Baixo, Médio, Alto.",
+            ],
             ["riskLevel", "varchar(30)", "Nível de risco do pedido."],
-            ["decisionNote", "text", "Nota de decisão/justificação."]
-            ]
+            ["decisionNote", "text", "Nota de decisão/justificação."],
+          ],
         },
         {
-            id: "deliverables",
-            name: "Deliverables",
-            layer: "Fiscal Ops",
-            description:
+          id: "deliverables",
+          name: "Deliverables",
+          layer: "Fiscal Ops",
+          description:
             "Base de dados dos entregáveis fiscais por cliente, declaração, prazo, estado e progresso.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do entregável."],
             ["clientId", "int", "Referência para Clients.id."],
             ["declarationType", "varchar(100)", "Tipo de declaração fiscal."],
@@ -1992,18 +2028,30 @@
             ["dueDate", "date", "Prazo legal/operacional da entrega."],
             ["status", "varchar(30)", "Estado: ok, prep, client, late."],
             ["progress", "decimal(5,2)", "Percentagem de progresso."],
-            ["assignedSeniorId", "int", "Senior responsável, quando aplicável."],
-            ["assignedManagerId", "int", "Manager responsável, quando aplicável."],
-            ["submittedAt", "datetime", "Data/hora de submissão, se aplicável."]
-            ]
+            [
+              "assignedSeniorId",
+              "int",
+              "Senior responsável, quando aplicável.",
+            ],
+            [
+              "assignedManagerId",
+              "int",
+              "Manager responsável, quando aplicável.",
+            ],
+            [
+              "submittedAt",
+              "datetime",
+              "Data/hora de submissão, se aplicável.",
+            ],
+          ],
         },
         {
-            id: "messages",
-            name: "Messages",
-            layer: "Operations",
-            description:
+          id: "messages",
+          name: "Messages",
+          layer: "Operations",
+          description:
             "Base de dados de mensagens, alertas, ficheiros em falta e avisos de dados por cliente/declarativo.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único da mensagem."],
             ["clientId", "int", "Cliente associado à mensagem."],
             ["deliverableId", "int", "Entregável associado, quando aplicável."],
@@ -2013,51 +2061,71 @@
             ["severity", "varchar(30)", "Severidade: info, warn, err."],
             ["status", "varchar(30)", "Estado: open, resolved, ignored."],
             ["createdAt", "datetime", "Data/hora de criação."],
-            ["resolvedAt", "datetime", "Data/hora de resolução."]
-            ]
+            ["resolvedAt", "datetime", "Data/hora de resolução."],
+          ],
         },
         {
-            id: "declaration-inputs",
-            name: "DeclarationInputs",
-            layer: "Fiscal Config",
-            description:
+          id: "declaration-inputs",
+          name: "DeclarationInputs",
+          layer: "Fiscal Config",
+          description:
             "Configuração dos inputs necessários por declaração fiscal, incluindo origem, template e disponibilidade NAV/BC.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do input configurado."],
-            ["declarationType", "varchar(100)", "Declaração fiscal a que o input pertence."],
+            [
+              "declarationType",
+              "varchar(100)",
+              "Declaração fiscal a que o input pertence.",
+            ],
             ["inputName", "varchar(250)", "Nome do input necessário."],
-            ["sourceType", "varchar(50)", "Origem: NAV, Calculável, Não-NAV, Portal AT, Cliente."],
+            [
+              "sourceType",
+              "varchar(50)",
+              "Origem: NAV, Calculável, Não-NAV, Portal AT, Cliente.",
+            ],
             ["templateName", "varchar(200)", "Template associado ao input."],
             ["isMandatory", "boolean", "Indica se o input é obrigatório."],
-            ["navAvailable", "boolean", "Indica se o input existe diretamente no NAV/BC."],
-            ["calculationRuleId", "int", "Regra usada quando o input é calculável."],
-            ["description", "text", "Descrição funcional do input."]
-            ]
+            [
+              "navAvailable",
+              "boolean",
+              "Indica se o input existe diretamente no NAV/BC.",
+            ],
+            [
+              "calculationRuleId",
+              "int",
+              "Regra usada quando o input é calculável.",
+            ],
+            ["description", "text", "Descrição funcional do input."],
+          ],
         },
         {
-            id: "templates",
-            name: "Templates",
-            layer: "Documents",
-            description:
+          id: "templates",
+          name: "Templates",
+          layer: "Documents",
+          description:
             "Base de dados dos templates disponíveis para download e preenchimento por declaração ou input.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do template."],
             ["templateName", "varchar(200)", "Nome do ficheiro/template."],
             ["declarationType", "varchar(100)", "Declaração associada."],
             ["version", "varchar(30)", "Versão do template."],
-            ["fileUrl", "varchar(500)", "Localização do ficheiro no SharePoint/OneLake."],
+            [
+              "fileUrl",
+              "varchar(500)",
+              "Localização do ficheiro no SharePoint/OneLake.",
+            ],
             ["isActive", "boolean", "Indica se é a versão ativa."],
             ["createdAt", "datetime", "Data de criação."],
-            ["updatedAt", "datetime", "Última atualização."]
-            ]
+            ["updatedAt", "datetime", "Última atualização."],
+          ],
         },
         {
-            id: "agent-runs",
-            name: "AgentRuns",
-            layer: "Agents",
-            description:
+          id: "agent-runs",
+          name: "AgentRuns",
+          layer: "Agents",
+          description:
             "Registo das execuções dos agentes, incluindo estado, input, output, erro e evidência.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único da execução."],
             ["agentId", "varchar(80)", "Identificador do agente executado."],
             ["clientId", "int", "Cliente associado à execução."],
@@ -2065,20 +2133,28 @@
             ["state", "varchar(50)", "Estado atual da execução."],
             ["startedAt", "datetime", "Data/hora de início."],
             ["endedAt", "datetime", "Data/hora de fim."],
-            ["status", "varchar(30)", "Resultado: success, warning, failed, blocked."],
+            [
+              "status",
+              "varchar(30)",
+              "Resultado: success, warning, failed, blocked.",
+            ],
             ["inputPayload", "json", "Payload recebido pelo agente."],
             ["outputPayload", "json", "Payload produzido pelo agente."],
             ["errorMessage", "text", "Mensagem de erro, quando aplicável."],
-            ["evidenceLink", "varchar(500)", "Link para evidência/log/ficheiro."]
-            ]
+            [
+              "evidenceLink",
+              "varchar(500)",
+              "Link para evidência/log/ficheiro.",
+            ],
+          ],
         },
         {
-            id: "validation-results",
-            name: "ValidationResults",
-            layer: "Rules",
-            description:
+          id: "validation-results",
+          name: "ValidationResults",
+          layer: "Rules",
+          description:
             "Resultados das validações fiscais e técnicas executadas sobre inputs, reconciliações e declarações.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do resultado."],
             ["deliverableId", "int", "Entregável validado."],
             ["ruleId", "varchar(100)", "Identificador da regra aplicada."],
@@ -2088,16 +2164,16 @@
             ["severity", "varchar(30)", "Severidade: info, warning, blocking."],
             ["message", "text", "Explicação do resultado."],
             ["recommendedAction", "text", "Ação recomendada."],
-            ["createdAt", "datetime", "Data/hora da validação."]
-            ]
+            ["createdAt", "datetime", "Data/hora da validação."],
+          ],
         },
         {
-            id: "audit-logs",
-            name: "AuditLogs",
-            layer: "Governance",
-            description:
+          id: "audit-logs",
+          name: "AuditLogs",
+          layer: "Governance",
+          description:
             "Base de dados de auditoria com ações de utilizadores, alterações de estado, decisões e eventos técnicos.",
-            columns: [
+          columns: [
             ["id", "int", "Identificador único do log."],
             ["actorUserId", "int", "Utilizador que executou a ação."],
             ["entityType", "varchar(80)", "Tipo de entidade afetada."],
@@ -2106,125 +2182,137 @@
             ["beforeValue", "json", "Estado anterior, quando aplicável."],
             ["afterValue", "json", "Estado novo, quando aplicável."],
             ["createdAt", "datetime", "Data/hora do evento."],
-            ["ipAddress", "varchar(80)", "IP/origem técnica, se disponível."]
-            ]
-        }
-        ];
-    const DB_RELATIONS = [
-  {
-    from: "Users",
-    fromCol: "id",
-    to: "ClientMemberships",
-    toCol: "userId",
-    type: "1:N",
-    description: "Um utilizador pode ter várias relações com clientes."
-  },
-  {
-    from: "Clients",
-    fromCol: "id",
-    to: "ClientMemberships",
-    toCol: "clientId",
-    type: "1:N",
-    description: "Um cliente pode ter vários utilizadores associados com roles diferentes."
-  },
-  {
-    from: "Users",
-    fromCol: "id",
-    to: "Approvals",
-    toCol: "userId",
-    type: "1:N",
-    description: "Um utilizador pode criar vários pedidos de acesso ou alteração de role."
-  },
-  {
-    from: "Clients",
-    fromCol: "id",
-    to: "Approvals",
-    toCol: "clientId",
-    type: "1:N",
-    description: "Um cliente pode ter vários pedidos de aprovação associados."
-  },
-  {
-    from: "Users",
-    fromCol: "id",
-    to: "Approvals",
-    toCol: "managerApproverId",
-    type: "1:N",
-    description: "Um Manager pode ser responsável pela aprovação de vários pedidos dos seus clientes."
-  },
-  {
-    from: "Clients",
-    fromCol: "id",
-    to: "Deliverables",
-    toCol: "clientId",
-    type: "1:N",
-    description: "Um cliente pode ter vários entregáveis fiscais por período e declaração."
-  },
-  {
-    from: "Deliverables",
-    fromCol: "id",
-    to: "Messages",
-    toCol: "deliverableId",
-    type: "1:N",
-    description: "Um entregável pode gerar várias mensagens, alertas ou pedidos de ficheiro."
-  },
-  {
-    from: "Clients",
-    fromCol: "id",
-    to: "Messages",
-    toCol: "clientId",
-    type: "1:N",
-    description: "Um cliente pode ter várias mensagens operacionais associadas."
-  },
-  {
-    from: "Deliverables",
-    fromCol: "declarationType",
-    to: "DeclarationInputs",
-    toCol: "declarationType",
-    type: "N:N lógico",
-    description: "Cada declaração usa vários inputs configurados por tipo declarativo."
-  },
-  {
-    from: "DeclarationInputs",
-    fromCol: "templateName",
-    to: "Templates",
-    toCol: "templateName",
-    type: "N:1",
-    description: "Vários inputs podem usar o mesmo template."
-  },
-  {
-    from: "Deliverables",
-    fromCol: "id",
-    to: "AgentRuns",
-    toCol: "deliverableId",
-    type: "1:N",
-    description: "Um entregável pode passar por várias execuções de agentes."
-  },
-  {
-    from: "Clients",
-    fromCol: "id",
-    to: "AgentRuns",
-    toCol: "clientId",
-    type: "1:N",
-    description: "As execuções dos agentes ficam sempre associadas ao cliente."
-  },
-  {
-    from: "Deliverables",
-    fromCol: "id",
-    to: "ValidationResults",
-    toCol: "deliverableId",
-    type: "1:N",
-    description: "Um entregável pode ter múltiplos resultados de validação."
-  },
-  {
-    from: "Users",
-    fromCol: "id",
-    to: "AuditLogs",
-    toCol: "actorUserId",
-    type: "1:N",
-    description: "As ações feitas por utilizadores ficam registadas em auditoria."
-  }
-];
-        let ME = null,
+            ["ipAddress", "varchar(80)", "IP/origem técnica, se disponível."],
+          ],
+        },
+      ];
+      const DB_RELATIONS = [
+        {
+          from: "Users",
+          fromCol: "id",
+          to: "ClientMemberships",
+          toCol: "userId",
+          type: "1:N",
+          description: "Um utilizador pode ter várias relações com clientes.",
+        },
+        {
+          from: "Clients",
+          fromCol: "id",
+          to: "ClientMemberships",
+          toCol: "clientId",
+          type: "1:N",
+          description:
+            "Um cliente pode ter vários utilizadores associados com roles diferentes.",
+        },
+        {
+          from: "Users",
+          fromCol: "id",
+          to: "Approvals",
+          toCol: "userId",
+          type: "1:N",
+          description:
+            "Um utilizador pode criar vários pedidos de acesso ou alteração de role.",
+        },
+        {
+          from: "Clients",
+          fromCol: "id",
+          to: "Approvals",
+          toCol: "clientId",
+          type: "1:N",
+          description:
+            "Um cliente pode ter vários pedidos de aprovação associados.",
+        },
+        {
+          from: "Users",
+          fromCol: "id",
+          to: "Approvals",
+          toCol: "managerApproverId",
+          type: "1:N",
+          description:
+            "Um Manager pode ser responsável pela aprovação de vários pedidos dos seus clientes.",
+        },
+        {
+          from: "Clients",
+          fromCol: "id",
+          to: "Deliverables",
+          toCol: "clientId",
+          type: "1:N",
+          description:
+            "Um cliente pode ter vários entregáveis fiscais por período e declaração.",
+        },
+        {
+          from: "Deliverables",
+          fromCol: "id",
+          to: "Messages",
+          toCol: "deliverableId",
+          type: "1:N",
+          description:
+            "Um entregável pode gerar várias mensagens, alertas ou pedidos de ficheiro.",
+        },
+        {
+          from: "Clients",
+          fromCol: "id",
+          to: "Messages",
+          toCol: "clientId",
+          type: "1:N",
+          description:
+            "Um cliente pode ter várias mensagens operacionais associadas.",
+        },
+        {
+          from: "Deliverables",
+          fromCol: "declarationType",
+          to: "DeclarationInputs",
+          toCol: "declarationType",
+          type: "N:N lógico",
+          description:
+            "Cada declaração usa vários inputs configurados por tipo declarativo.",
+        },
+        {
+          from: "DeclarationInputs",
+          fromCol: "templateName",
+          to: "Templates",
+          toCol: "templateName",
+          type: "N:1",
+          description: "Vários inputs podem usar o mesmo template.",
+        },
+        {
+          from: "Deliverables",
+          fromCol: "id",
+          to: "AgentRuns",
+          toCol: "deliverableId",
+          type: "1:N",
+          description:
+            "Um entregável pode passar por várias execuções de agentes.",
+        },
+        {
+          from: "Clients",
+          fromCol: "id",
+          to: "AgentRuns",
+          toCol: "clientId",
+          type: "1:N",
+          description:
+            "As execuções dos agentes ficam sempre associadas ao cliente.",
+        },
+        {
+          from: "Deliverables",
+          fromCol: "id",
+          to: "ValidationResults",
+          toCol: "deliverableId",
+          type: "1:N",
+          description:
+            "Um entregável pode ter múltiplos resultados de validação.",
+        },
+        {
+          from: "Users",
+          fromCol: "id",
+          to: "AuditLogs",
+          toCol: "actorUserId",
+          type: "1:N",
+          description:
+            "As ações feitas por utilizadores ficam registadas em auditoria.",
+        },
+      ];
+      let ME = null,
         SCOPE = null,
         CURPAGE = "dash",
         SELECTED_MSG = null,
@@ -2232,11 +2320,11 @@
         SELECTED_AGENT = null,
         SELECTED_DB = null;
 
-        const TODAY = 14;
+      const TODAY = 14;
 
-        const $ = (id) => document.getElementById(id),
+      const $ = (id) => document.getElementById(id),
         initials = (n) =>
-            n
+          n
             .split(/\s+/)
             .map((w) => w[0])
             .slice(0, 2)
@@ -2245,7 +2333,7 @@
         clientById = (id) => CLIENTS.find((c) => c.id === id),
         userById = (id) => USERS.find((u) => u.id === id),
         esc = (s) =>
-            String(s || "")
+          String(s || "")
             .replace(/'/g, "\\'")
             .replace(/"/g, "&quot;");
       const IC = {
@@ -2428,72 +2516,67 @@
         let h = "";
 
         if (ME.isDocs) {
-            h +=
+          h +=
             '<div class="navsec">Visão Geral</div>' +
             navItem("d-overview", "dash", "Resumo", "01") +
             navItem("d-flow", "layers", "Fluxo de Informação", "02") +
-
             '<div class="navsec">Tecnologia</div>' +
             navItem("d-stack", "cpu", "Stack por Stage", "03") +
             navItem("d-fabric", "grid", "Microsoft Fabric", "04") +
             navItem("d-cost", "euro", "Custo & Dificuldade", "05") +
             navItem("d-reqs", "appr", "Requisitos", "06") +
-
             '<div class="navsec">Regras</div>' +
             navItem("d-decl", "rules", "Validações", "07") +
             navItem("d-inputs", "client", "Inputs e Origem", "08") +
             navItem("d-agents", "robot", "Agentes", "09") +
             navItem("d-databases", "grid", "Bases de Dados", "10") +
-
             '<div class="navsec">Funcional</div>' +
             navItem("d-functional", "layers", "Estrutura Funcional", "11") +
             navItem("d-journey", "user", "Jornada por Perfil", "12") +
             navItem("d-ops", "track", "Operação Diária", "13");
         } else if (ME.isAdmin) {
-            h +=
+          h +=
             '<div class="navsec">Equipa DTT</div>' +
             navItem("a-dash", "dash", "Dashboard") +
             navItem("a-cal", "cal", "Calendário Global") +
             navItem("a-tracking", "track", "Tracking") +
             navItem("a-logs", "log", "Logs") +
-
             '<div class="navsec">Gestão</div>' +
             navItem("a-clients", "client", "Clientes") +
             navItem("a-users", "user", "Utilizadores") +
             navItem(
-                "a-appr",
-                "appr",
-                "Aprovações",
-                visibleApprovals().filter((a) => a.status === "pending").length
+              "a-appr",
+              "appr",
+              "Aprovações",
+              visibleApprovals().filter((a) => a.status === "pending").length,
             );
         } else {
-            h +=
+          h +=
             '<div class="navsec">Pessoal</div>' +
             navItem("dash", "dash", "Dashboard") +
             navItem("cal", "cal", "Calendário") +
             navItem("msgs", "msg", "Mensagens", MESSAGES.length) +
             navItem("profile", "user", "O meu perfil") +
-
             '<div class="navsec">Cliente em foco</div>' +
             navItem("client", "client", "Visão do cliente") +
             navItem("client-info", "info", "Info por Declaração") +
             navItem("client-tpl", "dl", "Templates");
 
-            if (myClients().some((c) => isManagerPlus(c.id))) {
+          if (myClients().some((c) => isManagerPlus(c.id))) {
             h +=
-                '<div class="navsec">Gestão</div>' +
-                navItem("client-team", "user", "Equipa & Roles") +
-                navItem(
+              '<div class="navsec">Gestão</div>' +
+              navItem("client-team", "user", "Equipa & Roles") +
+              navItem(
                 "client-appr",
                 "appr",
                 "Aprovações",
-                visibleApprovals().filter((a) => a.status === "pending").length
-                );
-            }
+                visibleApprovals().filter((a) => a.status === "pending").length,
+              );
+          }
         }
 
         $("nav").innerHTML = h;
-        }
+      }
 
       const TITLES = {
         dash: ["Dashboard", "Visão Geral"],
@@ -2527,12 +2610,14 @@
         "d-inputs": ["Inputs e Origem", "Mapeamento · 08"],
         "d-agents": ["Agentes Especializados", "Camada de Agentes · 09"],
         "d-databases": ["Bases de Dados", "Modelo de Dados · 10"],
-        "database-detail": ["Detalhe da Base de Dados", "Colunas, tipos e descrição"],
+        "database-detail": [
+          "Detalhe da Base de Dados",
+          "Colunas, tipos e descrição",
+        ],
         "agent-flow": ["Fluxo do Agente", "Memória de estado · execução"],
         "d-functional": ["Estrutura funcional E2E", "Documentação · 11"],
         "d-journey": ["Jornada por perfil", "Documentação · 12"],
         "d-ops": ["Operação diária", "Documentação · 13"],
-
       };
       function goto(p) {
         CURPAGE = p;
@@ -3112,9 +3197,8 @@
         return `<div class="phead"><div class="crumb">Funcional · 11</div><h1>Jornada por perfil</h1></div><div class="grid g3"><div class="card"><h3 class="bb">Associate / Senior</h3><ul><li>Vê clientes atribuídos.</li><li>Consulta calendário.</li><li>Resolve mensagens.</li><li>Upload/import/NAV.</li><li>Senior recebe erro de validação com regra e evidência.</li></ul></div><div class="card"><h3 class="bb">Manager</h3><ul><li>Gere equipa e roles.</li><li>Aprova apenas pedidos associados aos seus clientes.</li><li>Acompanha KPIs.</li><li>Recebe pronto-para-entrega após validação final.</li></ul></div><div class="card"><h3 class="bb">DTT / App Admin</h3><ul><li>Gestão global.</li><li>Calendário global.</li><li>Aprova candidaturas a Manager e pedidos sem Manager aplicável.</li><li>Monitoriza agentes e exceções.</li></ul></div></div>`;
       }
 
-
       function pgDocOps() {
-  return `
+        return `
     <div class="phead">
       <div class="crumb">Funcional · 13</div>
       <h1>Operação diária — árvore de decisão</h1>
@@ -3221,40 +3305,40 @@
 }</pre>
     </div>
   `;
-}
-function openDatabase(id) {
-  SELECTED_DB = DATABASES.find((d) => d.id === id);
-  goto("database-detail");
-}
-
-function dbRelationsForColumn(dbName, colName) {
-  return DB_RELATIONS.filter(
-    (r) =>
-      (r.from === dbName && r.fromCol === colName) ||
-      (r.to === dbName && r.toCol === colName)
-  );
-}
-
-function relationLabel(dbName, colName) {
-  let rels = dbRelationsForColumn(dbName, colName);
-
-  if (!rels.length) {
-    return `<span class="csub">—</span>`;
-  }
-
-  return rels
-    .map((r) => {
-      if (r.from === dbName && r.fromCol === colName) {
-        return `<span class="chip o">→ ${r.to}.${r.toCol} · ${r.type}</span>`;
+      }
+      function openDatabase(id) {
+        SELECTED_DB = DATABASES.find((d) => d.id === id);
+        goto("database-detail");
       }
 
-      return `<span class="chip">← ${r.from}.${r.fromCol} · ${r.type}</span>`;
-    })
-    .join("");
-}
+      function dbRelationsForColumn(dbName, colName) {
+        return DB_RELATIONS.filter(
+          (r) =>
+            (r.from === dbName && r.fromCol === colName) ||
+            (r.to === dbName && r.toCol === colName),
+        );
+      }
 
-function pgDocDatabases() {
-  return `<div class="phead">
+      function relationLabel(dbName, colName) {
+        let rels = dbRelationsForColumn(dbName, colName);
+
+        if (!rels.length) {
+          return `<span class="csub">—</span>`;
+        }
+
+        return rels
+          .map((r) => {
+            if (r.from === dbName && r.fromCol === colName) {
+              return `<span class="chip o">→ ${r.to}.${r.toCol} · ${r.type}</span>`;
+            }
+
+            return `<span class="chip">← ${r.from}.${r.fromCol} · ${r.type}</span>`;
+          })
+          .join("");
+      }
+
+      function pgDocDatabases() {
+        return `<div class="phead">
     <div class="crumb">Modelo de Dados · 10</div>
     <h1>Bases de Dados Necessárias</h1>
     <p>
@@ -3265,7 +3349,12 @@ function pgDocDatabases() {
 
   <div class="grid g4" style="margin-bottom:22px">
     ${kpi("bg-o", SVG.doc, DATABASES.length, "Bases de dados")}
-    ${kpi("bg-b", SVG.bolt, DATABASES.reduce((a, d) => a + d.columns.length, 0), "Colunas")}
+    ${kpi(
+      "bg-b",
+      SVG.bolt,
+      DATABASES.reduce((a, d) => a + d.columns.length, 0),
+      "Colunas",
+    )}
     ${kpi("bg-t", SVG.clock, DB_RELATIONS.length, "Relações")}
     ${kpi("bg-g", SVG.check, "ERD", "Schema visual")}
   </div>
@@ -3276,78 +3365,29 @@ function pgDocDatabases() {
       Schema Relacional Visual
     </h3>
 
-    <p class="muted" style="margin-bottom:18px">
-      Cada bloco representa uma base de dados. Dentro de cada bloco estão as colunas,
-      o respetivo tipo de dados e, quando aplicável, a relação direta com outra base de dados.
+    <p class="muted" style="margin-bottom:16px">
+      Diagrama ERD importado como imagem para manter o layout profissional.
     </p>
 
     <div style="
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0, 1fr));
-      gap:18px;
+      width:100%;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      padding:14px;
     ">
-      ${DATABASES.map(
-        (db) => `<div style="
-          border:1px solid var(--line);
-          border-radius:12px;
-          background:#fff;
-          box-shadow:var(--shadow);
-          overflow:hidden;
-        ">
-          <div style="
-            background:linear-gradient(135deg, var(--ink), #2b2b2b);
-            color:#fff;
-            padding:14px 16px;
-            display:flex;
-            align-items:center;
-            gap:10px;
-          ">
-            <span class="info-dot sm">DB</span>
-            <div>
-              <b style="font-size:15px">${db.name}</b>
-              <div style="font-size:11px;color:#ddd">${db.layer}</div>
-            </div>
-            <span class="chip o" style="margin-left:auto;background:#fff;color:var(--orange)">
-              ${db.columns.length} colunas
-            </span>
-          </div>
-
-          <div style="padding:0">
-            ${db.columns
-              .map(
-                (c, idx) => `<div style="
-                  display:grid;
-                  grid-template-columns:180px 120px 1fr;
-                  gap:12px;
-                  align-items:start;
-                  padding:11px 14px;
-                  border-top:${idx === 0 ? "none" : "1px solid var(--line)"};
-                  background:${idx % 2 === 0 ? "#fff" : "var(--paper)"};
-                ">
-                  <div>
-                    <b>${c[0]}</b>
-                    ${
-                      c[0] === "id" ||
-                      c[0].endsWith("Id") ||
-                      c[0].toLowerCase().includes("id")
-                        ? `<div style="font-size:10px;color:var(--orange);font-weight:800;text-transform:uppercase">key</div>`
-                        : ""
-                    }
-                  </div>
-
-                  <div>
-                    <span class="pill nav">${c[1]}</span>
-                  </div>
-
-                  <div style="font-size:12px">
-                    ${relationLabel(db.name, c[0])}
-                  </div>
-                </div>`
-              )
-              .join("")}
-          </div>
-        </div>`
-      ).join("")}
+      <img
+        src="schema.png"
+        alt="Schema Relacional TaxFlow"
+        style="
+          width:100%;
+          min-width:1000px;
+          height:auto;
+          display:block;
+          border-radius:8px;
+        "
+      />
     </div>
   </div>
 
@@ -3379,7 +3419,7 @@ function pgDocDatabases() {
             <td><span class="pill calc">${r.toCol}</span></td>
             <td><span class="chip o">${r.type}</span></td>
             <td>${r.description}</td>
-          </tr>`
+          </tr>`,
         ).join("")}
       </tbody>
     </table>
@@ -3399,17 +3439,20 @@ function pgDocDatabases() {
         <p class="muted">${d.description}</p>
         <div style="margin-top:12px">
           <span class="chip o">${d.columns.length} colunas</span>
-          ${d.columns.slice(0, 4).map((c) => `<span class="statechip">${c[0]}</span>`).join("")}
+          ${d.columns
+            .slice(0, 4)
+            .map((c) => `<span class="statechip">${c[0]}</span>`)
+            .join("")}
         </div>
-      </div>`
+      </div>`,
     ).join("")}
   </div>`;
-}
+      }
 
-function pgDatabaseDetail() {
-  let db = SELECTED_DB || DATABASES[0];
+      function pgDatabaseDetail() {
+        let db = SELECTED_DB || DATABASES[0];
 
-  return `<div class="phead">
+        return `<div class="phead">
     <div class="crumb">Base de Dados · detalhe</div>
     <h1>${db.name}</h1>
     <p>${db.description}</p>
@@ -3440,13 +3483,15 @@ function pgDatabaseDetail() {
         </tr>
       </thead>
       <tbody>
-        ${db.columns.map(
-          (c) => `<tr>
+        ${db.columns
+          .map(
+            (c) => `<tr>
             <td><b>${c[0]}</b></td>
             <td><span class="pill nav">${c[1]}</span></td>
             <td>${c[2]}</td>
-          </tr>`
-        ).join("")}
+          </tr>`,
+          )
+          .join("")}
       </tbody>
     </table>
   </div>
@@ -3454,7 +3499,7 @@ function pgDatabaseDetail() {
   <div style="margin-top:18px">
     <button class="btn ghost" onclick="goto('d-databases')">Voltar à lista de bases de dados</button>
   </div>`;
-}
+      }
 
       function render(p) {
         let v = $("view");
