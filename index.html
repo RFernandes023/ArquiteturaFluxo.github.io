@@ -1232,6 +1232,7 @@
         overflow: auto;
         max-width: 100%;
         word-break: break-word;
+        margin: 0;
       }
       .flowtree {
         display: grid;
@@ -2230,10 +2231,12 @@
         SELECTED_DECL = null,
         SELECTED_AGENT = null,
         SELECTED_DB = null;
-      const TODAY = 14;
-      const $ = (id) => document.getElementById(id),
+
+        const TODAY = 14;
+
+        const $ = (id) => document.getElementById(id),
         initials = (n) =>
-          n
+            n
             .split(/\s+/)
             .map((w) => w[0])
             .slice(0, 2)
@@ -2242,7 +2245,7 @@
         clientById = (id) => CLIENTS.find((c) => c.id === id),
         userById = (id) => USERS.find((u) => u.id === id),
         esc = (s) =>
-          String(s || "")
+            String(s || "")
             .replace(/'/g, "\\'")
             .replace(/"/g, "&quot;");
       const IC = {
@@ -2423,65 +2426,75 @@
       }
       function buildNav() {
         let h = "";
+
         if (ME.isDocs) {
-          h +=
+            h +=
             '<div class="navsec">Visão Geral</div>' +
             navItem("d-overview", "dash", "Resumo", "01") +
             navItem("d-flow", "layers", "Fluxo de Informação", "02") +
+
             '<div class="navsec">Tecnologia</div>' +
             navItem("d-stack", "cpu", "Stack por Stage", "03") +
             navItem("d-fabric", "grid", "Microsoft Fabric", "04") +
             navItem("d-cost", "euro", "Custo & Dificuldade", "05") +
             navItem("d-reqs", "appr", "Requisitos", "06") +
+
             '<div class="navsec">Regras</div>' +
             navItem("d-decl", "rules", "Validações", "07") +
             navItem("d-inputs", "client", "Inputs e Origem", "08") +
             navItem("d-agents", "robot", "Agentes", "09") +
             navItem("d-databases", "grid", "Bases de Dados", "10") +
-            '<div class="navsec"&gt;Funcional&lt;</div>' +
+
+            '<div class="navsec">Funcional</div>' +
             navItem("d-functional", "layers", "Estrutura Funcional", "11") +
             navItem("d-journey", "user", "Jornada por Perfil", "12") +
             navItem("d-ops", "track", "Operação Diária", "13");
         } else if (ME.isAdmin) {
-          h +=
+            h +=
             '<div class="navsec">Equipa DTT</div>' +
             navItem("a-dash", "dash", "Dashboard") +
             navItem("a-cal", "cal", "Calendário Global") +
             navItem("a-tracking", "track", "Tracking") +
             navItem("a-logs", "log", "Logs") +
+
             '<div class="navsec">Gestão</div>' +
             navItem("a-clients", "client", "Clientes") +
             navItem("a-users", "user", "Utilizadores") +
             navItem(
-              "a-appr",
-              "appr",
-              "Aprovações",
-              visibleApprovals().filter((a) => a.status === "pending").length,
+                "a-appr",
+                "appr",
+                "Aprovações",
+                visibleApprovals().filter((a) => a.status === "pending").length
             );
         } else {
-          h +=
+            h +=
             '<div class="navsec">Pessoal</div>' +
             navItem("dash", "dash", "Dashboard") +
             navItem("cal", "cal", "Calendário") +
             navItem("msgs", "msg", "Mensagens", MESSAGES.length) +
             navItem("profile", "user", "O meu perfil") +
+
             '<div class="navsec">Cliente em foco</div>' +
             navItem("client", "client", "Visão do cliente") +
             navItem("client-info", "info", "Info por Declaração") +
             navItem("client-tpl", "dl", "Templates");
-          if (myClients().some((c) => isManagerPlus(c.id)))
+
+            if (myClients().some((c) => isManagerPlus(c.id))) {
             h +=
-              '<div class="navsec">Gestão</div>' +
-              navItem("client-team", "user", "Equipa & Roles") +
-              navItem(
+                '<div class="navsec">Gestão</div>' +
+                navItem("client-team", "user", "Equipa & Roles") +
+                navItem(
                 "client-appr",
                 "appr",
                 "Aprovações",
-                visibleApprovals().filter((a) => a.status === "pending").length,
-              );
+                visibleApprovals().filter((a) => a.status === "pending").length
+                );
+            }
         }
+
         $("nav").innerHTML = h;
-      }
+        }
+
       const TITLES = {
         dash: ["Dashboard", "Visão Geral"],
         cal: ["Calendário", "Entregas dos meus clientes"],
@@ -2516,9 +2529,10 @@
         "d-databases": ["Bases de Dados", "Modelo de Dados · 10"],
         "database-detail": ["Detalhe da Base de Dados", "Colunas, tipos e descrição"],
         "agent-flow": ["Fluxo do Agente", "Memória de estado · execução"],
-        "d-functional": ["Estrutura funcional E2E", "Documentação · 10"],
-        "d-journey": ["Jornada por perfil", "Documentação · 11"],
-        "d-ops": ["Operação diária", "Documentação · 12"],
+        "d-functional": ["Estrutura funcional E2E", "Documentação · 11"],
+        "d-journey": ["Jornada por perfil", "Documentação · 12"],
+        "d-ops": ["Operação diária", "Documentação · 13"],
+
       };
       function goto(p) {
         CURPAGE = p;
@@ -3097,14 +3111,122 @@
       function pgDocJourney() {
         return `<div class="phead"><div class="crumb">Funcional · 11</div><h1>Jornada por perfil</h1></div><div class="grid g3"><div class="card"><h3 class="bb">Associate / Senior</h3><ul><li>Vê clientes atribuídos.</li><li>Consulta calendário.</li><li>Resolve mensagens.</li><li>Upload/import/NAV.</li><li>Senior recebe erro de validação com regra e evidência.</li></ul></div><div class="card"><h3 class="bb">Manager</h3><ul><li>Gere equipa e roles.</li><li>Aprova apenas pedidos associados aos seus clientes.</li><li>Acompanha KPIs.</li><li>Recebe pronto-para-entrega após validação final.</li></ul></div><div class="card"><h3 class="bb">DTT / App Admin</h3><ul><li>Gestão global.</li><li>Calendário global.</li><li>Aprova candidaturas a Manager e pedidos sem Manager aplicável.</li><li>Monitoriza agentes e exceções.</li></ul></div></div>`;
       }
+
+
       function pgDocOps() {
-        return `<div class="phead"><div class="crumb">Funcional · 12</div><h1>Operação diária — árvore de decisão</h1><p>Qualquer erro de validação notifica o Senior.</p></div><div class="flowtree"><div class="decision"><div class="q">1. Evento fiscal ou novo ficheiro recebido?</div><div class="branches"><div class="branch ok"><b>Sim</b><p>Ingestion Agent guarda raw, identifica cliente/período/declaração e atualiza memória.</p></div><div class="branch"><b>Não</b><p>Continua monitorização de calendário, NAV, SharePoint e mensagens.</p></div></div></div><div class="arrow">▼</div><div class="decision"><div class="q">2. Todos os inputs obrigatórios existem?</div><div class="branches"><div class="branch ok"><b>Sim</b><p>Mapping/Extraction Agent normaliza para schema canónico.</p></div><div class="branch err"><b>Não</b><p>Gera mensagem de ficheiro em falta. Senior é notificado se bloquear prazo.</p></div></div></div><div class="arrow">▼</div><div class="decision"><div class="q">3. Validação de inputs pelos agentes passou?</div><div class="branches"><div class="branch ok"><b>Sim</b><p>Validation Agent marca inputs como válidos e Reconciliation Agent executa cruzamentos.</p></div><div class="branch err"><b>Não</b><p><b>Notificar Senior</b> com cliente, declaração, input, regra falhada, severidade e ação recomendada.</p></div></div></div><div class="arrow">▼</div><div class="decision"><div class="q">4. Reconciliações e tolerâncias OK?</div><div class="branches"><div class="branch ok"><b>Sim</b><p>Declaration Builder Agent calcula campos e constrói draft da declaração.</p></div><div class="branch err"><b>Não</b><p>Notificar Senior com diferença, contas/campos afetados e evidência.</p></div></div></div><div class="arrow">▼</div><div class="decision"><div class="q">5. Validação final da declaração passou?</div><div class="branches"><div class="branch ok"><b>Sim</b><p>Filing Agent muda estado para ready_to_submit e notifica Senior/Manager para entrega.</p></div><div class="branch err"><b>Não</b><p>Notificar Senior com regras finais falhadas. Sem notificação de entrega até correção.</p></div></div></div></div><div class="card" style="margin-top:20px"><h3 class="bb"><span class="info-dot">i</span>Payload de notificação Senior em qualquer erro</h3><div class="memory">{\n  notify: 'Senior',\n  reason: 'validation_error',\n  client: '<cliente>',\n  declaration: '<declaração>',\n  period: '<período>',\n  failedRule: '<regra>',\n  input: '<input>',\n  severity: 'blocking',\n  recommendedAction: '<ação sugerida>',\n  evidenceLink: '<linha/ficheiro/regra>'\n}</div></div>`;
-      }
-      
-      function openDatabase(id) {
+  return `
+    <div class="phead">
+      <div class="crumb">Funcional · 13</div>
+      <h1>Operação diária — árvore de decisão</h1>
+      <p>Qualquer erro de validação notifica o Senior.</p>
+    </div>
+
+    <div class="flowtree">
+      <div class="decision">
+        <div class="q">1. Evento fiscal ou novo ficheiro recebido?</div>
+        <div class="branches">
+          <div class="branch ok">
+            <b>Sim</b>
+            <p>Ingestion Agent guarda raw, identifica cliente/período/declaração e atualiza memória.</p>
+          </div>
+          <div class="branch">
+            <b>Não</b>
+            <p>Continua monitorização de calendário, NAV, SharePoint e mensagens.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">▼</div>
+
+      <div class="decision">
+        <div class="q">2. Todos os inputs obrigatórios existem?</div>
+        <div class="branches">
+          <div class="branch ok">
+            <b>Sim</b>
+            <p>Mapping/Extraction Agent normaliza para schema canónico.</p>
+          </div>
+          <div class="branch err">
+            <b>Não</b>
+            <p>Gera mensagem de ficheiro em falta. Senior é notificado se bloquear prazo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">▼</div>
+
+      <div class="decision">
+        <div class="q">3. Validação de inputs pelos agentes passou?</div>
+        <div class="branches">
+          <div class="branch ok">
+            <b>Sim</b>
+            <p>Validation Agent marca inputs como válidos e Reconciliation Agent executa cruzamentos.</p>
+          </div>
+          <div class="branch err">
+            <b>Não</b>
+            <p><b>Notificar Senior</b> com cliente, declaração, input, regra falhada, severidade e ação recomendada.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">▼</div>
+
+      <div class="decision">
+        <div class="q">4. Reconciliações e tolerâncias OK?</div>
+        <div class="branches">
+          <div class="branch ok">
+            <b>Sim</b>
+            <p>Declaration Builder Agent calcula campos e constrói draft da declaração.</p>
+          </div>
+          <div class="branch err">
+            <b>Não</b>
+            <p>Notificar Senior com diferença, contas/campos afetados e evidência.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">▼</div>
+
+      <div class="decision">
+        <div class="q">5. Validação final da declaração passou?</div>
+        <div class="branches">
+          <div class="branch ok">
+            <b>Sim</b>
+            <p>Filing Agent muda estado para ready_to_submit e notifica Senior/Manager para entrega.</p>
+          </div>
+          <div class="branch err">
+            <b>Não</b>
+            <p>Notificar Senior com regras finais falhadas. Sem notificação de entrega até correção.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3 class="bb">
+        <span class="info-dot">i</span>
+        Payload de notificação Senior em qualquer erro
+      </h3>
+
+      <pre class="memory">{
+  notify: 'Senior',
+  reason: 'validation_error',
+  client: '&lt;cliente&gt;',
+  declaration: '&lt;declaração&gt;',
+  period: '&lt;período&gt;',
+  failedRule: '&lt;regra&gt;',
+  input: '&lt;input&gt;',
+  severity: 'blocking',
+  recommendedAction: '&lt;ação sugerida&gt;',
+  evidenceLink: '&lt;linha/ficheiro/regra&gt;'
+}</pre>
+    </div>
+  `;
+}
+function openDatabase(id) {
   SELECTED_DB = DATABASES.find((d) => d.id === id);
   goto("database-detail");
 }
+
 function dbRelationsForColumn(dbName, colName) {
   return DB_RELATIONS.filter(
     (r) =>
@@ -3131,23 +3253,6 @@ function relationLabel(dbName, colName) {
     .join("");
 }
 
-function relationLabel(dbName, colName) {
-  let rels = dbRelationsForColumn(dbName, colName);
-
-  if (!rels.length) {
-    return `<span class="csub">—</span>`;
-  }
-
-  return rels
-    .map((r) => {
-      if (r.from === dbName && r.fromCol === colName) {
-        return `<span class="chip o">→ ${r.to}.${r.toCol} · ${r.type}</span>`;
-      }
-
-      return `<span class="chip">← ${r.from}.${r.fromCol} · ${r.type}</span>`;
-    })
-    .join("");
-}
 function pgDocDatabases() {
   return `<div class="phead">
     <div class="crumb">Modelo de Dados · 10</div>
@@ -3350,6 +3455,7 @@ function pgDatabaseDetail() {
     <button class="btn ghost" onclick="goto('d-databases')">Voltar à lista de bases de dados</button>
   </div>`;
 }
+
       function render(p) {
         let v = $("view");
         switch (p) {
