@@ -1915,413 +1915,650 @@
         },
       ];
       const DATABASES = [
-        {
-          id: "users",
-          name: "Users",
-          layer: "Core App",
-          description:
-            "Base de dados de utilizadores da plataforma, incluindo perfil, email, cor visual, flags de admin/documentação e ligação a clientes através de memberships.",
-          columns: [
-            ["id", "int", "Identificador único do utilizador."],
-            ["name", "varchar(150)", "Nome visível do utilizador."],
-            ["email", "varchar(200)", "Email organizacional usado no login."],
-            [
-              "isAdmin",
-              "boolean",
-              "Indica se o utilizador pertence à equipa DTT/Admin.",
-            ],
-            ["isDocs", "boolean", "Indica se é o User de Teste/documentação."],
-            [
-              "color",
-              "varchar(20)",
-              "Cor usada no avatar e identificação visual.",
-            ],
-            ["createdAt", "datetime", "Data de criação do utilizador."],
-            ["updatedAt", "datetime", "Última atualização do perfil."],
-          ],
-        },
-        {
-          id: "clients",
-          name: "Clients",
-          layer: "Core App",
-          description:
-            "Base de dados dos clientes configurados na plataforma, incluindo NIF, nome e declarações fiscais aplicáveis.",
-          columns: [
-            ["id", "int", "Identificador único do cliente."],
-            ["name", "varchar(200)", "Nome legal/comercial do cliente."],
-            ["nif", "varchar(20)", "Número de identificação fiscal."],
-            [
-              "status",
-              "varchar(30)",
-              "Estado do cliente: active, inactive, onboarding.",
-            ],
-            ["createdAt", "datetime", "Data de criação do cliente."],
-            ["updatedAt", "datetime", "Última alteração da ficha do cliente."],
-          ],
-        },
-        {
-          id: "memberships",
-          name: "ClientMemberships",
-          layer: "RBAC",
-          description:
-            "Tabela de relação entre utilizadores e clientes. Define que utilizador tem acesso a que cliente e com que role.",
-          columns: [
-            ["id", "int", "Identificador único da relação."],
-            ["userId", "int", "Referência para Users.id."],
-            ["clientId", "int", "Referência para Clients.id."],
-            [
-              "role",
-              "varchar(50)",
-              "Role no cliente: Associate, Senior, Manager.",
-            ],
-            [
-              "status",
-              "varchar(30)",
-              "Estado: active, pending, rejected, inactive.",
-            ],
-            [
-              "approvedBy",
-              "int",
-              "Utilizador que aprovou a associação, quando aplicável.",
-            ],
-            ["approvedAt", "datetime", "Data/hora da aprovação."],
-            ["createdAt", "datetime", "Data de pedido/criação da relação."],
-          ],
-        },
-        {
-          id: "approvals",
-          name: "Approvals",
-          layer: "Workflow",
-          description:
-            "Base de dados dos pedidos de acesso, candidaturas a clientes e alterações de role. Suporta aprovação por Manager ou DTT.",
-          columns: [
-            ["id", "int", "Identificador único do pedido."],
-            ["userId", "int", "Utilizador que pediu acesso ou alteração."],
-            ["clientId", "int", "Cliente associado ao pedido."],
-            ["requestedRole", "varchar(50)", "Role pretendido."],
-            ["kind", "varchar(30)", "Tipo de pedido: join, promote, remove."],
-            ["status", "varchar(30)", "Estado: pending, approved, rejected."],
-            ["requestedAt", "datetime", "Data/hora do pedido."],
-            ["decidedAt", "datetime", "Data/hora da decisão."],
-            [
-              "approverType",
-              "varchar(30)",
-              "Tipo de aprovador: manager ou dtt.",
-            ],
-            [
-              "managerApproverId",
-              "int",
-              "Manager responsável quando aplicável.",
-            ],
-            ["businessReason", "text", "Justificação de negócio do pedido."],
-            ["expectedHoursMonth", "decimal(8,2)", "Horas mensais estimadas."],
-            [
-              "clientPortfolioImpact",
-              "varchar(30)",
-              "Impacto: Baixo, Médio, Alto.",
-            ],
-            ["riskLevel", "varchar(30)", "Nível de risco do pedido."],
-            ["decisionNote", "text", "Nota de decisão/justificação."],
-          ],
-        },
-        {
-          id: "deliverables",
-          name: "Deliverables",
-          layer: "Fiscal Ops",
-          description:
-            "Base de dados dos entregáveis fiscais por cliente, declaração, prazo, estado e progresso.",
-          columns: [
-            ["id", "int", "Identificador único do entregável."],
-            ["clientId", "int", "Referência para Clients.id."],
-            ["declarationType", "varchar(100)", "Tipo de declaração fiscal."],
-            ["period", "varchar(20)", "Período fiscal associado."],
-            ["dueDate", "date", "Prazo legal/operacional da entrega."],
-            ["status", "varchar(30)", "Estado: ok, prep, client, late."],
-            ["progress", "decimal(5,2)", "Percentagem de progresso."],
-            [
-              "assignedSeniorId",
-              "int",
-              "Senior responsável, quando aplicável.",
-            ],
-            [
-              "assignedManagerId",
-              "int",
-              "Manager responsável, quando aplicável.",
-            ],
-            [
-              "submittedAt",
-              "datetime",
-              "Data/hora de submissão, se aplicável.",
-            ],
-          ],
-        },
-        {
-          id: "messages",
-          name: "Messages",
-          layer: "Operations",
-          description:
-            "Base de dados de mensagens, alertas, ficheiros em falta e avisos de dados por cliente/declarativo.",
-          columns: [
-            ["id", "int", "Identificador único da mensagem."],
-            ["clientId", "int", "Cliente associado à mensagem."],
-            ["deliverableId", "int", "Entregável associado, quando aplicável."],
-            ["type", "varchar(30)", "Tipo: file, data, validation, system."],
-            ["title", "varchar(250)", "Título curto da mensagem."],
-            ["body", "text", "Descrição da mensagem."],
-            ["severity", "varchar(30)", "Severidade: info, warn, err."],
-            ["status", "varchar(30)", "Estado: open, resolved, ignored."],
-            ["createdAt", "datetime", "Data/hora de criação."],
-            ["resolvedAt", "datetime", "Data/hora de resolução."],
-          ],
-        },
-        {
-          id: "declaration-inputs",
-          name: "DeclarationInputs",
-          layer: "Fiscal Config",
-          description:
-            "Configuração dos inputs necessários por declaração fiscal, incluindo origem, template e disponibilidade NAV/BC.",
-          columns: [
-            ["id", "int", "Identificador único do input configurado."],
-            [
-              "declarationType",
-              "varchar(100)",
-              "Declaração fiscal a que o input pertence.",
-            ],
-            ["inputName", "varchar(250)", "Nome do input necessário."],
-            [
-              "sourceType",
-              "varchar(50)",
-              "Origem: NAV, Calculável, Não-NAV, Portal AT, Cliente.",
-            ],
-            ["templateName", "varchar(200)", "Template associado ao input."],
-            ["isMandatory", "boolean", "Indica se o input é obrigatório."],
-            [
-              "navAvailable",
-              "boolean",
-              "Indica se o input existe diretamente no NAV/BC.",
-            ],
-            [
-              "calculationRuleId",
-              "int",
-              "Regra usada quando o input é calculável.",
-            ],
-            ["description", "text", "Descrição funcional do input."],
-          ],
-        },
-        {
-          id: "templates",
-          name: "Templates",
-          layer: "Documents",
-          description:
-            "Base de dados dos templates disponíveis para download e preenchimento por declaração ou input.",
-          columns: [
-            ["id", "int", "Identificador único do template."],
-            ["templateName", "varchar(200)", "Nome do ficheiro/template."],
-            ["declarationType", "varchar(100)", "Declaração associada."],
-            ["version", "varchar(30)", "Versão do template."],
-            [
-              "fileUrl",
-              "varchar(500)",
-              "Localização do ficheiro no SharePoint/OneLake.",
-            ],
-            ["isActive", "boolean", "Indica se é a versão ativa."],
-            ["createdAt", "datetime", "Data de criação."],
-            ["updatedAt", "datetime", "Última atualização."],
-          ],
-        },
-        {
-          id: "agent-runs",
-          name: "AgentRuns",
-          layer: "Agents",
-          description:
-            "Registo das execuções dos agentes, incluindo estado, input, output, erro e evidência.",
-          columns: [
-            ["id", "int", "Identificador único da execução."],
-            ["agentId", "varchar(80)", "Identificador do agente executado."],
-            ["clientId", "int", "Cliente associado à execução."],
-            ["deliverableId", "int", "Entregável associado."],
-            ["state", "varchar(50)", "Estado atual da execução."],
-            ["startedAt", "datetime", "Data/hora de início."],
-            ["endedAt", "datetime", "Data/hora de fim."],
-            [
-              "status",
-              "varchar(30)",
-              "Resultado: success, warning, failed, blocked.",
-            ],
-            ["inputPayload", "json", "Payload recebido pelo agente."],
-            ["outputPayload", "json", "Payload produzido pelo agente."],
-            ["errorMessage", "text", "Mensagem de erro, quando aplicável."],
-            [
-              "evidenceLink",
-              "varchar(500)",
-              "Link para evidência/log/ficheiro.",
-            ],
-          ],
-        },
-        {
-          id: "validation-results",
-          name: "ValidationResults",
-          layer: "Rules",
-          description:
-            "Resultados das validações fiscais e técnicas executadas sobre inputs, reconciliações e declarações.",
-          columns: [
-            ["id", "int", "Identificador único do resultado."],
-            ["deliverableId", "int", "Entregável validado."],
-            ["ruleId", "varchar(100)", "Identificador da regra aplicada."],
-            ["ruleName", "varchar(200)", "Nome funcional da regra."],
-            ["inputName", "varchar(250)", "Input/campo afetado."],
-            ["result", "varchar(30)", "Resultado: passed, failed, warning."],
-            ["severity", "varchar(30)", "Severidade: info, warning, blocking."],
-            ["message", "text", "Explicação do resultado."],
-            ["recommendedAction", "text", "Ação recomendada."],
-            ["createdAt", "datetime", "Data/hora da validação."],
-          ],
-        },
-        {
-          id: "audit-logs",
-          name: "AuditLogs",
-          layer: "Governance",
-          description:
-            "Base de dados de auditoria com ações de utilizadores, alterações de estado, decisões e eventos técnicos.",
-          columns: [
-            ["id", "int", "Identificador único do log."],
-            ["actorUserId", "int", "Utilizador que executou a ação."],
-            ["entityType", "varchar(80)", "Tipo de entidade afetada."],
-            ["entityId", "varchar(100)", "Identificador da entidade afetada."],
-            ["action", "varchar(100)", "Ação executada."],
-            ["beforeValue", "json", "Estado anterior, quando aplicável."],
-            ["afterValue", "json", "Estado novo, quando aplicável."],
-            ["createdAt", "datetime", "Data/hora do evento."],
-            ["ipAddress", "varchar(80)", "IP/origem técnica, se disponível."],
-          ],
-        },
-      ];
-      const DB_RELATIONS = [
-        {
-          from: "Users",
-          fromCol: "id",
-          to: "ClientMemberships",
-          toCol: "userId",
-          type: "1:N",
-          description: "Um utilizador pode ter várias relações com clientes.",
-        },
-        {
-          from: "Clients",
-          fromCol: "id",
-          to: "ClientMemberships",
-          toCol: "clientId",
-          type: "1:N",
-          description:
-            "Um cliente pode ter vários utilizadores associados com roles diferentes.",
-        },
-        {
-          from: "Users",
-          fromCol: "id",
-          to: "Approvals",
-          toCol: "userId",
-          type: "1:N",
-          description:
-            "Um utilizador pode criar vários pedidos de acesso ou alteração de role.",
-        },
-        {
-          from: "Clients",
-          fromCol: "id",
-          to: "Approvals",
-          toCol: "clientId",
-          type: "1:N",
-          description:
-            "Um cliente pode ter vários pedidos de aprovação associados.",
-        },
-        {
-          from: "Users",
-          fromCol: "id",
-          to: "Approvals",
-          toCol: "managerApproverId",
-          type: "1:N",
-          description:
-            "Um Manager pode ser responsável pela aprovação de vários pedidos dos seus clientes.",
-        },
-        {
-          from: "Clients",
-          fromCol: "id",
-          to: "Deliverables",
-          toCol: "clientId",
-          type: "1:N",
-          description:
-            "Um cliente pode ter vários entregáveis fiscais por período e declaração.",
-        },
-        {
-          from: "Deliverables",
-          fromCol: "id",
-          to: "Messages",
-          toCol: "deliverableId",
-          type: "1:N",
-          description:
-            "Um entregável pode gerar várias mensagens, alertas ou pedidos de ficheiro.",
-        },
-        {
-          from: "Clients",
-          fromCol: "id",
-          to: "Messages",
-          toCol: "clientId",
-          type: "1:N",
-          description:
-            "Um cliente pode ter várias mensagens operacionais associadas.",
-        },
-        {
-          from: "Deliverables",
-          fromCol: "declarationType",
-          to: "DeclarationInputs",
-          toCol: "declarationType",
-          type: "N:N lógico",
-          description:
-            "Cada declaração usa vários inputs configurados por tipo declarativo.",
-        },
-        {
-          from: "DeclarationInputs",
-          fromCol: "templateName",
-          to: "Templates",
-          toCol: "templateName",
-          type: "N:1",
-          description: "Vários inputs podem usar o mesmo template.",
-        },
-        {
-          from: "Deliverables",
-          fromCol: "id",
-          to: "AgentRuns",
-          toCol: "deliverableId",
-          type: "1:N",
-          description:
-            "Um entregável pode passar por várias execuções de agentes.",
-        },
-        {
-          from: "Clients",
-          fromCol: "id",
-          to: "AgentRuns",
-          toCol: "clientId",
-          type: "1:N",
-          description:
-            "As execuções dos agentes ficam sempre associadas ao cliente.",
-        },
-        {
-          from: "Deliverables",
-          fromCol: "id",
-          to: "ValidationResults",
-          toCol: "deliverableId",
-          type: "1:N",
-          description:
-            "Um entregável pode ter múltiplos resultados de validação.",
-        },
-        {
-          from: "Users",
-          fromCol: "id",
-          to: "AuditLogs",
-          toCol: "actorUserId",
-          type: "1:N",
-          description:
-            "As ações feitas por utilizadores ficam registadas em auditoria.",
-        },
-      ];
+      {
+        id: "users",
+        name: "Users",
+        layer: "Core",
+        group: "Core",
+        description:
+          "Tabela de utilizadores da plataforma, incluindo perfil, email organizacional, flags de administração/documentação e cor visual.",
+        columns: [
+          ["id", "int", "Identificador único do utilizador."],
+          ["name", "varchar(150)", "Nome visível do utilizador."],
+          ["email", "varchar(200)", "Email organizacional usado no login."],
+          ["is_admin", "boolean", "Indica se o utilizador pertence à equipa DTT/Admin."],
+          ["is_docs", "boolean", "Indica se é o utilizador de documentação/demo."],
+          ["color", "varchar(20)", "Cor usada no avatar e identificação visual."],
+          ["created_at", "datetime", "Data de criação do utilizador."],
+          ["updated_at", "datetime", "Última atualização do perfil."],
+        ],
+      },
+      {
+        id: "clients",
+        name: "Clients",
+        layer: "Core",
+        group: "Core",
+        description:
+          "Tabela dos clientes configurados na plataforma, incluindo identificação fiscal, estado e metadados básicos.",
+        columns: [
+          ["id", "int", "Identificador único do cliente."],
+          ["name", "varchar(200)", "Nome legal/comercial do cliente."],
+          ["nif", "varchar(20)", "Número de identificação fiscal."],
+          ["status", "varchar(30)", "Estado do cliente: active, inactive, onboarding."],
+          ["created_at", "datetime", "Data de criação do cliente."],
+          ["updated_at", "datetime", "Última alteração da ficha do cliente."],
+        ],
+      },
+      {
+        id: "client-memberships",
+        name: "ClientMemberships",
+        layer: "Core",
+        group: "Core",
+        description:
+          "Tabela de relação entre utilizadores e clientes. Define quem tem acesso a cada cliente, com que role e em que estado.",
+        columns: [
+          ["id", "int", "Identificador único da relação."],
+          ["user_id", "int", "Referência para Users.id."],
+          ["client_id", "int", "Referência para Clients.id."],
+          ["role", "varchar(50)", "Role no cliente: Associate, Senior, Manager."],
+          ["status", "varchar(30)", "Estado: active, pending, rejected, inactive."],
+          ["approved_by", "int", "Utilizador que aprovou a associação, quando aplicável."],
+          ["approved_at", "datetime", "Data/hora da aprovação."],
+          ["created_at", "datetime", "Data de criação do vínculo/pedido."],
+        ],
+      },
+      {
+        id: "approvals",
+        name: "Approvals",
+        layer: "Core",
+        group: "Core",
+        description:
+          "Tabela de pedidos de acesso a clientes e alterações de role, incluindo decisão, aprovador, impacto e risco.",
+        columns: [
+          ["id", "int", "Identificador único do pedido."],
+          ["user_id", "int", "Utilizador que pediu acesso ou alteração."],
+          ["client_id", "int", "Cliente associado ao pedido."],
+          ["requested_role", "varchar(50)", "Role pretendido."],
+          ["kind", "varchar(30)", "Tipo de pedido: join, promote, remove."],
+          ["status", "varchar(30)", "Estado: pending, approved, rejected."],
+          ["requested_at", "datetime", "Data/hora do pedido."],
+          ["decided_at", "datetime", "Data/hora da decisão."],
+          ["approver_type", "varchar(30)", "Tipo de aprovador: manager ou dtt."],
+          ["manager_approver_id", "int", "Manager aprovador, quando aplicável."],
+          ["business_reason", "text", "Justificação de negócio."],
+          ["expected_hours_month", "decimal(8,2)", "Horas mensais estimadas."],
+          ["client_portfolio_impact", "varchar(30)", "Impacto esperado: Baixo, Médio, Alto."],
+          ["risk_level", "varchar(30)", "Nível de risco do pedido."],
+          ["decision_note", "text", "Nota/justificação da decisão."],
+        ],
+      },
+    
+      {
+        id: "declaration-definitions",
+        name: "DeclarationDefinitions",
+        layer: "Fiscal / Operação",
+        group: "Fiscal / Operação",
+        description:
+          "Catálogo das declarações fiscais suportadas pela plataforma, incluindo código, nome, categoria e frequência.",
+        columns: [
+          ["id", "int", "Identificador único da declaração."],
+          ["code", "varchar(50)", "Código funcional/curto da declaração."],
+          ["name", "varchar(100)", "Nome da declaração fiscal."],
+          ["category", "varchar(50)", "Categoria declarativa/fiscal."],
+          ["frequency", "varchar(30)", "Periodicidade: monthly, quarterly, annual, event-driven."],
+          ["country_code", "varchar(10)", "País/jurisdição aplicável."],
+          ["active", "boolean", "Indica se a declaração está ativa."],
+          ["created_at", "datetime", "Data de criação."],
+          ["updated_at", "datetime", "Última atualização."],
+        ],
+      },
+      {
+        id: "deliverables",
+        name: "Deliverables",
+        layer: "Fiscal / Operação",
+        group: "Fiscal / Operação",
+        description:
+          "Tabela dos entregáveis fiscais por cliente, declaração e período, incluindo prazo, estado, progresso e responsáveis.",
+        columns: [
+          ["id", "int", "Identificador único do entregável."],
+          ["client_id", "int", "Referência para Clients.id."],
+          ["declaration_id", "int", "Referência para DeclarationDefinitions.id."],
+          ["period_key", "varchar(20)", "Período fiscal: 2026-05, 2026-Q2, 2026, etc."],
+          ["due_date", "date", "Prazo legal/operacional da entrega."],
+          ["status", "varchar(30)", "Estado: ok, prep, client, late, blocked."],
+          ["progress", "decimal(5,2)", "Percentagem de progresso."],
+          ["assigned_senior_id", "int", "Senior responsável, quando aplicável."],
+          ["assigned_manager_id", "int", "Manager responsável, quando aplicável."],
+          ["submitted_at", "datetime", "Data/hora de submissão."],
+          ["created_at", "datetime", "Data de criação do entregável."],
+          ["updated_at", "datetime", "Última atualização."],
+        ],
+      },
+      {
+        id: "messages",
+        name: "Messages",
+        layer: "Fiscal / Operação",
+        group: "Fiscal / Operação",
+        description:
+          "Tabela de mensagens, alertas, pedidos de ficheiros e avisos operacionais associados a clientes e entregáveis.",
+        columns: [
+          ["id", "int", "Identificador único da mensagem."],
+          ["client_id", "int", "Cliente associado à mensagem."],
+          ["deliverable_id", "int", "Entregável associado, quando aplicável."],
+          ["type", "varchar(30)", "Tipo: file, data, validation, system."],
+          ["title", "varchar(250)", "Título curto da mensagem."],
+          ["body", "text", "Descrição detalhada."],
+          ["severity", "varchar(30)", "Severidade: info, warn, err."],
+          ["status", "varchar(30)", "Estado: open, resolved, ignored."],
+          ["created_at", "datetime", "Data/hora de criação."],
+          ["resolved_at", "datetime", "Data/hora de resolução."],
+        ],
+      },
+      {
+        id: "templates",
+        name: "Templates",
+        layer: "Fiscal / Operação",
+        group: "Fiscal / Operação",
+        description:
+          "Tabela dos templates disponíveis para preenchimento/download por declaração fiscal.",
+        columns: [
+          ["id", "int", "Identificador único do template."],
+          ["template_name", "varchar(200)", "Nome do template/ficheiro."],
+          ["declaration_id", "int", "Referência para DeclarationDefinitions.id."],
+          ["version", "varchar(30)", "Versão do template."],
+          ["file_url", "varchar(500)", "Localização do ficheiro no repositório documental."],
+          ["is_active", "boolean", "Indica se é a versão ativa."],
+          ["created_at", "datetime", "Data de criação."],
+          ["updated_at", "datetime", "Última atualização."],
+        ],
+      },
+      {
+        id: "declaration-inputs",
+        name: "DeclarationInputs",
+        layer: "Fiscal / Operação",
+        group: "Fiscal / Operação",
+        description:
+          "Configuração dos inputs necessários por declaração fiscal, incluindo origem, template associado e obrigatoriedade.",
+        columns: [
+          ["id", "int", "Identificador único do input configurado."],
+          ["declaration_id", "int", "Referência para DeclarationDefinitions.id."],
+          ["input_code", "varchar(100)", "Código funcional do input."],
+          ["input_name", "varchar(250)", "Nome do input necessário."],
+          ["source_type", "varchar(50)", "Origem: NAV, Calculável, Não-NAV, Portal AT, Cliente, ERP."],
+          ["template_id", "int", "Referência para Templates.id, quando aplicável."],
+          ["is_mandatory", "boolean", "Indica se o input é obrigatório."],
+          ["nav_available", "boolean", "Indica se o input pode ser obtido via NAV/ERP."],
+          ["calculation_rule_ref", "varchar(100)", "Referência textual a regra de cálculo, se existir."],
+          ["description", "text", "Descrição funcional do input."],
+        ],
+      },
+    
+      {
+        id: "source-systems",
+        name: "SourceSystems",
+        layer: "Integrações ERP",
+        group: "Integrações ERP",
+        description:
+          "Tabela dos sistemas de origem por cliente, incluindo NAV, Business Central e outros ERP suportados.",
+        columns: [
+          ["id", "int", "Identificador único do sistema de origem."],
+          ["client_id", "int", "Referência para Clients.id."],
+          ["system_name", "varchar(150)", "Nome do sistema configurado."],
+          ["system_type", "varchar(50)", "Tipo: NAV, BusinessCentral, SAP, Primavera, Sage, OtherERP."],
+          ["vendor", "varchar(100)", "Fornecedor/plataforma do sistema."],
+          ["version", "varchar(50)", "Versão do ERP/sistema."],
+          ["environment", "varchar(30)", "Ambiente: prod, test, dev."],
+          ["status", "varchar(30)", "Estado: active, inactive, error."],
+          ["base_url", "varchar(500)", "Endpoint/base URL de integração, se aplicável."],
+          ["created_at", "datetime", "Data de criação."],
+          ["updated_at", "datetime", "Última atualização."],
+        ],
+      },
+      {
+        id: "erp-connections",
+        name: "ERPConnections",
+        layer: "Integrações ERP",
+        group: "Integrações ERP",
+        description:
+          "Tabela das conexões técnicas aos sistemas ERP, incluindo autenticação, tenant, empresa e estado da ligação.",
+        columns: [
+          ["id", "int", "Identificador único da conexão."],
+          ["source_system_id", "int", "Referência para SourceSystems.id."],
+          ["connection_name", "varchar(150)", "Nome lógico da conexão."],
+          ["auth_type", "varchar(50)", "Tipo de autenticação: oauth, basic, api_key, service_principal, sql."],
+          ["credential_ref", "varchar(250)", "Referência para secret store / Key Vault."],
+          ["company_code", "varchar(100)", "Código de empresa/companhia no ERP."],
+          ["tenant_ref", "varchar(150)", "Tenant/ref técnica quando aplicável."],
+          ["connection_status", "varchar(30)", "Estado: connected, failed, pending, disabled."],
+          ["last_success_at", "datetime", "Última sincronização/conexão com sucesso."],
+          ["last_failure_at", "datetime", "Última falha de ligação."],
+          ["created_at", "datetime", "Data de criação."],
+          ["updated_at", "datetime", "Última atualização."],
+        ],
+      },
+      {
+        id: "input-receipts",
+        name: "InputReceipts",
+        layer: "Integrações ERP",
+        group: "Integrações ERP",
+        description:
+          "Tabela de receção de inputs/documentos, indicando origem, ficheiro, hash, período e estado de processamento.",
+        columns: [
+          ["id", "int", "Identificador único da receção."],
+          ["client_id", "int", "Referência para Clients.id."],
+          ["deliverable_id", "int", "Referência para Deliverables.id, quando aplicável."],
+          ["declaration_input_id", "int", "Referência para DeclarationInputs.id."],
+          ["source_system_id", "int", "Referência para SourceSystems.id, quando aplicável."],
+          ["received_from", "varchar(50)", "Origem efetiva: NAV, Client, Email, SharePoint, PortalAT, Manual, OtherERP."],
+          ["file_name", "varchar(250)", "Nome do ficheiro recebido."],
+          ["file_hash", "varchar(128)", "Hash do ficheiro para controlo de duplicados/integridade."],
+          ["storage_url", "varchar(500)", "Localização do ficheiro armazenado."],
+          ["period_key", "varchar(20)", "Período a que o input respeita."],
+          ["receipt_status", "varchar(30)", "Estado: received, processing, validated, failed, archived."],
+          ["received_at", "datetime", "Data/hora de receção."],
+          ["processed_at", "datetime", "Data/hora de processamento."],
+        ],
+      },
+    
+      {
+        id: "agents",
+        name: "Agents",
+        layer: "Agentes & Governação",
+        group: "Agentes & Governação",
+        description:
+          "Catálogo dos agentes especializados da plataforma, incluindo código, stage, tipo e objetivo funcional.",
+        columns: [
+          ["id", "int", "Identificador único do agente."],
+          ["agent_code", "varchar(80)", "Código técnico/funcional do agente."],
+          ["agent_name", "varchar(150)", "Nome visível do agente."],
+          ["stage", "varchar(50)", "Stage/layer em que atua: Bronze, Silver, Gold."],
+          ["agent_type", "varchar(50)", "Tipo: Deterministic, LLM, OCR, Hybrid."],
+          ["purpose", "text", "Objetivo funcional do agente."],
+          ["active", "boolean", "Indica se o agente está ativo."],
+          ["created_at", "datetime", "Data de criação."],
+          ["updated_at", "datetime", "Última atualização."],
+        ],
+      },
+      {
+        id: "agent-sessions",
+        name: "AgentSessions",
+        layer: "Agentes & Governação",
+        group: "Agentes & Governação",
+        description:
+          "Sessões/contextos de execução dos agentes, com estado atual, cliente, entregável e contexto persistente.",
+        columns: [
+          ["id", "int", "Identificador único da sessão do agente."],
+          ["agent_id", "int", "Referência para Agents.id."],
+          ["client_id", "int", "Referência para Clients.id, quando aplicável."],
+          ["deliverable_id", "int", "Referência para Deliverables.id, quando aplicável."],
+          ["session_key", "varchar(120)", "Chave única de sessão/contexto."],
+          ["current_state", "varchar(50)", "Estado atual da sessão do agente."],
+          ["session_status", "varchar(30)", "Estado da sessão: open, completed, failed, blocked."],
+          ["started_at", "datetime", "Data/hora de início."],
+          ["ended_at", "datetime", "Data/hora de fim."],
+          ["last_heartbeat_at", "datetime", "Último heartbeat/sinal de atividade."],
+          ["context_json", "json", "Contexto operacional persistido da sessão."],
+        ],
+      },
+      {
+        id: "agent-runs",
+        name: "AgentRuns",
+        layer: "Agentes & Governação",
+        group: "Agentes & Governação",
+        description:
+          "Execuções concretas dos agentes, incluindo timestamps, estado, payloads, erro e evidência.",
+        columns: [
+          ["id", "int", "Identificador único da execução."],
+          ["agent_id", "int", "Referência para Agents.id."],
+          ["session_id", "int", "Referência para AgentSessions.id."],
+          ["client_id", "int", "Referência para Clients.id."],
+          ["deliverable_id", "int", "Referência para Deliverables.id."],
+          ["state", "varchar(50)", "Estado/fase da execução."],
+          ["started_at", "datetime", "Data/hora de início."],
+          ["ended_at", "datetime", "Data/hora de fim."],
+          ["status", "varchar(30)", "Resultado: success, warning, failed, blocked."],
+          ["input_payload", "json", "Payload recebido."],
+          ["output_payload", "json", "Payload produzido."],
+          ["error_message", "text", "Mensagem de erro, quando aplicável."],
+          ["evidence_link", "varchar(500)", "Link para log/evidência."],
+        ],
+      },
+      {
+        id: "agent-memory",
+        name: "AgentMemory",
+        layer: "Agentes & Governação",
+        group: "Agentes & Governação",
+        description:
+          "Memória persistente por sessão de agente, guardada em formato chave/valor com versionamento simples.",
+        columns: [
+          ["id", "int", "Identificador único do registo de memória."],
+          ["session_id", "int", "Referência para AgentSessions.id."],
+          ["memory_key", "varchar(150)", "Chave da memória persistida."],
+          ["memory_value_json", "json", "Valor da memória em formato JSON."],
+          ["memory_type", "varchar(50)", "Tipo: working, persistent, summary, evidence_ref."],
+          ["version_no", "int", "Versão incremental do valor."],
+          ["created_at", "datetime", "Data/hora de criação do registo."],
+        ],
+      },
+      {
+        id: "validation-results",
+        name: "ValidationResults",
+        layer: "Agentes & Governação",
+        group: "Agentes & Governação",
+        description:
+          "Resultados das validações técnicas/fiscais executadas sobre inputs e entregáveis, incluindo regra, severidade e ação recomendada.",
+        columns: [
+          ["id", "int", "Identificador único do resultado."],
+          ["deliverable_id", "int", "Referência para Deliverables.id."],
+          ["rule_code", "varchar(100)", "Código da regra aplicada."],
+          ["rule_name", "varchar(200)", "Nome funcional da regra."],
+          ["input_receipt_id", "int", "Referência para InputReceipts.id, quando aplicável."],
+          ["agent_run_id", "int", "Referência para AgentRuns.id, quando aplicável."],
+          ["input_name", "varchar(250)", "Nome do input/campo afetado."],
+          ["result", "varchar(30)", "Resultado: passed, failed, warning."],
+          ["severity", "varchar(30)", "Severidade: info, warning, blocking."],
+          ["message", "text", "Explicação do resultado."],
+          ["recommended_action", "text", "Ação recomendada."],
+          ["created_at", "datetime", "Data/hora da validação."],
+        ],
+      },
+      {
+        id: "audit-logs",
+        name: "AuditLogs",
+        layer: "Agentes & Governação",
+        group: "Agentes & Governação",
+        description:
+          "Tabela de auditoria com ações de utilizadores e eventos sobre entidades da plataforma.",
+        columns: [
+          ["id", "int", "Identificador único do log."],
+          ["actor_user_id", "int", "Referência para Users.id."],
+          ["entity_type", "varchar(80)", "Tipo de entidade afetada."],
+          ["entity_id", "varchar(100)", "Identificador da entidade afetada."],
+          ["action", "varchar(100)", "Ação executada."],
+          ["before_value", "json", "Estado anterior, quando aplicável."],
+          ["after_value", "json", "Estado novo, quando aplicável."],
+          ["created_at", "datetime", "Data/hora do evento."],
+          ["ip_address", "varchar(80)", "IP/origem técnica, se disponível."],
+        ],
+      },
+    ];
+    const DB_RELATIONS = [
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "ClientMemberships",
+    toCol: "user_id",
+    type: "1:N",
+    description: "Um utilizador pode ter várias associações a clientes.",
+  },
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "ClientMemberships",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter vários utilizadores associados.",
+  },
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "ClientMemberships",
+    toCol: "approved_by",
+    type: "1:N",
+    description: "Um utilizador pode aprovar várias associações a clientes.",
+  },
+
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "Approvals",
+    toCol: "user_id",
+    type: "1:N",
+    description: "Um utilizador pode criar vários pedidos de acesso ou alteração de role.",
+  },
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "Approvals",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter vários pedidos de aprovação associados.",
+  },
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "Approvals",
+    toCol: "manager_approver_id",
+    type: "1:N",
+    description: "Um Manager pode aprovar vários pedidos dos seus clientes.",
+  },
+
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "SourceSystems",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter vários sistemas de origem configurados.",
+  },
+  {
+    from: "SourceSystems",
+    fromCol: "id",
+    to: "ERPConnections",
+    toCol: "source_system_id",
+    type: "1:N",
+    description: "Um sistema de origem pode ter uma ou mais conexões técnicas.",
+  },
+
+  {
+    from: "DeclarationDefinitions",
+    fromCol: "id",
+    to: "Templates",
+    toCol: "declaration_id",
+    type: "1:N",
+    description: "Uma declaração pode ter várias versões de template.",
+  },
+  {
+    from: "DeclarationDefinitions",
+    fromCol: "id",
+    to: "DeclarationInputs",
+    toCol: "declaration_id",
+    type: "1:N",
+    description: "Uma declaração pode exigir vários inputs configurados.",
+  },
+  {
+    from: "Templates",
+    fromCol: "id",
+    to: "DeclarationInputs",
+    toCol: "template_id",
+    type: "1:N",
+    description: "Um template pode estar associado a vários inputs.",
+  },
+
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "Deliverables",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter vários entregáveis fiscais.",
+  },
+  {
+    from: "DeclarationDefinitions",
+    fromCol: "id",
+    to: "Deliverables",
+    toCol: "declaration_id",
+    type: "1:N",
+    description: "Uma declaração pode originar vários entregáveis por cliente/período.",
+  },
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "Deliverables",
+    toCol: "assigned_senior_id",
+    type: "1:N",
+    description: "Um Senior pode ser responsável por vários entregáveis.",
+  },
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "Deliverables",
+    toCol: "assigned_manager_id",
+    type: "1:N",
+    description: "Um Manager pode ser responsável por vários entregáveis.",
+  },
+
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "Messages",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter várias mensagens e alertas operacionais.",
+  },
+  {
+    from: "Deliverables",
+    fromCol: "id",
+    to: "Messages",
+    toCol: "deliverable_id",
+    type: "1:N",
+    description: "Um entregável pode gerar várias mensagens.",
+  },
+
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "InputReceipts",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter várias receções de inputs/documentos.",
+  },
+  {
+    from: "Deliverables",
+    fromCol: "id",
+    to: "InputReceipts",
+    toCol: "deliverable_id",
+    type: "1:N",
+    description: "Um entregável pode consumir várias receções de inputs.",
+  },
+  {
+    from: "DeclarationInputs",
+    fromCol: "id",
+    to: "InputReceipts",
+    toCol: "declaration_input_id",
+    type: "1:N",
+    description: "Um input configurado pode ser recebido várias vezes.",
+  },
+  {
+    from: "SourceSystems",
+    fromCol: "id",
+    to: "InputReceipts",
+    toCol: "source_system_id",
+    type: "1:N",
+    description: "Um sistema de origem pode fornecer vários inputs.",
+  },
+
+  {
+    from: "Agents",
+    fromCol: "id",
+    to: "AgentSessions",
+    toCol: "agent_id",
+    type: "1:N",
+    description: "Um agente pode abrir várias sessões de execução.",
+  },
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "AgentSessions",
+    toCol: "client_id",
+    type: "1:N",
+    description: "Um cliente pode ter várias sessões de agentes.",
+  },
+  {
+    from: "Deliverables",
+    fromCol: "id",
+    to: "AgentSessions",
+    toCol: "deliverable_id",
+    type: "1:N",
+    description: "Um entregável pode originar várias sessões de agentes.",
+  },
+
+  {
+    from: "Agents",
+    fromCol: "id",
+    to: "AgentRuns",
+    toCol: "agent_id",
+    type: "1:N",
+    description: "Um agente pode ter várias execuções registadas.",
+  },
+  {
+    from: "AgentSessions",
+    fromCol: "id",
+    to: "AgentRuns",
+    toCol: "session_id",
+    type: "1:N",
+    description: "Uma sessão pode conter várias execuções do agente.",
+  },
+  {
+    from: "Clients",
+    fromCol: "id",
+    to: "AgentRuns",
+    toCol: "client_id",
+    type: "1:N",
+    description: "As execuções dos agentes podem ficar associadas a um cliente.",
+  },
+  {
+    from: "Deliverables",
+    fromCol: "id",
+    to: "AgentRuns",
+    toCol: "deliverable_id",
+    type: "1:N",
+    description: "As execuções dos agentes podem ficar associadas a um entregável.",
+  },
+
+  {
+    from: "AgentSessions",
+    fromCol: "id",
+    to: "AgentMemory",
+    toCol: "session_id",
+    type: "1:N",
+    description: "Uma sessão de agente pode ter vários registos de memória persistente.",
+  },
+
+  {
+    from: "Deliverables",
+    fromCol: "id",
+    to: "ValidationResults",
+    toCol: "deliverable_id",
+    type: "1:N",
+    description: "Um entregável pode ter múltiplos resultados de validação.",
+  },
+  {
+    from: "InputReceipts",
+    fromCol: "id",
+    to: "ValidationResults",
+    toCol: "input_receipt_id",
+    type: "1:N",
+    description: "Uma receção de input pode originar vários resultados de validação.",
+  },
+  {
+    from: "AgentRuns",
+    fromCol: "id",
+    to: "ValidationResults",
+    toCol: "agent_run_id",
+    type: "1:N",
+    description: "Uma execução de agente pode produzir vários resultados de validação.",
+  },
+
+  {
+    from: "Users",
+    fromCol: "id",
+    to: "AuditLogs",
+    toCol: "actor_user_id",
+    type: "1:N",
+    description: "As ações dos utilizadores ficam registadas em auditoria.",
+  },
+];
       let ME = null,
         SCOPE = null,
         CURPAGE = "dash",
@@ -2619,11 +2856,8 @@
         "d-decl": ["Validações por Declaração", "Motor de Regras · 07"],
         "d-inputs": ["Inputs e Origem", "Mapeamento · 08"],
         "d-agents": ["Agentes Especializados", "Camada de Agentes · 09"],
-        "d-databases": ["Bases de Dados", "Modelo de Dados · 10"],
-        "database-detail": [
-          "Detalhe da Base de Dados",
-          "Colunas, tipos e descrição",
-        ],
+        "d-databases": ["Modelo de Dados", "Tabelas operacionais · 10"],
+        "database-detail": ["Tabela · detalhe", "Colunas, tipos e descrição"],
         "agent-flow": ["Fluxo do Agente", "Memória de estado · execução"],
         "d-functional": ["Estrutura funcional E2E", "Documentação · 11"],
         "d-journey": ["Jornada por perfil", "Documentação · 12"],
@@ -3350,15 +3584,16 @@
       function pgDocDatabases() {
         return `<div class="phead">
     <div class="crumb">Modelo de Dados · 10</div>
-    <h1>Bases de Dados Necessárias</h1>
+    <h1>Modelo de Dados</h1>
     <p>
-      Modelo relacional da plataforma TaxFlow: bases de dados, colunas,
-      tipos de dados e relações diretas entre tabelas.
+      Modelo operacional V1 da plataforma TaxFlow: tabelas relacionais para
+      operação da app, integrações ERP/NAV, memória de estado dos agentes,
+      validações e auditoria.
     </p>
   </div>
 
   <div class="grid g4" style="margin-bottom:22px">
-    ${kpi("bg-o", SVG.doc, DATABASES.length, "Bases de dados")}
+    ${kpi("bg-o", SVG.doc, DATABASES.length, "Tabelas")}
     ${kpi(
       "bg-b",
       SVG.bolt,
@@ -3372,11 +3607,12 @@
   <div class="card" style="margin-bottom:20px">
     <h3 class="bb">
       <span class="info-dot">i</span>
-      Schema Relacional Visual
+    Schema lógico operacional
     </h3>
 
     <p class="muted" style="margin-bottom:16px">
-      Diagrama ERD importado como imagem para manter o layout.
+    Diagrama ERD do modelo operacional V1, incluindo RBAC, entregáveis,
+    integrações ERP, memória dos agentes e auditoria.
     </p>
 
     <div style="
@@ -3405,7 +3641,7 @@
     <div style="padding:18px 22px">
       <h3 class="bb">
         <span class="info-dot">i</span>
-        Relações diretas entre bases de dados
+        Relações entre tabelas
       </h3>
     </div>
 
@@ -3435,7 +3671,7 @@
     </table>
   </div>
 
-  <input class="search-i" style="margin-bottom:16px" placeholder="Filtrar bases de dados..."
+  <input class="search-i" style="margin-bottom:16px" placeholder="Filtrar tabelas..."
     oninput="document.querySelectorAll('#dbList .card').forEach(c=>c.style.display=c.textContent.toLowerCase().includes(this.value.toLowerCase())?'':'none')">
 
   <div class="grid g2" id="dbList">
